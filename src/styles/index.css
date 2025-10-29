@@ -1,0 +1,513 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* APOLO - Dios del Sol, la Música y la Profecía */
+  --apollo-gold: #FFD700;           /* Oro solar - su esencia */
+  --apollo-sun: #FF8C00;            /* Naranja del amanecer */
+  --apollo-light: #FFF8E1;          /* Luz del amanecer */
+  --apollo-sky: #4682B4;            /* Azul de sus ojos proféticos */
+  --apollo-laurel: #228B22;         /* Verde laurel de la victoria */
+  --apollo-marble: #F5F5F5;         /* Mármol de su templo */
+  --apollo-bronze: #B8860B;         /* Bronce de su lira */
+  --apollo-text: #2F2F2F;           /* Texto de papiro */
+  --apollo-sun-glow: rgba(255, 215, 0, 0.4);
+
+  /* HECATE - Diosa de la Magia, Noche y Encrucijadas */
+  --hecate-night: #0A0014;          /* Noche profunda */
+  --hecate-purple: #4B0082;         /* Púrpura místico */
+  --hecate-moon: #E6E6FA;           /* Plata lunar */
+  --hecate-magic: #9370DB;          /* Magia violeta */
+  --hecate-forest: #2E8B57;         /* Verde de bosque nocturno */
+  --hecate-torch: #DC143C;          /* Rojo de antorchas */
+  --hecate-mystic: #8B008B;         /* Misterio profundo */
+  --hecate-text: #F0F0F0;           /* Texto plateado */
+  --hecate-shadow: rgba(75, 0, 130, 0.3);
+
+  /* Variables por defecto (Apolo) */
+  --color-primary: var(--apollo-gold);
+  --color-secondary: var(--apollo-sky);
+  --color-background: var(--apollo-light);
+  --color-surface: var(--apollo-marble);
+  --color-text: var(--apollo-text);
+  --color-text-secondary: #5D4037;
+  --color-accent: var(--apollo-laurel);
+  --color-border: var(--apollo-bronze);
+  --color-glow: var(--apollo-sun-glow);
+  
+  /* Gradientes Épicos de Apolo */
+  --gradient-primary: linear-gradient(135deg, var(--apollo-gold), var(--apollo-sun), var(--apollo-bronze));
+  --gradient-background: linear-gradient(135deg, var(--apollo-light), #FFECB3, #FFF8E1);
+  --gradient-sky: linear-gradient(135deg, var(--apollo-sky), #87CEEB, #B0E0E6);
+  --gradient-marble: linear-gradient(135deg, var(--apollo-marble), #F0F0F0, var(--apollo-marble));
+  --gradient-sun: radial-gradient(circle, var(--apollo-gold), var(--apollo-sun), transparent);
+  
+  /* Sombras y Efectos de Apolo */
+  --shadow-primary: 0 4px 20px rgba(255, 215, 0, 0.3);
+  --shadow-strong: 0 8px 30px rgba(255, 215, 0, 0.5);
+  --shadow-glow: 0 0 20px var(--apollo-sun-glow);
+  --shadow-text: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  
+  /* Tipografía Divina */
+  --font-primary: 'Cinzel', 'Georgia', serif;
+  --font-decorative: 'MedievalSharp', cursive;
+  --font-magic: 'UnifrakturMaguntia', cursive;
+  --font-oracle: 'Goudy Bookletter 1911', serif;
+  
+  /* Espaciado del Olimpo */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1.25rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-xxl: 4rem;
+  
+  /* Bordes del Templo */
+  --border-radius-sm: 8px;
+  --border-radius-md: 15px;
+  --border-radius-lg: 25px;
+  --border-radius-xl: 40px;
+  
+  /* Transiciones Divinas */
+  --transition-slow: 0.8s ease;
+  --transition-normal: 0.4s ease;
+  --transition-fast: 0.2s ease;
+}
+
+/* TEMA HECATE - Versión Mejorada y Más Oscura */
+.theme-hecate {
+  --color-primary: #E6E6FA;           /* Plata lunar pura */
+  --color-secondary: #9370DB;         /* Magia violeta */
+  --color-background: #050008;        /* Negro absoluto con toque púrpura */
+  --color-surface: #0F001F;           /* Púrpura muy oscuro */
+  --color-text: #F5F5F5;              /* Blanco fantasma */
+  --color-text-secondary: #C0C0C0;    /* Plata apagada */
+  --color-accent: #2E8B57;            /* Verde bosque profundo */
+  --color-border: #6A0DAD;            /* Púrpura intenso */
+  --color-glow: rgba(147, 112, 219, 0.15); /* Brillo muy sutil */
+  
+  /* Gradientes Nocturnos */
+  --gradient-primary: linear-gradient(135deg, #1A0033, #0A0014, #050008);
+  --gradient-background: linear-gradient(135deg, #050008, #0A0014, #050008);
+  --gradient-magic: linear-gradient(135deg, #2D004D, #1A0033, #0A0014);
+  --gradient-moon: linear-gradient(135deg, #0A0014, #1A0033, #0A0014);
+  
+  /* Sombras de la Noche */
+  --shadow-primary: 0 4px 15px rgba(0, 0, 0, 0.6);
+  --shadow-strong: 0 8px 25px rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 10px rgba(147, 112, 219, 0.1);
+}
+
+/* Fondo Hecate - Noche Profunda con Elementos Místicos */
+.theme-hecate .app {
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(75, 0, 130, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(46, 139, 87, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 40% 50%, rgba(10, 0, 20, 0.8) 0%, transparent 50%),
+    linear-gradient(135deg, #050008 0%, #0A0014 50%, #050008 100%);
+}
+
+/* Efectos de Constelaciones para Hecate */
+.theme-hecate .constellations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 4s infinite;
+}
+
+.star.small { width: 1px; height: 1px; }
+.star.medium { width: 2px; height: 2px; }
+.star.large { width: 3px; height: 3px; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Luna de Hecate */
+.moon {
+  position: fixed;
+  top: 15%;
+  right: 10%;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle at 30% 30%, #E6E6FA, #C0C0C0);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 30px rgba(230, 230, 250, 0.3),
+    inset -5px -5px 10px rgba(0, 0, 0, 0.5);
+  z-index: -1;
+  opacity: 0.1;
+  filter: blur(0.5px);
+}
+
+/* Efectos de Niebla Nocturna */
+.fog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(ellipse at 30% 40%, rgba(10, 0, 20, 0.9) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(26, 0, 51, 0.7) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+/* Símbolos Flotantes de Hecate */
+.hecate-symbols {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.05;
+}
+
+.symbol {
+  position: absolute;
+  font-size: 24px;
+  opacity: 0.1;
+  animation: float 20s infinite linear;
+}
+
+.symbol.key { content: "🗝️"; }
+.symbol.torch { content: "🔦"; }
+.symbol.moon { content: "🌙"; }
+.symbol.crossroads { content: "➕"; }
+
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(0deg); }
+  100% { transform: translateY(-100vh) rotate(360deg); }
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  background: var(--gradient-background);
+  color: var(--color-text);
+  transition: all var(--transition-slow);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Fondo Animado de Apolo - Templo del Sol */
+.theme-apollo .app {
+  position: relative;
+}
+
+.theme-apollo .app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 30%, var(--apollo-sun-glow) 0%, transparent 25%),
+    radial-gradient(circle at 80% 70%, rgba(70, 130, 180, 0.1) 0%, transparent 25%),
+    linear-gradient(45deg, transparent 49%, var(--apollo-gold) 50%, transparent 51%),
+    linear-gradient(-45deg, transparent 49%, var(--apollo-gold) 50%, transparent 51%);
+  background-size: 200% 200%, 150% 150%, 100px 100px, 100px 100px;
+  animation: sunTemple 30s linear infinite;
+  pointer-events: none;
+  z-index: -2;
+  opacity: 0.1;
+}
+
+@keyframes sunTemple {
+  0% { background-position: 0% 0%, 0% 0%, 0 0, 0 0; }
+  100% { background-position: 100% 100%, 100% 100%, 100px 100px, 100px 100px; }
+}
+
+/* Fondo Animado de Hecate - Santuario Nocturno */
+.theme-hecate .app {
+  position: relative;
+}
+
+.theme-hecate .app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(75, 0, 130, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 85% 75%, rgba(46, 139, 87, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 50% 50%, transparent 0%, var(--hecate-night) 70%),
+    linear-gradient(45deg, transparent 49%, var(--hecate-magic) 50%, transparent 51%);
+  background-size: 200% 200%, 150% 150%, 100% 100%, 150px 150px;
+  animation: nightSanctuary 40s linear infinite;
+  pointer-events: none;
+  z-index: -2;
+  opacity: 0.15;
+}
+
+@keyframes nightSanctuary {
+  0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0 0; }
+  100% { background-position: 100% 100%, 100% 100%, 0% 0%, 150px 150px; }
+}
+
+/* Efectos de Partículas Divinas */
+.bg-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: float 15s infinite linear;
+}
+
+.theme-apollo .particle {
+  background: radial-gradient(circle, var(--apollo-gold), transparent);
+  box-shadow: 0 0 15px var(--apollo-gold);
+}
+
+.theme-hecate .particle {
+  background: radial-gradient(circle, var(--hecate-magic), transparent);
+  box-shadow: 0 0 10px var(--hecate-magic);
+}
+
+@keyframes float {
+  0% { 
+    transform: translateY(100vh) rotate(0deg) scale(0.5);
+    opacity: 0; 
+  }
+  10% { opacity: 0.7; }
+  90% { opacity: 0.7; }
+  100% { 
+    transform: translateY(-100vh) rotate(360deg) scale(1.5);
+    opacity: 0; 
+  }
+}
+
+/* Efectos de Relámpago para Apolo */
+@keyframes lightning {
+  0%, 90%, 100% { opacity: 0; }
+  5%, 85% { opacity: 0.1; }
+}
+
+.lightning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 30%, var(--apollo-gold) 50%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+  animation: lightning 8s infinite;
+}
+
+/* Efectos de Niebla para Hecate */
+@keyframes mist {
+  0% { 
+    transform: translateX(-100%) skewX(-15deg);
+    opacity: 0;
+  }
+  50% { opacity: 0.1; }
+  100% { 
+    transform: translateX(200%) skewX(-15deg);
+    opacity: 0;
+  }
+}
+
+.mist {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--hecate-moon), transparent);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+  animation: mist 25s infinite;
+}
+
+.mist:nth-child(2) {
+  animation-delay: 8s;
+  top: 30%;
+  height: 70%;
+}
+
+.mist:nth-child(3) {
+  animation-delay: 15s;
+  top: 60%;
+  height: 40%;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--spacing-xl);
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+}
+
+/* Scrollbar Divino */
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 10px;
+  border: 2px solid var(--color-background);
+  box-shadow: var(--shadow-primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Efectos de Texto Épico */
+.epic-text {
+  font-family: var(--font-decorative);
+  text-shadow: var(--shadow-text);
+  letter-spacing: 1px;
+}
+
+.magic-text {
+  font-family: var(--font-magic);
+  text-shadow: 0 0 10px currentColor;
+  letter-spacing: 2px;
+}
+
+.oracle-text {
+  font-family: var(--font-oracle);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* Animaciones del Olimpo */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% { 
+    box-shadow: var(--shadow-primary);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: var(--shadow-strong), var(--shadow-glow);
+    transform: scale(1.02);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s var(--transition-normal);
+}
+
+.scale-in {
+  animation: scaleIn 0.6s var(--transition-normal);
+}
+
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* Efectos Especiales por Dios */
+.theme-apollo .divine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-apollo .divine-effect::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, var(--apollo-gold), transparent);
+  transform: rotate(45deg);
+  animation: divineShine 6s infinite;
+}
+
+@keyframes divineShine {
+  0% { transform: rotate(45deg) translateX(-100%); }
+  100% { transform: rotate(45deg) translateX(100%); }
+}
+
+.theme-hecate .mystic-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-hecate .mystic-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--hecate-magic), transparent);
+  animation: mysticFlow 4s infinite;
+}
+
+@keyframes mysticFlow {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}

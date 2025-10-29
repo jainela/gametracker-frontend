@@ -1,0 +1,295 @@
+.biblioteca {
+  padding: var(--spacing-xxl) 0;
+}
+
+.biblioteca-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xxl);
+  padding: var(--spacing-xl);
+  background: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-primary);
+  border: 2px solid var(--color-border);
+}
+
+.theme-apollo .biblioteca-header {
+  background: linear-gradient(135deg, var(--apollo-white), var(--apollo-light));
+  border-color: var(--apollo-bronze);
+}
+
+.theme-hecate .biblioteca-header {
+  background: linear-gradient(135deg, var(--hecate-purple), var(--color-surface));
+  border-color: var(--hecate-silver);
+}
+
+.biblioteca-title {
+  font-size: 2.2rem;
+  color: var(--color-text);
+  font-family: var(--font-decorative);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.add-game-button {
+  background: var(--gradient-primary);
+  border: none;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.theme-apollo .add-game-button {
+  background: linear-gradient(135deg, var(--apollo-gold), var(--apollo-sun));
+  color: var(--apollo-text);
+}
+
+.theme-hecate .add-game-button {
+  background: linear-gradient(135deg, var(--hecate-silver), var(--hecate-purple));
+  color: var(--hecate-text);
+}
+
+.add-game-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-strong);
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xxl);
+}
+
+.game-card {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-primary);
+  transition: all 0.3s ease;
+  border: 2px solid var(--color-border);
+}
+
+.theme-apollo .game-card {
+  background: linear-gradient(135deg, var(--apollo-white), #FFF8E1);
+  border-color: var(--apollo-bronze);
+}
+
+.theme-hecate .game-card {
+  background: linear-gradient(135deg, var(--color-surface), #2A0047);
+  border-color: var(--hecate-silver);
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-strong);
+}
+
+.cover-placeholder {
+  width: 100%;
+  height: 160px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+}
+
+.theme-apollo .cover-placeholder {
+  background: linear-gradient(135deg, var(--apollo-gold), var(--apollo-sky));
+}
+
+.theme-hecate .cover-placeholder {
+  background: linear-gradient(135deg, var(--hecate-purple), var(--hecate-silver));
+}
+
+.game-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+  font-family: var(--font-decorative);
+}
+
+.game-platform {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+  font-size: 0.9rem;
+}
+
+.game-progress {
+  margin-bottom: var(--spacing-md);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--spacing-xs);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--border-radius-lg);
+  transition: width 0.5s ease;
+}
+
+.theme-apollo .progress-fill {
+  background: linear-gradient(90deg, var(--apollo-gold), var(--apollo-sun));
+}
+
+.theme-hecate .progress-fill {
+  background: linear-gradient(90deg, var(--hecate-silver), var(--hecate-purple));
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.game-rating {
+  font-size: 1.3rem;
+  margin-bottom: var(--spacing-sm);
+  letter-spacing: 1px;
+}
+
+.game-hours {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.game-completed {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.theme-apollo .game-completed {
+  background: var(--apollo-laurel);
+  color: var(--apollo-white);
+}
+
+.theme-hecate .game-completed {
+  background: var(--hecate-green);
+  color: var(--hecate-text);
+}
+
+.filters-section {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-button:hover {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+/* Biblioteca Hecate - Versión Oscura */
+.theme-hecate .biblioteca-header {
+  background: linear-gradient(135deg, #1A0029, #2D004D, #1A0029);
+  border: 2px solid rgba(147, 112, 219, 0.5);
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.7),
+    inset 0 1px 5px rgba(147, 112, 219, 0.2);
+}
+
+.theme-hecate .biblioteca-title {
+  color: var(--hecate-silver);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.theme-hecate .add-game-button {
+  background: linear-gradient(135deg, #4B0082, #2D004D, #1A0033);
+  color: var(--hecate-silver);
+  border: 2px solid rgba(147, 112, 219, 0.5);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.6),
+    inset 0 1px 5px rgba(147, 112, 219, 0.2);
+}
+
+.theme-hecate .add-game-button:hover {
+  background: linear-gradient(135deg, #2D004D, #4B0082, #2D004D);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.8),
+    0 0 15px rgba(147, 112, 219, 0.3);
+}
+
+/* Tarjetas de Juegos Hecate */
+.theme-hecate .game-card {
+  background: linear-gradient(135deg, #1A0029, #2D004D, #1A0029);
+  border: 2px solid rgba(147, 112, 219, 0.4);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.6),
+    inset 0 1px 5px rgba(147, 112, 219, 0.1);
+}
+
+.theme-hecate .game-card:hover {
+  background: linear-gradient(135deg, #2D004D, #1A0029, #2D004D);
+  border-color: rgba(147, 112, 219, 0.7);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(147, 112, 219, 0.2);
+}
+
+/* Portadas Hecate */
+.theme-hecate .cover-placeholder {
+  background: linear-gradient(135deg, #4B0082, #2D004D, #1A0033);
+  box-shadow: 
+    inset 0 2px 10px rgba(0, 0, 0, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.4);
+  color: var(--hecate-silver);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Barras de Progreso Hecate */
+.theme-hecate .progress-bar {
+  background: rgba(10, 0, 20, 0.8);
+  border: 1px solid rgba(147, 112, 219, 0.3);
+}
+
+.theme-hecate .progress-fill {
+  background: linear-gradient(90deg, #9370DB, #8A2BE2, #4B0082);
+  box-shadow: inset 0 1px 5px rgba(255, 255, 255, 0.2);
+}
+
+/* Botones de Filtro Hecate */
+.theme-hecate .filter-button {
+  background: linear-gradient(135deg, #2D004D, #1A0033);
+  border: 1px solid rgba(147, 112, 219, 0.4);
+  color: var(--hecate-silver);
+  box-shadow: 
+    0 3px 10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 3px rgba(147, 112, 219, 0.1);
+}
+
+.theme-hecate .filter-button:hover {
+  background: linear-gradient(135deg, #4B0082, #2D004D);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(147, 112, 219, 0.2);
+}

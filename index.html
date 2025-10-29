@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/lyra.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GameTracker - Biblioteca de los Dioses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=MedievalSharp&family=UnifrakturMaguntia&family=Goudy+Bookletter+1911&display=swap" rel="stylesheet">
+    <style>
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: 'Cinzel', serif;
+        overflow: hidden;
+      }
+
+      .loading-apollo {
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+        color: #FFF8E1;
+      }
+
+      .loading-hecate {
+        background: linear-gradient(135deg, #0A0014, #4B0082, #2E8B57);
+        color: #E6E6FA;
+      }
+
+      .loading-god {
+        font-size: 8rem;
+        margin-bottom: 2rem;
+        animation: godEntrance 2s ease-out;
+        filter: drop-shadow(0 0 20px currentColor);
+      }
+
+      .loading-text {
+        font-size: 2.5rem;
+        text-align: center;
+        text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+
+      .loading-subtext {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        font-style: italic;
+      }
+
+      .oracle-message {
+        position: absolute;
+        bottom: 20%;
+        font-size: 1rem;
+        opacity: 0.7;
+        text-align: center;
+        max-width: 500px;
+        line-height: 1.6;
+      }
+
+      @keyframes godEntrance {
+        0% { 
+          transform: scale(0) rotate(-180deg);
+          opacity: 0;
+        }
+        60% { 
+          transform: scale(1.2) rotate(10deg);
+          opacity: 1;
+        }
+        100% { 
+          transform: scale(1) rotate(0deg);
+        }
+      }
+
+      .fade-out {
+        animation: fadeToGod 1.5s ease-in forwards;
+      }
+
+      @keyframes fadeToGod {
+        to {
+          opacity: 0;
+          transform: scale(1.5);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading" class="loading-screen loading-apollo">
+      <div class="loading-god">🌞</div>
+      <div class="loading-text">EL TEMPLO DE APOLO SE ALZA</div>
+      <div class="loading-subtext">Dios del Sol, la Música y la Profecía</div>
+      <div class="oracle-message">
+        "Que la luz del sol ilumine tu camino gaming y la música de la victoria suene en tus oídos"
+      </div>
+    </div>
+
+    <div id="root"></div>
+    
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <script>
+      let currentTheme = 'apollo';
+      
+      function setLoadingTheme(theme) {
+        const loading = document.getElementById('loading');
+        if (theme === 'hecate') {
+          loading.className = 'loading-screen loading-hecate';
+          loading.innerHTML = `
+            <div class="loading-god">🌙</div>
+            <div class="loading-text">EL SANTUARIO DE HECATE DESPIERTA</div>
+            <div class="loading-subtext">Diosa de la Magia, la Noche y las Encrucijadas</div>
+            <div class="oracle-message">
+              "Que las sombras te guíen a victorias inesperadas y la magia fortalezca tu determinación"
+            </div>
+          `;
+        }
+        currentTheme = theme;
+      }
+
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          const loading = document.getElementById('loading');
+          loading.classList.add('fade-out');
+          setTimeout(() => loading.style.display = 'none', 1500);
+        }, 3000);
+
+        // Escuchar cambios de tema
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'class') {
+              const isHecate = mutation.target.classList.contains('theme-hecate');
+              if (isHecate && currentTheme !== 'hecate') {
+                setLoadingTheme('hecate');
+              } else if (!isHecate && currentTheme !== 'apollo') {
+                setLoadingTheme('apollo');
+              }
+            }
+          });
+        });
+
+        observer.observe(document.body, { attributes: true });
+      });
+    </script>
+  </body>
+</html>

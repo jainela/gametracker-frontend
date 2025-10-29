@@ -1,0 +1,23 @@
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.text-gold {
+  color: var(--color-primary);
+}
+
+.text-silver {
+  color: var(--color-secondary);
+}
+
+.bg-surface {
+  background-color: var(--color-surface);
+}
+
+.border-gold {
+  border: 1px solid var(--color-primary);
+}
+
+.border-silver {
+  border: 1px solid var(--color-secondary);
+}
