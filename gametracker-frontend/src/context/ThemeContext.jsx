@@ -1,10 +1,18 @@
-// src/context/ThemeContext.jsx
 import React, { createContext, useContext, useState } from 'react';
 
+// Crear el contexto
 const ThemeContext = createContext();
 
-export const useTheme = () => useContext(ThemeContext);
+// Hook personalizado para usar el contexto
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme debe usarse dentro de un ThemeProvider');
+  }
+  return context;
+};
 
+// Proveedor del contexto
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -20,3 +28,6 @@ export const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+
+// Exportar el contexto por si acaso
+export default ThemeContext;

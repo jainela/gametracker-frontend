@@ -1,28 +1,49 @@
-// src/components/Navbar/Navbar.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeContext';
 import './Navbar.css';
 
-const Navbar = () => {
-  const { isDarkMode, toggleTheme } = useTheme();
+const Navbar = ({ onNavigate, currentView = 'biblioteca' }) => {
+  // Función por defecto si no se pasa onNavigate
+  const handleNavigation = (view) => {
+    if (onNavigate) {
+      onNavigate(view);
+    } else {
+      console.log('Navegando a:', view);
+    }
+  };
+
+  const navItems = [
+    { key: 'biblioteca', label: '📚 Biblioteca', path: '/' },
+    { key: 'agregar-juego', label: '➕ Agregar Juego', path: '/agregar-juego' },
+    { key: 'reseñas', label: '⭐ Reseñas', path: '/reseñas' },
+    { key: 'estadisticas', label: '📊 Estadísticas', path: '/estadisticas' }
+  ];
 
   return (
     <nav className="navbar">
-      <div className="nav-brand">
-        <h2>🎮 GameTracker</h2>
-      </div>
-      
-      <div className="nav-links">
-        <Link to="/">Biblioteca</Link>
-        <Link to="/agregar-juego">Agregar Juego</Link>
-        <Link to="/reseñas">Reseñas</Link>
-        <Link to="/estadisticas">Estadísticas</Link>
-      </div>
+      <div className="nav-container">
+        <div className="nav-brand">
+          <h1>🎮 GameTracker</h1>
+          <span className="nav-subtitle">Tu Biblioteca de Videojuegos</span>
+        </div>
 
-      <button className="theme-toggle" onClick={toggleTheme}>
-        {isDarkMode ? '☀️ Apolo' : '🌙 Hécate'}
-      </button>
+        <div className="nav-links">
+          {navItems.map(item => (
+            <button
+              key={item.key}
+              className={currentView === item.key ? 'nav-link active' : 'nav-link'}
+              onClick={() => handleNavigation(item.key)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="nav-actions">
+          <button className="theme-toggle">
+            🌙 Tema
+          </button>
+        </div>
+      </div>
     </nav>
   );
 };

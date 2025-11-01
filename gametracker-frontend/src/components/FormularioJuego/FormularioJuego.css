@@ -1,11 +1,15 @@
-/* src/components/FormularioJuego/FormularioJuego.css */
-.formulario-juego {
+.formulario-container {
   padding: 2rem;
   min-height: calc(100vh - 80px);
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+  text-align: center;
 }
 
-.formulario-juego h2 {
-  color: var(--accent);
+.formulario-container h1 {
+  color: #dda930;
   margin-bottom: 1rem;
+}
+
+.formulario-container p {
+  color: #8e521a;
+  font-size: 1.2rem;
 }

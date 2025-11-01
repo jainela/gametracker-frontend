@@ -1,20 +1,171 @@
-/* src/components/BibliotecaJuegos/BibliotecaJuegos.css */
-.biblioteca {
-  padding: 2rem;
+.biblioteca-container {
   min-height: calc(100vh - 80px);
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  padding: 2rem;
+  background: linear-gradient(135deg, #fbf8eb 0%, #f7efca 100%);
 }
 
-.biblioteca h1 {
-  color: var(--accent);
+.biblioteca-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+}
+
+.biblioteca-header h1 {
+  color: #dda930;
   font-size: 2.5rem;
-  text-shadow: 2px 2px 4px var(--shadow);
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.biblioteca p {
-  text-align: center;
+.biblioteca-header p {
+  color: #8e521a;
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Estadísticas */
+.biblioteca-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid #e6c25e;
+  box-shadow: 0 4px 15px rgba(222, 169, 48, 0.2);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(222, 169, 48, 0.3);
+}
+
+.stat-card h3 {
+  color: #8e521a;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-number {
+  color: #dda930;
+  font-size: 2rem;
+  font-weight: bold;
+  display: block;
+}
+
+/* Sección de juegos */
+.juegos-grid-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-header h2 {
+  color: #3a1d0e;
+  font-size: 1.8rem;
+}
+
+/* Grid de juegos */
+.juegos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 16px;
+  border: 2px dashed #e6c25e;
+}
+
+.empty-state h3 {
+  color: #3a1d0e;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.empty-state p {
+  color: #8e521a;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+/* Botones */
+.btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #dda930, #ce9324);
+  color: white;
+  box-shadow: 0 4px 15px rgba(222, 169, 48, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(222, 169, 48, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .biblioteca-container {
+    padding: 1rem;
+  }
+
+  .biblioteca-header h1 {
+    font-size: 2rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .juegos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .biblioteca-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .juegos-grid {
+    grid-template-columns: 1fr;
+  }
 }

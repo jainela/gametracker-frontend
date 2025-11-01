@@ -1,31 +1,71 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from './context/ThemeContext';
-import Navbar from './components/Navbar/Navbar';
+import React, { useState } from 'react';
 import BibliotecaJuegos from './components/BibliotecaJuegos/BibliotecaJuegos';
 import FormularioJuego from './components/FormularioJuego/FormularioJuego';
 import ListaReseñas from './components/ListaReseñas/ListaReseñas';
 import FormularioReseña from './components/FormularioReseña/FormularioReseña';
 import EstadisticasPersonales from './components/EstadisticasPersonales/EstadisticasPersonales';
-import './styles/themes.css';
 import './App.css';
 
-function App() {
+const NavbarSimple = ({ currentView, onNavigate }) => {
+  const navItems = [
+    { key: 'biblioteca', label: '📚 Biblioteca', icon: '📚' },
+    { key: 'agregar-juego', label: '➕ Agregar Juego', icon: '➕' },
+    { key: 'reseñas', label: '⭐ Reseñas', icon: '⭐' },
+    { key: 'estadisticas', label: '📊 Estadísticas', icon: '📊' },
+  ];
+
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="App">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<BibliotecaJuegos />} />
-            <Route path="/agregar-juego" element={<FormularioJuego />} />
-            <Route path="/reseñas" element={<ListaReseñas />} />
-            <Route path="/agregar-reseña" element={<FormularioReseña />} />
-            <Route path="/estadisticas" element={<EstadisticasPersonales />} />
-          </Routes>
+    <nav className="navbar-simple">
+      <div className="nav-simple-container">
+        <div className="nav-simple-brand">
+          <h1>🎮 GameTracker</h1>
+          <span>Tu Biblioteca de Videojuegos</span>
         </div>
-      </Router>
-    </ThemeProvider>
+
+        <div className="nav-simple-links">
+          {navItems.map(item => (
+            <button
+              key={item.key}
+              className={`nav-simple-link ${currentView === item.key ? 'active' : ''}`}
+              onClick={() => onNavigate(item.key)}
+            >
+              <span className="nav-icon">{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+function App() {
+  const [currentView, setCurrentView] = useState('biblioteca');
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'biblioteca':
+        return <BibliotecaJuegos />;
+      case 'agregar-juego':
+        return <FormularioJuego />;
+      case 'reseñas':
+        return <ListaReseñas />;
+      case 'agregar-reseña':
+        return <FormularioReseña />;
+      case 'estadisticas':
+        return <EstadisticasPersonales />;
+      default:
+        return <BibliotecaJuegos />;
+    }
+  };
+
+  return (
+    <div className="App">
+      <NavbarSimple currentView={currentView} onNavigate={setCurrentView} />
+      <main className="main-content">
+        {renderView()}
+      </main>
+    </div>
   );
 }
 
