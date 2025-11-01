@@ -2,4 +2,10 @@
 .formulario-juego {
   padding: 2rem;
   min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+}
+
+.formulario-juego h2 {
+  color: var(--accent);
+  margin-bottom: 1rem;
 }

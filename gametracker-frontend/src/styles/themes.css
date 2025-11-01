@@ -1,42 +1,58 @@
 /* src/styles/themes.css */
 :root {
-  /* Tema Apolo (claro) */
+  /* Tema Apolo (claro) - Hierba Dorada */
   --apolo-bg-primary: #fbf8eb;
   --apolo-bg-secondary: #f7efca;
+  --apolo-bg-tertiary: #efdc99;
   --apolo-text-primary: #3a1d0e;
+  --apolo-text-secondary: #8e521a;
   --apolo-accent: #dda930;
+  --apolo-accent-hover: #ce9324;
   --apolo-card-bg: #ffffff;
   --apolo-border: #e6c25e;
+  --apolo-shadow: rgba(222, 169, 48, 0.2);
   
-  /* Tema Hécate (oscuro) */
+  /* Tema Hécate (oscuro) - Blue Gem */
   --hecate-bg-primary: #1f0e67;
   --hecate-bg-secondary: #371a98;
+  --hecate-bg-tertiary: #411dba;
   --hecate-text-primary: #f3f3ff;
+  --hecate-text-secondary: #b7b3ff;
   --hecate-accent: #7058fa;
-  --hecate-card-bg: #411dba;
+  --hecate-accent-hover: #5d36f1;
+  --hecate-card-bg: #2d1a7a;
   --hecate-border: #9388fd;
+  --hecate-shadow: rgba(112, 88, 250, 0.3);
 }
 
 .theme-apolo {
   --bg-primary: var(--apolo-bg-primary);
   --bg-secondary: var(--apolo-bg-secondary);
+  --bg-tertiary: var(--apolo-bg-tertiary);
   --text-primary: var(--apolo-text-primary);
+  --text-secondary: var(--apolo-text-secondary);
   --accent: var(--apolo-accent);
+  --accent-hover: var(--apolo-accent-hover);
   --card-bg: var(--apolo-card-bg);
   --border: var(--apolo-border);
+  --shadow: var(--apolo-shadow);
 }
 
 .theme-hecate {
   --bg-primary: var(--hecate-bg-primary);
   --bg-secondary: var(--hecate-bg-secondary);
+  --bg-tertiary: var(--hecate-bg-tertiary);
   --text-primary: var(--hecate-text-primary);
+  --text-secondary: var(--hecate-text-secondary);
   --accent: var(--hecate-accent);
+  --accent-hover: var(--hecate-accent-hover);
   --card-bg: var(--hecate-card-bg);
   --border: var(--hecate-border);
+  --shadow: var(--hecate-shadow);
 }
 
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 body {
@@ -44,5 +60,24 @@ body {
   color: var(--text-primary);
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
 }
