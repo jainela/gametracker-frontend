@@ -1,0 +1,48 @@
+/* src/styles/themes.css */
+:root {
+  /* Tema Apolo (claro) */
+  --apolo-bg-primary: #fbf8eb;
+  --apolo-bg-secondary: #f7efca;
+  --apolo-text-primary: #3a1d0e;
+  --apolo-accent: #dda930;
+  --apolo-card-bg: #ffffff;
+  --apolo-border: #e6c25e;
+  
+  /* Tema Hécate (oscuro) */
+  --hecate-bg-primary: #1f0e67;
+  --hecate-bg-secondary: #371a98;
+  --hecate-text-primary: #f3f3ff;
+  --hecate-accent: #7058fa;
+  --hecate-card-bg: #411dba;
+  --hecate-border: #9388fd;
+}
+
+.theme-apolo {
+  --bg-primary: var(--apolo-bg-primary);
+  --bg-secondary: var(--apolo-bg-secondary);
+  --text-primary: var(--apolo-text-primary);
+  --accent: var(--apolo-accent);
+  --card-bg: var(--apolo-card-bg);
+  --border: var(--apolo-border);
+}
+
+.theme-hecate {
+  --bg-primary: var(--hecate-bg-primary);
+  --bg-secondary: var(--hecate-bg-secondary);
+  --text-primary: var(--hecate-text-primary);
+  --accent: var(--hecate-accent);
+  --card-bg: var(--hecate-card-bg);
+  --border: var(--hecate-border);
+}
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}

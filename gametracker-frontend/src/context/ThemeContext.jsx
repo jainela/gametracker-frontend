@@ -1,0 +1,22 @@
+// src/context/ThemeContext.jsx
+import React, { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext();
+
+export const useTheme = () => useContext(ThemeContext);
+
+export const ThemeProvider = ({ children }) => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  return (
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+      <div className={isDarkMode ? 'theme-hecate' : 'theme-apolo'}>
+        {children}
+      </div>
+    </ThemeContext.Provider>
+  );
+};
