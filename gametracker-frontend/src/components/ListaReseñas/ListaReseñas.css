@@ -1,44 +1,408 @@
-.lista-container {
-  padding: 2rem;
+.santuario-cronicas {
   min-height: calc(100vh - 80px);
+  padding: 2rem;
+  position: relative;
+}
+
+.theme-apolo .santuario-cronicas {
+  background: linear-gradient(135deg, 
+    var(--apolo-bg-primary) 0%, 
+    var(--apolo-marble) 50%, 
+    var(--apolo-bg-secondary) 100%);
+}
+
+.theme-hecate .santuario-cronicas {
+  background: linear-gradient(135deg, 
+    var(--hecate-bg-primary) 0%, 
+    var(--hecate-midnight) 50%, 
+    var(--hecate-bg-secondary) 100%);
+}
+
+/* Header del Salón */
+.salon-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.rollos-sagrados {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rollos-sagrados h1 {
+  font-size: 2.8rem;
+  margin: 0;
+  text-shadow: 2px 2px 8px var(--shadow);
+}
+
+.pluma-diosa {
+  font-size: 2.5rem;
+  animation: escribir 2s ease-in-out infinite;
+}
+
+@keyframes escribir {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(5deg); }
+}
+
+.salon-subtitulo {
+  color: var(--text-secondary);
+  font-size: 1.3rem;
+  font-style: italic;
+  font-family: 'Cinzel', serif;
+}
+
+/* Tablilla de Sabiduría */
+.tablilla-sabiduria {
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 3px solid var(--border);
+  box-shadow: 0 8px 32px var(--shadow);
+  text-align: center;
+}
+
+.oraculo-escritura {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
 }
 
-/* Gradientes específicos por tema */
-.theme-apolo .lista-container {
-  background: linear-gradient(135deg, var(--apolo-bg-primary) 0%, var(--apolo-bg-secondary) 100%);
+.oraculo-icono {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 8px var(--shadow));
 }
 
-.theme-hecate .lista-container {
-  background: linear-gradient(135deg, var(--hecate-bg-primary) 0%, var(--hecate-bg-secondary) 100%);
+.oraculo-escritura p {
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
 }
 
-.lista-container h1 {
-  color: var(--accent);
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.lista-container p {
+.firma-oraculo {
   color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-family: 'Cinzel', serif;
+}
+
+/* Acciones del Cronista */
+.acciones-cronista {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+/* Biblioteca de Crónicas */
+.biblioteca-cronicas {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.columnas-cronicas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+/* Papiro de Crónica */
+.cronica-papiro {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 3px solid var(--border);
+  box-shadow: 0 8px 32px var(--shadow);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cronica-papiro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+}
+
+.cronica-papiro:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px var(--shadow);
+}
+
+.cronica-apolo {
+  border-left: 6px solid var(--apolo-accent);
+}
+
+.cronica-hecate {
+  border-left: 6px solid var(--hecate-accent);
+}
+
+.cronica-divina {
+  border-left: 6px solid;
+  border-image: linear-gradient(135deg, var(--apolo-accent), var(--hecate-accent)) 1;
+}
+
+.cronica-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.sello-dios {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dios-icono {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.dios-texto {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Cinzel', serif;
+}
+
+.estrellas-cronicas {
+  color: var(--accent);
   font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.cronica-cuerpo {
+  margin-bottom: 1.5rem;
+}
+
+.cronica-titulo {
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  margin: 0 0 1rem 0;
+  font-family: 'Cinzel', serif;
+  line-height: 1.3;
+}
+
+.cronica-autor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.autor-icono {
+  font-size: 1rem;
+}
+
+.autor-texto {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.cronica-texto {
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.cronica-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.cronica-fecha {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.fecha-icono {
+  font-size: 1rem;
+}
+
+.acciones-cronica {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-pequeno {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Cinzel', serif;
+}
+
+.btn-editar-cronica {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.btn-editar-cronica:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.btn-borrar-cronica {
+  background: transparent;
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.btn-borrar-cronica:hover {
+  background: var(--error);
+  color: white;
+}
+
+/* Santuario Vacío */
+.santuario-vacio {
   text-align: center;
+  padding: 4rem 2rem;
+  background: var(--card-bg);
+  border-radius: 20px;
+  border: 3px dashed var(--border);
   max-width: 500px;
+  margin: 0 auto;
+}
+
+.papiro-vacio {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 8px var(--shadow));
+}
+
+.santuario-vacio h3 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-family: 'Cinzel', serif;
+}
+
+.santuario-vacio p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+/* Piedra Angular */
+.piedra-angular {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border);
+}
+
+.sabiduria-ancestral {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 20px var(--shadow);
+}
+
+.sabiduria-texto {
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  font-family: 'Cinzel', serif;
+}
+
+.estadisticas-cronicas {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.estadistica {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .lista-container {
+@media (max-width: 968px) {
+  .santuario-cronicas {
     padding: 1rem;
   }
-  
-  .lista-container h1 {
-    font-size: 1.8rem;
+
+  .rollos-sagrados h1 {
+    font-size: 2.2rem;
   }
-  
-  .lista-container p {
-    font-size: 1rem;
+
+  .columnas-cronicas {
+    grid-template-columns: 1fr;
+  }
+
+  .acciones-cronista {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .rollos-sagrados {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rollos-sagrados h1 {
+    font-size: 2rem;
+  }
+
+  .cronica-footer {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .acciones-cronica {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .estadisticas-cronicas {
+    flex-direction: column;
+    gap: 1rem;
   }
 }

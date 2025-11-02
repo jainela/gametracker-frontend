@@ -1,44 +1,464 @@
-.estadisticas-container {
-  padding: 2rem;
+.oraculo-progreso {
   min-height: calc(100vh - 80px);
+  padding: 2rem;
+  position: relative;
+}
+
+.theme-apolo .oraculo-progreso {
+  background: linear-gradient(135deg, 
+    var(--apolo-bg-primary) 0%, 
+    var(--apolo-marble) 50%, 
+    var(--apolo-bg-secondary) 100%);
+}
+
+.theme-hecate .oraculo-progreso {
+  background: linear-gradient(135deg, 
+    var(--hecate-bg-primary) 0%, 
+    var(--hecate-midnight) 50%, 
+    var(--hecate-bg-secondary) 100%);
+}
+
+/* Templo del Oráculo */
+.templo-oraculo {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.esfera-cristal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.esfera-cristal h1 {
+  font-size: 2.8rem;
+  margin: 0;
+  text-shadow: 2px 2px 8px var(--shadow);
+}
+
+.humo-profetico {
+  font-size: 2.5rem;
+  animation: humear 3s ease-in-out infinite;
+}
+
+@keyframes humear {
+  0%, 100% { opacity: 0.5; transform: translateY(0px); }
+  50% { opacity: 1; transform: translateY(-10px); }
+}
+
+.profecia-oraculo {
+  color: var(--text-secondary);
+  font-size: 1.3rem;
+  font-style: italic;
+  font-family: 'Cinzel', serif;
+}
+
+/* Espejo del Alma */
+.espejo-alma {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 3rem;
+  border: 4px solid var(--border);
+  box-shadow: 0 16px 48px var(--shadow);
+  margin-bottom: 3rem;
+}
+
+.reflejo-estadisticas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  text-align: center;
+}
+
+.estadistica-principal {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
 }
 
-/* Gradientes específicos por tema */
-.theme-apolo .estadisticas-container {
-  background: linear-gradient(135deg, var(--apolo-bg-primary) 0%, var(--apolo-bg-secondary) 100%);
+.numero-epico {
+  font-size: 3.5rem;
+  font-weight: 900;
+  font-family: 'Cinzel', serif;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 2px 2px 8px var(--shadow);
 }
 
-.theme-hecate .estadisticas-container {
-  background: linear-gradient(135deg, var(--hecate-bg-primary) 0%, var(--hecate-bg-secondary) 100%);
+.label-epico {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.estadisticas-container h1 {
+/* Tablillas de Poder */
+.tablillas-poder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.tablilla {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 3px solid var(--border);
+  box-shadow: 0 8px 32px var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.tablilla:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px var(--shadow);
+}
+
+.tablilla-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.tablilla-icono {
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.tablilla-header h3 {
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  margin: 0;
+  font-family: 'Cinzel', serif;
+}
+
+/* Progreso Épico */
+.progreso-epico {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.barra-progreso {
+  height: 12px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progreso-completado {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+.estadistica-progreso {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.estadistica-progreso .numero {
   color: var(--accent);
-  margin-bottom: 1rem;
-  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
 }
 
-.estadisticas-container p {
+.estadistica-progreso .total {
   color: var(--text-secondary);
   font-size: 1.2rem;
+}
+
+.sabiduria-progreso {
+  color: var(--text-secondary);
+  font-style: italic;
   text-align: center;
-  max-width: 500px;
+  margin-top: 0.5rem;
+}
+
+/* Alineación de Dioses */
+.alineacion-dioses {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dios-progreso {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.dios-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.dios-icono {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.dios-nombre {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: 'Cinzel', serif;
+}
+
+.progreso-dios {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.barra-dios {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progreso-dios-completado {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.dios-apolo .progreso-dios-completado {
+  background: linear-gradient(90deg, var(--apolo-accent), var(--apolo-gold-dark));
+}
+
+.dios-hecate .progreso-dios-completado {
+  background: linear-gradient(90deg, var(--hecate-accent), var(--hecate-purple-dark));
+}
+
+.porcentaje-dios {
+  color: var(--text-secondary);
+  font-weight: 600;
+  min-width: 3rem;
+  text-align: right;
+}
+
+.sabiduria-dioses {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Logros */
+.contador-logros {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.numero-logros {
+  font-size: 3rem;
+  font-weight: 900;
+  font-family: 'Cinzel', serif;
+  color: var(--accent);
+  text-shadow: 2px 2px 8px var(--shadow);
+}
+
+.label-logros {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.medallas-heroe {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.medalla {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 4px 8px var(--shadow));
+  animation: brillar 2s ease-in-out infinite;
+}
+
+.medalla-oro { animation-delay: 0s; }
+.medalla-plata { animation-delay: 0.5s; }
+.medalla-bronce { animation-delay: 1s; }
+
+@keyframes brillar {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Panteón Personal */
+.panteon-personal {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 3px solid var(--border);
+  box-shadow: 0 8px 32px var(--shadow);
+  margin-bottom: 3rem;
+}
+
+.titulo-panteon {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+}
+
+.virtudes-heroe {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.virtud {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.virtud:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.virtud-icono {
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.virtud-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.virtud-nombre {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.virtud-valor {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+}
+
+/* Profecía Final */
+.profecia-final {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.rollo-profecia {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 2.5rem;
+  border: 3px solid var(--border);
+  box-shadow: 0 8px 32px var(--shadow);
+  text-align: center;
+  position: relative;
+}
+
+.texto-profecia {
+  color: var(--accent);
+  font-size: 1.4rem;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  font-family: 'Cinzel', serif;
+}
+
+.sello-oraculo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-family: 'Cinzel', serif;
+}
+
+.sello-icono {
+  font-size: 1.2rem;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .estadisticas-container {
+@media (max-width: 968px) {
+  .oraculo-progreso {
     padding: 1rem;
   }
-  
-  .estadisticas-container h1 {
-    font-size: 1.8rem;
+
+  .esfera-cristal h1 {
+    font-size: 2.2rem;
   }
-  
-  .estadisticas-container p {
-    font-size: 1rem;
+
+  .reflejo-estadisticas {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .tablillas-poder {
+    grid-template-columns: 1fr;
+  }
+
+  .virtudes-heroe {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .esfera-cristal {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .esfera-cristal h1 {
+    font-size: 2rem;
+  }
+
+  .espejo-alma {
+    padding: 2rem;
+  }
+
+  .numero-epico {
+    font-size: 2.8rem;
+  }
+
+  .tablilla {
+    padding: 1.5rem;
+  }
+
+  .panteon-personal {
+    padding: 2rem;
+  }
+
+  .texto-profecia {
+    font-size: 1.2rem;
   }
 }

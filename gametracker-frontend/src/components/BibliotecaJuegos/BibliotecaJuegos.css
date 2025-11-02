@@ -1,60 +1,115 @@
 .biblioteca-container {
   min-height: calc(100vh - 80px);
   padding: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Gradientes específicos por tema */
+/* Fondo de templo */
 .theme-apolo .biblioteca-container {
-  background: linear-gradient(135deg, var(--apolo-bg-primary) 0%, var(--apolo-bg-secondary) 100%);
+  background: linear-gradient(135deg, 
+    var(--apolo-bg-primary) 0%, 
+    var(--apolo-marble) 50%, 
+    var(--apolo-bg-secondary) 100%);
 }
 
 .theme-hecate .biblioteca-container {
-  background: linear-gradient(135deg, var(--hecate-bg-primary) 0%, var(--hecate-bg-secondary) 100%);
+  background: linear-gradient(135deg, 
+    var(--hecate-bg-primary) 0%, 
+    var(--hecate-midnight) 50%, 
+    var(--hecate-bg-secondary) 100%);
 }
 
+/* Header del templo */
 .biblioteca-header {
   text-align: center;
   margin-bottom: 3rem;
+  position: relative;
 }
 
-.biblioteca-header h1 {
-  color: var(--accent);
+.temple-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.temple-banner h1 {
+  font-size: 3rem;
+  margin: 0;
+  text-shadow: 2px 2px 8px var(--shadow);
+  letter-spacing: 3px;
+}
+
+.god-emblems {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.emblem {
   font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px var(--shadow);
+  filter: drop-shadow(0 4px 8px var(--shadow));
+  animation: float 3s ease-in-out infinite;
 }
 
-.biblioteca-header p {
+.emblem-apolo {
+  animation-delay: 0s;
+}
+
+.emblem-hecate {
+  animation-delay: 1.5s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.temple-greeting {
   color: var(--text-secondary);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+  font-family: 'Cinzel', serif;
+}
+
+.god-quote {
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-weight: 500;
   max-width: 600px;
   margin: 0 auto;
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
 }
 
-/* Estadísticas */
-.biblioteca-stats {
+/* Estadísticas divinas */
+.divine-stats {
+  margin-bottom: 3rem;
+}
+
+.oracle-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 3rem;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.stat-card {
+.oracle-card {
   background: var(--card-bg);
-  padding: 1.5rem;
-  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
   text-align: center;
   border: 2px solid var(--border);
-  box-shadow: 0 4px 15px var(--shadow);
+  box-shadow: 0 8px 32px var(--shadow);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
-.stat-card::before {
+.oracle-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -64,82 +119,86 @@
   background: linear-gradient(90deg, var(--accent), var(--accent-hover));
 }
 
-.stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px var(--shadow);
+.oracle-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 40px var(--shadow);
 }
 
-.stat-card h3 {
+.oracle-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.oracle-card h3 {
   color: var(--text-secondary);
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: 'Cinzel', serif;
 }
 
-.stat-number {
+.oracle-number {
   color: var(--accent);
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   display: block;
+  font-family: 'Cinzel', serif;
 }
 
-/* Sección de juegos */
-.juegos-grid-section {
+.god-card {
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg-tertiary) 100%);
+}
+
+.god-card .oracle-number {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Salón de juegos */
+.hall-of-games {
   max-width: 1400px;
   margin: 0 auto;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.section-header h2 {
-  color: var(--text-primary);
-  font-size: 1.8rem;
-  margin: 0;
-}
-
-/* Grid de juegos */
-.juegos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-/* Estado vacío */
-.empty-state {
+.hall-header {
   text-align: center;
-  padding: 4rem 2rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
   background: var(--card-bg);
-  border-radius: 16px;
-  border: 2px dashed var(--border);
-  max-width: 500px;
-  margin: 0 auto;
+  border-radius: 20px;
+  border: 3px solid var(--border);
+  box-shadow: 0 8px 32px var(--shadow);
 }
 
-.empty-state h3 {
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+.hall-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 6px var(--shadow);
 }
 
-.empty-state p {
+.hall-subtitle {
   color: var(--text-secondary);
+  font-size: 1.2rem;
   margin-bottom: 2rem;
-  font-size: 1.1rem;
+  font-style: italic;
 }
 
-/* Botones */
+.divine-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Botones épicos */
 .btn {
-  padding: 0.8rem 1.5rem;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -147,122 +206,243 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-family: inherit;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-primary {
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-epic {
   background: linear-gradient(135deg, var(--accent), var(--accent-hover));
   color: var(--bg-primary);
-  box-shadow: 0 4px 15px var(--shadow);
+  box-shadow: 0 4px 20px var(--shadow);
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px var(--shadow);
+.btn-epic:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 30px var(--shadow);
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none !important;
+.btn-magic {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  font-family: 'Cinzel', serif;
 }
 
-/* Responsive Design */
+.btn-magic:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+  transform: translateY(-3px);
+}
+
+/* Grid sagrado */
+.sacred-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* Santuario vacío */
+.empty-sanctuary {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--card-bg);
+  border-radius: 20px;
+  border: 3px dashed var(--border);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 8px var(--shadow));
+}
+
+.empty-sanctuary h3 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-family: 'Cinzel', serif;
+}
+
+.empty-sanctuary p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+/* Pie del templo */
+.temple-footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border);
+}
+
+.altar-wisdom {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 20px var(--shadow);
+}
+
+.wisdom-text {
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  font-family: 'Cinzel', serif;
+}
+
+.altar-offerings {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.offering {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Responsive Design Épico */
 @media (max-width: 1200px) {
-  .juegos-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  .sacred-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
+  }
+  
+  .temple-banner h1 {
+    font-size: 2.5rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 968px) {
   .biblioteca-container {
     padding: 1rem;
   }
 
-  .biblioteca-header h1 {
-    font-size: 2rem;
-  }
-
-  .biblioteca-header p {
-    font-size: 1rem;
-  }
-
-  .section-header {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-
-  .juegos-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .biblioteca-stats {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  .oracle-cards {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1rem;
   }
 
-  .stat-card {
-    padding: 1rem;
+  .oracle-card {
+    padding: 1.5rem 1rem;
   }
 
-  .stat-number {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .juegos-grid {
-    grid-template-columns: 1fr;
+  .oracle-number {
+    font-size: 1.8rem;
   }
 
-  .biblioteca-stats {
-    grid-template-columns: 1fr;
+  .hall-header {
+    padding: 1.5rem;
   }
 
-  .empty-state {
-    padding: 2rem 1rem;
+  .hall-header h2 {
+    font-size: 2rem;
   }
 
-  .empty-state h3 {
-    font-size: 1.3rem;
-  }
-
-  .empty-state p {
-    font-size: 1rem;
+  .divine-actions {
+    flex-direction: column;
+    align-items: center;
   }
 
   .btn {
     width: 100%;
+    max-width: 300px;
     justify-content: center;
   }
 }
 
-/* Modo tableta */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .juegos-grid {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+@media (max-width: 768px) {
+  .temple-banner {
+    flex-direction: column;
+    gap: 0.5rem;
   }
-  
-  .biblioteca-container {
-    padding: 1.5rem;
+
+  .temple-banner h1 {
+    font-size: 2rem;
+  }
+
+  .emblem {
+    font-size: 2rem;
+  }
+
+  .temple-greeting {
+    font-size: 1.2rem;
+  }
+
+  .god-quote {
+    font-size: 1rem;
+  }
+
+  .oracle-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sacred-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .altar-offerings {
+    flex-direction: column;
+    gap: 1rem;
   }
 }
 
-/* Soporte para orientación landscape en móviles */
-@media (max-height: 500px) and (orientation: landscape) {
-  .biblioteca-container {
-    padding: 1rem;
+@media (max-width: 480px) {
+  .oracle-cards {
+    grid-template-columns: 1fr;
   }
-  
-  .biblioteca-header {
-    margin-bottom: 1.5rem;
+
+  .empty-sanctuary {
+    padding: 2rem 1rem;
   }
-  
-  .biblioteca-stats {
-    margin-bottom: 1.5rem;
+
+  .empty-icon {
+    font-size: 3rem;
   }
+
+  .wisdom-text {
+    font-size: 1.1rem;
+  }
+}
+
+/* Efectos especiales */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px var(--shadow); }
+  50% { box-shadow: 0 0 30px var(--accent); }
+}
+
+.glow-card {
+  animation: glow 2s ease-in-out infinite;
 }

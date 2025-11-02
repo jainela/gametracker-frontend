@@ -1,30 +1,36 @@
 :root {
-  /* Tema Apolo (claro) - Hierba Dorada */
-  --apolo-bg-primary: #fbf8eb;
-  --apolo-bg-secondary: #f7efca;
-  --apolo-bg-tertiary: #efdc99;
-  --apolo-text-primary: #3a1d0e;
-  --apolo-text-secondary: #8e521a;
-  --apolo-accent: #dda930;
-  --apolo-accent-hover: #ce9324;
+  /* Templo de Apolo - Luz y Gloria */
+  --apolo-bg-primary: #fef9e7;
+  --apolo-bg-secondary: #fcf3d0;
+  --apolo-bg-tertiary: #f8e8a8;
+  --apolo-text-primary: #2c1810;
+  --apolo-text-secondary: #7c5c3c;
+  --apolo-accent: #d4af37;
+  --apolo-accent-hover: #b8941f;
   --apolo-card-bg: #ffffff;
-  --apolo-border: #e6c25e;
-  --apolo-shadow: rgba(222, 169, 48, 0.2);
+  --apolo-border: #e9d8a6;
+  --apolo-shadow: rgba(212, 175, 55, 0.25);
+  --apolo-gold-light: #fef3cd;
+  --apolo-gold-dark: #b8941f;
+  --apolo-marble: #f8f9fa;
   --apolo-success: #10b981;
   --apolo-warning: #f59e0b;
-  --apolo-error: #ef4444;
+  --apolo-error: #dc2626;
   
-  /* Tema Hécate (oscuro) - Blue Bell */
-  --hecate-bg-primary: #28283e;
-  --hecate-bg-secondary: #45446b;
-  --hecate-bg-tertiary: #514f84;
-  --hecate-text-primary: #f3f4fa;
-  --hecate-text-secondary: #d6dcef;
-  --hecate-accent: #7371ba;
-  --hecate-accent-hover: #635fa3;
-  --hecate-card-bg: #353555;
-  --hecate-border: #898dcb;
-  --hecate-shadow: rgba(115, 113, 186, 0.3);
+  /* Santuario de Hécate - Misterio y Noche */
+  --hecate-bg-primary: #1a1a2e;
+  --hecate-bg-secondary: #2d2b55;
+  --hecate-bg-tertiary: #413f7d;
+  --hecate-text-primary: #e2e8f0;
+  --hecate-text-secondary: #94a3b8;
+  --hecate-accent: #8b5cf6;
+  --hecate-accent-hover: #7c3aed;
+  --hecate-card-bg: #252547;
+  --hecate-border: #4c51bf;
+  --hecate-shadow: rgba(139, 92, 246, 0.3);
+  --hecate-purple-light: #a78bfa;
+  --hecate-purple-dark: #6d28d9;
+  --hecate-midnight: #0f172a;
   --hecate-success: #10b981;
   --hecate-warning: #f59e0b;
   --hecate-error: #ef4444;
@@ -44,6 +50,9 @@
   --success: var(--apolo-success);
   --warning: var(--apolo-warning);
   --error: var(--apolo-error);
+  --gold-light: var(--apolo-gold-light);
+  --gold-dark: var(--apolo-gold-dark);
+  --marble: var(--apolo-marble);
 }
 
 .theme-hecate {
@@ -60,13 +69,16 @@
   --success: var(--hecate-success);
   --warning: var(--hecate-warning);
   --error: var(--hecate-error);
+  --purple-light: var(--hecate-purple-light);
+  --purple-dark: var(--hecate-purple-dark);
+  --midnight: var(--hecate-midnight);
 }
 
 * {
-  transition: background-color 0.3s ease, 
-              color 0.3s ease, 
-              border-color 0.3s ease, 
-              box-shadow 0.3s ease,
+  transition: background-color 0.4s ease, 
+              color 0.4s ease, 
+              border-color 0.4s ease, 
+              box-shadow 0.4s ease,
               transform 0.3s ease;
 }
 
@@ -77,45 +89,91 @@ body {
   padding: 0;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* Scrollbar personalizado para ambos temas */
+/* Efectos de partículas para el fondo */
+.theme-apolo::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(252, 243, 208, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.theme-hecate::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(76, 81, 191, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Scrollbar épico */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
   background: var(--bg-secondary);
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 4px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  border-radius: 6px;
+  border: 2px solid var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-hover);
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
 }
 
-/* Mejoras específicas para el tema Hécate */
+/* Mejoras de texto */
+.theme-apolo {
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
 .theme-hecate {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Gradientes específicos para cada tema */
-.theme-apolo .navbar {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+/* Animaciones de destello */
+@keyframes gold-shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
 }
 
-.theme-hecate .navbar {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+@keyframes purple-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
-.theme-apolo .biblioteca-container {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+.gold-effect {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.3),
+    transparent
+  );
+  background-size: 1000px 100%;
+  animation: gold-shimmer 3s infinite linear;
 }
 
-.theme-hecate .biblioteca-container {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+.purple-effect {
+  animation: purple-glow 2s ease-in-out infinite;
 }

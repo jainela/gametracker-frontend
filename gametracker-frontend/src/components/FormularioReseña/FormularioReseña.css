@@ -1,44 +1,266 @@
-.formulario-reseña-container {
+.templo-escritura {
   padding: 2rem;
   min-height: calc(100vh - 80px);
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-/* Gradientes específicos por tema */
-.theme-apolo .formulario-reseña-container {
-  background: linear-gradient(135deg, var(--apolo-bg-primary) 0%, var(--apolo-bg-tertiary) 100%);
+.theme-apolo .templo-escritura {
+  background: linear-gradient(135deg, 
+    var(--apolo-bg-primary) 0%, 
+    var(--apolo-marble) 50%, 
+    var(--apolo-gold-light) 100%);
 }
 
-.theme-hecate .formulario-reseña-container {
-  background: linear-gradient(135deg, var(--hecate-bg-primary) 0%, var(--hecate-bg-tertiary) 100%);
+.theme-hecate .templo-escritura {
+  background: linear-gradient(135deg, 
+    var(--hecate-bg-primary) 0%, 
+    var(--hecate-midnight) 50%, 
+    var(--hecate-purple-light) 100%);
 }
 
-.formulario-reseña-container h1 {
-  color: var(--accent);
-  margin-bottom: 1rem;
+.atalaya-cronista {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 3rem;
+  border: 4px solid var(--border);
+  box-shadow: 0 16px 48px var(--shadow);
+  max-width: 800px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.atalaya-cronista::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+}
+
+.rollo-principal {
   text-align: center;
+  margin-bottom: 3rem;
 }
 
-.formulario-reseña-container p {
+.rollo-principal h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 8px var(--shadow);
+}
+
+.instruccion-oraculo {
   color: var(--text-secondary);
   font-size: 1.2rem;
+  font-style: italic;
+  font-family: 'Cinzel', serif;
+}
+
+/* Selección Divina */
+.seleccion-divina {
+  margin-bottom: 2rem;
+}
+
+.titulo-seccion {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-family: 'Cinzel', serif;
   text-align: center;
-  max-width: 500px;
+}
+
+.dioses-opciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.opcion-dios {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.opcion-dios:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.opcion-dios.seleccionado {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--bg-tertiary), transparent);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.icono-dios {
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.texto-dios {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+}
+
+.descripcion-dios {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Papiro del Formulario */
+.papiro-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.campo-sagrado {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.label-epico {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: 'Cinzel', serif;
+}
+
+.select-divino, .input-epico, .textarea-epico {
+  padding: 1rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.select-divino:focus, .input-epico:focus, .textarea-epico:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--shadow);
+}
+
+.textarea-epico {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+.contador-palabras {
+  text-align: right;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Estrellas Input */
+.estrellas-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-estrella {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--border);
+}
+
+.btn-estrella:hover {
+  transform: scale(1.2);
+  color: var(--accent);
+}
+
+/* Acciones Finales */
+.acciones-finales {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Consejo del Oráculo */
+.consejo-oraculo {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 2px solid var(--border);
+}
+
+.oraculo-icono {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.consejo-texto {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin: 0;
+  font-style: italic;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .formulario-reseña-container {
+  .templo-escritura {
     padding: 1rem;
   }
   
-  .formulario-reseña-container h1 {
+  .atalaya-cronista {
+    padding: 2rem;
+  }
+  
+  .rollo-principal h1 {
+    font-size: 2rem;
+  }
+  
+  .dioses-opciones {
+    grid-template-columns: 1fr;
+  }
+  
+  .acciones-finales {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .atalaya-cronista {
+    padding: 1.5rem;
+  }
+  
+  .rollo-principal h1 {
     font-size: 1.8rem;
   }
   
-  .formulario-reseña-container p {
-    font-size: 1rem;
+  .opcion-dios {
+    padding: 1rem;
   }
 }

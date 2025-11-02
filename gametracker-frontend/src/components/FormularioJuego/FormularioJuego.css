@@ -1,44 +1,142 @@
-.formulario-container {
+.santuario-formulario {
   padding: 2rem;
   min-height: calc(100vh - 80px);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
-/* Gradientes específicos por tema */
-.theme-apolo .formulario-container {
-  background: linear-gradient(135deg, var(--apolo-bg-primary) 0%, var(--apolo-bg-tertiary) 100%);
+.theme-apolo .santuario-formulario {
+  background: linear-gradient(135deg, 
+    var(--apolo-bg-primary) 0%, 
+    var(--apolo-marble) 50%, 
+    var(--apolo-gold-light) 100%);
 }
 
-.theme-hecate .formulario-container {
-  background: linear-gradient(135deg, var(--hecate-bg-primary) 0%, var(--hecate-bg-tertiary) 100%);
+.theme-hecate .santuario-formulario {
+  background: linear-gradient(135deg, 
+    var(--hecate-bg-primary) 0%, 
+    var(--hecate-midnight) 50%, 
+    var(--hecate-purple-light) 100%);
 }
 
-.formulario-container h1 {
-  color: var(--accent);
-  margin-bottom: 1rem;
+.altar-creacion {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 3rem;
+  border: 4px solid var(--border);
+  box-shadow: 
+    0 16px 48px var(--shadow),
+    inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  max-width: 600px;
+  width: 100%;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.formulario-container p {
+.altar-creacion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+}
+
+.oraculo-header {
+  margin-bottom: 2rem;
+}
+
+.oraculo-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 8px var(--shadow);
+}
+
+.oraculo-subtitulo {
   color: var(--text-secondary);
   font-size: 1.2rem;
-  text-align: center;
-  max-width: 500px;
+  font-style: italic;
+  font-family: 'Cinzel', serif;
+}
+
+.piedra-sagrada {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+  border: 2px solid var(--border);
+}
+
+.runas-poder {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.runa {
+  font-size: 2rem;
+  filter: drop-shadow(0 4px 8px var(--shadow));
+  animation: float 3s ease-in-out infinite;
+}
+
+.runa:nth-child(1) { animation-delay: 0s; }
+.runa:nth-child(2) { animation-delay: 0.5s; }
+.runa:nth-child(3) { animation-delay: 1s; }
+.runa:nth-child(4) { animation-delay: 1.5s; }
+
+.mensaje-oraculo p {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.profecias-pendientes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.profecia {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 0.8rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+.acciones-sagradas {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .formulario-container {
+  .santuario-formulario {
     padding: 1rem;
   }
   
-  .formulario-container h1 {
-    font-size: 1.8rem;
+  .altar-creacion {
+    padding: 2rem;
   }
   
-  .formulario-container p {
-    font-size: 1rem;
+  .oraculo-header h1 {
+    font-size: 2rem;
+  }
+  
+  .acciones-sagradas {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
   }
 }

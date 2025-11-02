@@ -9,77 +9,86 @@ import './styles/themes.css';
 import './App.css';
 
 const Navbar = ({ currentView, onNavigate }) => {
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode, toggleTheme, themeName } = useTheme();
 
   const navItems = [
-    { key: 'biblioteca', label: '📚 Biblioteca', icon: '📚' },
-    { key: 'agregar-juego', label: '➕ Agregar Juego', icon: '➕' },
-    { key: 'reseñas', label: '⭐ Reseñas', icon: '⭐' },
-    { key: 'estadisticas', label: '📊 Estadísticas', icon: '📊' },
+    { key: 'biblioteca', label: 'Biblioteca', icon: '📜', description: 'Salón de los Héroes' },
+    { key: 'agregar-juego', label: 'Agregar Juego', icon: '⚔️', description: 'Forjar Leyenda' },
+    { key: 'reseñas', label: 'Reseñas', icon: '⭐', description: 'Crónicas Divinas' },
+    { key: 'estadisticas', label: 'Estadísticas', icon: '📊', description: 'Oráculo del Progreso' },
   ];
 
+  const getThemeQuote = () => {
+    return isDarkMode 
+      ? "Bajo el manto de Hécate, tus juegos encuentran misterio"
+      : "Bajo la luz de Apolo, tus juegos alcanzan la gloria";
+  };
+
   return (
-    <nav className="navbar">
-      <div className="nav-container">
-        <div className="nav-brand">
-          <h1>🎮 GameTracker</h1>
-          <span className="nav-subtitle">Tu Biblioteca de Videojuegos</span>
-        </div>
+    <>
+      <nav className="navbar">
+        <div className="nav-container">
+          <div className="nav-brand">
+            <h1 className="epic-text">GAME TRACKER</h1>
+            <span className="nav-subtitle">{getThemeQuote()}</span>
+          </div>
 
-        <div className="nav-links">
-          {navItems.map(item => (
-            <button
-              key={item.key}
-              className={`nav-link ${currentView === item.key ? 'active' : ''}`}
-              onClick={() => onNavigate(item.key)}
+          <div className="nav-links">
+            {navItems.map(item => (
+              <button
+                key={item.key}
+                className={`nav-link ${currentView === item.key ? 'active' : ''}`}
+                onClick={() => onNavigate(item.key)}
+                title={item.description}
+              >
+                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-label epic-text">{item.label}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="nav-actions">
+            <button 
+              className="theme-toggle"
+              onClick={toggleTheme}
+              aria-label={`Cambiar a templo de ${isDarkMode ? 'Apolo' : 'Hécate'}`}
             >
-              <span className="nav-icon">{item.icon}</span>
-              <span className="nav-label">{item.label}</span>
+              <span className="theme-icon">
+                {isDarkMode ? '☀️' : '🌙'}
+              </span>
+              <span className="theme-text">
+                {themeName}
+              </span>
             </button>
-          ))}
+          </div>
         </div>
-
-        <div className="nav-actions">
-          <button 
-            className="theme-toggle"
-            onClick={toggleTheme}
-            aria-label={isDarkMode ? 'Cambiar a tema Apolo' : 'Cambiar a tema Hécate'}
-          >
-            <span className="theme-icon">
-              {isDarkMode ? '☀️' : '🌙'}
-            </span>
-            <span className="theme-text">
-              {isDarkMode ? 'Apolo' : 'Hécate'}
-            </span>
-          </button>
-        </div>
-      </div>
-    </nav>
+      </nav>
+      
+      {/* Pilares decorativos */}
+      <div className="temple-decoration pillar-left"></div>
+      <div className="temple-decoration pillar-right"></div>
+    </>
   );
 };
 
 const AppContent = () => {
   const [currentView, setCurrentView] = useState('biblioteca');
+  const { isDarkMode } = useTheme();
 
   const renderView = () => {
-    switch (currentView) {
-      case 'biblioteca':
-        return <BibliotecaJuegos />;
-      case 'agregar-juego':
-        return <FormularioJuego />;
-      case 'reseñas':
-        return <ListaReseñas />;
-      case 'agregar-reseña':
-        return <FormularioReseña />;
-      case 'estadisticas':
-        return <EstadisticasPersonales />;
-      default:
-        return <BibliotecaJuegos />;
-    }
+    const views = {
+      'biblioteca': <BibliotecaJuegos />,
+      'agregar-juego': <FormularioJuego />,
+      'reseñas': <ListaReseñas />,
+      'agregar-reseña': <FormularioReseña />,
+      'estadisticas': <EstadisticasPersonales />
+    };
+    
+    return views[currentView] || <BibliotecaJuegos />;
   };
 
   return (
-    <div className="App">
+    <div className={`App ${isDarkMode ? 'temple-hecate' : 'temple-apolo'}`}>
       <Navbar currentView={currentView} onNavigate={setCurrentView} />
       <main className="main-content">
         {renderView()}
