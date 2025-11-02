@@ -1,20 +1,31 @@
 .App {
   min-height: 100vh;
-  background: linear-gradient(135deg, #fbf8eb 0%, #f7efca 100%);
-  color: #3a1d0e;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: 'Inter', sans-serif;
 }
 
-/* Navbar Simple Styles */
-.navbar-simple {
-  background: linear-gradient(135deg, #f7efca 0%, #efdc99 100%);
+/* Navbar Styles */
+.navbar {
   padding: 1rem 2rem;
-  border-bottom: 3px solid #dda930;
-  box-shadow: 0 4px 20px rgba(222, 169, 48, 0.2);
+  border-bottom: 3px solid var(--accent);
+  box-shadow: 0 4px 20px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+/* Gradientes específicos por tema */
+.theme-apolo .navbar {
+  background: linear-gradient(135deg, var(--apolo-bg-secondary) 0%, var(--apolo-bg-tertiary) 100%);
 }
 
-.nav-simple-container {
-  max-width: 1200px;
+.theme-hecate .navbar {
+  background: linear-gradient(135deg, var(--hecate-bg-secondary) 0%, var(--hecate-bg-tertiary) 100%);
+}
+
+.nav-container {
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -22,30 +33,33 @@
   gap: 2rem;
 }
 
-.nav-simple-brand h1 {
-  color: #dda930;
+.nav-brand h1 {
+  color: var(--accent);
   margin: 0;
   font-size: 1.8rem;
   font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.nav-simple-brand span {
-  color: #8e521a;
+.nav-subtitle {
+  color: var(--text-secondary);
   font-size: 0.8rem;
+  display: block;
+  margin-top: -2px;
 }
 
-.nav-simple-links {
+.nav-links {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-.nav-simple-link {
+.nav-link {
   background: transparent;
-  border: 2px solid #dda930;
+  border: 2px solid var(--accent);
   padding: 0.7rem 1.2rem;
   border-radius: 8px;
-  color: #dda930;
+  color: var(--accent);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -53,43 +67,146 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
+  text-decoration: none;
 }
 
-.nav-simple-link:hover {
-  background: #dda930;
-  color: white;
+.nav-link:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(222, 169, 48, 0.3);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
-.nav-simple-link.active {
-  background: #dda930;
-  color: white;
+.nav-link.active {
+  background: var(--accent);
+  color: var(--bg-primary);
 }
 
-.nav-icon {
-  font-size: 1rem;
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 25px;
+  cursor: pointer;
+  color: var(--bg-primary);
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px var(--shadow);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow);
+}
+
+.theme-icon {
+  font-size: 1.1rem;
+}
+
+.theme-text {
+  font-size: 0.9rem;
 }
 
 .main-content {
   min-height: calc(100vh - 80px);
 }
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .nav-container {
+    gap: 1.5rem;
+  }
+  
+  .nav-links {
+    gap: 0.8rem;
+  }
+  
+  .nav-link {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+}
 
-/* Responsive */
 @media (max-width: 768px) {
-  .nav-simple-container {
-    flex-direction: column;
-    gap: 1rem;
+  .navbar {
     padding: 1rem;
   }
 
-  .nav-simple-links {
+  .nav-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-brand {
+    text-align: center;
+  }
+
+  .nav-links {
     flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .nav-label {
+    display: none;
+  }
+
+  .theme-text {
+    display: none;
+  }
+
+  .theme-toggle {
+    padding: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-link {
+    width: 100%;
     justify-content: center;
   }
 
-  .nav-simple-link {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
+  .nav-brand h1 {
+    font-size: 1.5rem;
   }
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

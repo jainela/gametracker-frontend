@@ -1,5 +1,44 @@
-/* src/components/ListaReseñas/ListaReseñas.css */
-.lista-reseñas {
+.lista-container {
   padding: 2rem;
   min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Gradientes específicos por tema */
+.theme-apolo .lista-container {
+  background: linear-gradient(135deg, var(--apolo-bg-primary) 0%, var(--apolo-bg-secondary) 100%);
+}
+
+.theme-hecate .lista-container {
+  background: linear-gradient(135deg, var(--hecate-bg-primary) 0%, var(--hecate-bg-secondary) 100%);
+}
+
+.lista-container h1 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.lista-container p {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  text-align: center;
+  max-width: 500px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lista-container {
+    padding: 1rem;
+  }
+  
+  .lista-container h1 {
+    font-size: 1.8rem;
+  }
+  
+  .lista-container p {
+    font-size: 1rem;
+  }
 }

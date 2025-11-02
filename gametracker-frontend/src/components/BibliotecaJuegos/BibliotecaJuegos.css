@@ -1,7 +1,15 @@
 .biblioteca-container {
   min-height: calc(100vh - 80px);
   padding: 2rem;
-  background: linear-gradient(135deg, #fbf8eb 0%, #f7efca 100%);
+}
+
+/* Gradientes específicos por tema */
+.theme-apolo .biblioteca-container {
+  background: linear-gradient(135deg, var(--apolo-bg-primary) 0%, var(--apolo-bg-secondary) 100%);
+}
+
+.theme-hecate .biblioteca-container {
+  background: linear-gradient(135deg, var(--hecate-bg-primary) 0%, var(--hecate-bg-secondary) 100%);
 }
 
 .biblioteca-header {
@@ -10,14 +18,14 @@
 }
 
 .biblioteca-header h1 {
-  color: #dda930;
+  color: var(--accent);
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 4px var(--shadow);
 }
 
 .biblioteca-header p {
-  color: #8e521a;
+  color: var(--text-secondary);
   font-size: 1.2rem;
   max-width: 600px;
   margin: 0 auto;
@@ -29,28 +37,40 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
-  max-width: 800px;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .stat-card {
-  background: white;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 12px;
   text-align: center;
-  border: 2px solid #e6c25e;
-  box-shadow: 0 4px 15px rgba(222, 169, 48, 0.2);
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 15px var(--shadow);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
 }
 
 .stat-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(222, 169, 48, 0.3);
+  box-shadow: 0 8px 25px var(--shadow);
 }
 
 .stat-card h3 {
-  color: #8e521a;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
@@ -58,7 +78,7 @@
 }
 
 .stat-number {
-  color: #dda930;
+  color: var(--accent);
   font-size: 2rem;
   font-weight: bold;
   display: block;
@@ -66,7 +86,7 @@
 
 /* Sección de juegos */
 .juegos-grid-section {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -80,8 +100,9 @@
 }
 
 .section-header h2 {
-  color: #3a1d0e;
+  color: var(--text-primary);
   font-size: 1.8rem;
+  margin: 0;
 }
 
 /* Grid de juegos */
@@ -95,19 +116,21 @@
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
+  background: var(--card-bg);
   border-radius: 16px;
-  border: 2px dashed #e6c25e;
+  border: 2px dashed var(--border);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .empty-state h3 {
-  color: #3a1d0e;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
 
 .empty-state p {
-  color: #8e521a;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
   font-size: 1.1rem;
 }
@@ -125,20 +148,34 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
+  font-family: inherit;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #dda930, #ce9324);
-  color: white;
-  box-shadow: 0 4px 15px rgba(222, 169, 48, 0.3);
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: var(--bg-primary);
+  box-shadow: 0 4px 15px var(--shadow);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(222, 169, 48, 0.4);
+  box-shadow: 0 6px 20px var(--shadow);
 }
 
-/* Responsive */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .juegos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .biblioteca-container {
     padding: 1rem;
@@ -146,6 +183,10 @@
 
   .biblioteca-header h1 {
     font-size: 2rem;
+  }
+
+  .biblioteca-header p {
+    font-size: 1rem;
   }
 
   .section-header {
@@ -160,12 +201,68 @@
   }
 
   .biblioteca-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .juegos-grid {
     grid-template-columns: 1fr;
+  }
+
+  .biblioteca-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.3rem;
+  }
+
+  .empty-state p {
+    font-size: 1rem;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Modo tableta */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .juegos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+  
+  .biblioteca-container {
+    padding: 1.5rem;
+  }
+}
+
+/* Soporte para orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+  .biblioteca-container {
+    padding: 1rem;
+  }
+  
+  .biblioteca-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .biblioteca-stats {
+    margin-bottom: 1.5rem;
   }
 }

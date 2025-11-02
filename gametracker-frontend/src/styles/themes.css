@@ -1,4 +1,3 @@
-/* src/styles/themes.css */
 :root {
   /* Tema Apolo (claro) - Hierba Dorada */
   --apolo-bg-primary: #fbf8eb;
@@ -11,18 +10,24 @@
   --apolo-card-bg: #ffffff;
   --apolo-border: #e6c25e;
   --apolo-shadow: rgba(222, 169, 48, 0.2);
+  --apolo-success: #10b981;
+  --apolo-warning: #f59e0b;
+  --apolo-error: #ef4444;
   
-  /* Tema Hécate (oscuro) - Blue Gem */
-  --hecate-bg-primary: #1f0e67;
-  --hecate-bg-secondary: #371a98;
-  --hecate-bg-tertiary: #411dba;
-  --hecate-text-primary: #f3f3ff;
-  --hecate-text-secondary: #b7b3ff;
-  --hecate-accent: #7058fa;
-  --hecate-accent-hover: #5d36f1;
-  --hecate-card-bg: #2d1a7a;
-  --hecate-border: #9388fd;
-  --hecate-shadow: rgba(112, 88, 250, 0.3);
+  /* Tema Hécate (oscuro) - Blue Bell */
+  --hecate-bg-primary: #28283e;
+  --hecate-bg-secondary: #45446b;
+  --hecate-bg-tertiary: #514f84;
+  --hecate-text-primary: #f3f4fa;
+  --hecate-text-secondary: #d6dcef;
+  --hecate-accent: #7371ba;
+  --hecate-accent-hover: #635fa3;
+  --hecate-card-bg: #353555;
+  --hecate-border: #898dcb;
+  --hecate-shadow: rgba(115, 113, 186, 0.3);
+  --hecate-success: #10b981;
+  --hecate-warning: #f59e0b;
+  --hecate-error: #ef4444;
 }
 
 .theme-apolo {
@@ -36,6 +41,9 @@
   --card-bg: var(--apolo-card-bg);
   --border: var(--apolo-border);
   --shadow: var(--apolo-shadow);
+  --success: var(--apolo-success);
+  --warning: var(--apolo-warning);
+  --error: var(--apolo-error);
 }
 
 .theme-hecate {
@@ -49,10 +57,17 @@
   --card-bg: var(--hecate-card-bg);
   --border: var(--hecate-border);
   --shadow: var(--hecate-shadow);
+  --success: var(--hecate-success);
+  --warning: var(--hecate-warning);
+  --error: var(--hecate-error);
 }
 
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease, 
+              box-shadow 0.3s ease,
+              transform 0.3s ease;
 }
 
 body {
@@ -60,11 +75,11 @@ body {
   color: var(--text-primary);
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
 }
 
-/* Scrollbar personalizado */
+/* Scrollbar personalizado para ambos temas */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -80,4 +95,27 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-hover);
+}
+
+/* Mejoras específicas para el tema Hécate */
+.theme-hecate {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Gradientes específicos para cada tema */
+.theme-apolo .navbar {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+}
+
+.theme-hecate .navbar {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+}
+
+.theme-apolo .biblioteca-container {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.theme-hecate .biblioteca-container {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
 }
