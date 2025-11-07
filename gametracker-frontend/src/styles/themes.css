@@ -1,5 +1,5 @@
 :root {
-  /* Templo de Apolo - Luz y Gloria */
+  /* Templo de Apolo - Luz y Gloria Mejorada */
   --apolo-bg-primary: #fef9e7;
   --apolo-bg-secondary: #fcf3d0;
   --apolo-bg-tertiary: #f8e8a8;
@@ -7,33 +7,35 @@
   --apolo-text-secondary: #7c5c3c;
   --apolo-accent: #d4af37;
   --apolo-accent-hover: #b8941f;
-  --apolo-card-bg: #ffffff;
+  --apolo-card-bg: linear-gradient(135deg, #ffffff 0%, #fef9e7 100%);
   --apolo-border: #e9d8a6;
-  --apolo-shadow: rgba(212, 175, 55, 0.25);
+  --apolo-shadow: rgba(212, 175, 55, 0.35);
   --apolo-gold-light: #fef3cd;
   --apolo-gold-dark: #b8941f;
-  --apolo-marble: #f8f9fa;
+  --apolo-marble: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   --apolo-success: #10b981;
   --apolo-warning: #f59e0b;
   --apolo-error: #dc2626;
+  --apolo-glow: rgba(212, 175, 55, 0.6);
   
-  /* Santuario de Hécate - Misterio y Noche */
-  --hecate-bg-primary: #1a1a2e;
-  --hecate-bg-secondary: #2d2b55;
-  --hecate-bg-tertiary: #413f7d;
+  /* Santuario de Hécate - Misterio y Noche Mejorada */
+  --hecate-bg-primary: #0f0f1f;
+  --hecate-bg-secondary: #1a1a2e;
+  --hecate-bg-tertiary: #2d2b55;
   --hecate-text-primary: #e2e8f0;
   --hecate-text-secondary: #94a3b8;
   --hecate-accent: #8b5cf6;
   --hecate-accent-hover: #7c3aed;
-  --hecate-card-bg: #252547;
+  --hecate-card-bg: linear-gradient(135deg, #252547 0%, #1a1a2e 100%);
   --hecate-border: #4c51bf;
-  --hecate-shadow: rgba(139, 92, 246, 0.3);
+  --hecate-shadow: rgba(139, 92, 246, 0.4);
   --hecate-purple-light: #a78bfa;
   --hecate-purple-dark: #6d28d9;
-  --hecate-midnight: #0f172a;
+  --hecate-midnight: linear-gradient(135deg, #0f0f1f 0%, #1a1a2e 100%);
   --hecate-success: #10b981;
   --hecate-warning: #f59e0b;
   --hecate-error: #ef4444;
+  --hecate-glow: rgba(139, 92, 246, 0.6);
 }
 
 .theme-apolo {
@@ -53,6 +55,7 @@
   --gold-light: var(--apolo-gold-light);
   --gold-dark: var(--apolo-gold-dark);
   --marble: var(--apolo-marble);
+  --glow: var(--apolo-glow);
 }
 
 .theme-hecate {
@@ -72,14 +75,16 @@
   --purple-light: var(--hecate-purple-light);
   --purple-dark: var(--hecate-purple-dark);
   --midnight: var(--hecate-midnight);
+  --glow: var(--hecate-glow);
 }
 
 * {
-  transition: background-color 0.4s ease, 
-              color 0.4s ease, 
-              border-color 0.4s ease, 
-              box-shadow 0.4s ease,
-              transform 0.3s ease;
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
@@ -87,12 +92,12 @@ body {
   color: var(--text-primary);
   margin: 0;
   padding: 0;
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Cinzel', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
 }
 
-/* Efectos de partículas para el fondo */
+/* Efectos de partículas avanzados */
 .theme-apolo::before {
   content: '';
   position: fixed;
@@ -101,10 +106,12 @@ body {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(252, 243, 208, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(252, 243, 208, 0.08) 0%, transparent 50%),
+    linear-gradient(45deg, transparent 30%, rgba(212, 175, 55, 0.03) 100%);
   pointer-events: none;
   z-index: -1;
+  animation: particle-float 20s ease-in-out infinite;
 }
 
 .theme-hecate::before {
@@ -115,33 +122,43 @@ body {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(76, 81, 191, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(76, 81, 191, 0.08) 0%, transparent 50%),
+    linear-gradient(45deg, transparent 30%, rgba(139, 92, 246, 0.03) 100%);
   pointer-events: none;
   z-index: -1;
+  animation: particle-float 20s ease-in-out infinite;
 }
 
-/* Scrollbar épico */
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.02); }
+}
+
+/* Scrollbar épico mejorado */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 14px;
 }
 
 ::-webkit-scrollbar-track {
   background: var(--bg-secondary);
-  border-radius: 6px;
+  border-radius: 8px;
+  margin: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-  border-radius: 6px;
-  border: 2px solid var(--bg-secondary);
+  border-radius: 8px;
+  border: 3px solid var(--bg-secondary);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  box-shadow: 0 0 12px var(--glow);
 }
 
-/* Mejoras de texto */
+/* Efectos de texto mejorados */
 .theme-apolo {
   -webkit-font-smoothing: antialiased;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -150,24 +167,48 @@ body {
 .theme-hecate {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Animaciones de destello */
+/* Animaciones avanzadas */
 @keyframes gold-shimmer {
   0% { background-position: -1000px 0; }
   100% { background-position: 1000px 0; }
 }
 
-@keyframes purple-glow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+@keyframes purple-pulse {
+  0%, 100% { 
+    opacity: 0.6;
+    box-shadow: 0 0 20px var(--glow);
+  }
+  50% { 
+    opacity: 1;
+    box-shadow: 0 0 40px var(--glow), 0 0 60px var(--glow);
+  }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-8px) rotate(1deg); }
+  66% { transform: translateY(-4px) rotate(-1deg); }
+}
+
+@keyframes glow-orb {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 20px var(--glow);
+  }
+  50% { 
+    transform: scale(1.1);
+    box-shadow: 0 0 40px var(--glow), 0 0 60px var(--glow);
+  }
 }
 
 .gold-effect {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(212, 175, 55, 0.3),
+    rgba(212, 175, 55, 0.4),
     transparent
   );
   background-size: 1000px 100%;
@@ -175,5 +216,46 @@ body {
 }
 
 .purple-effect {
-  animation: purple-glow 2s ease-in-out infinite;
+  animation: purple-pulse 3s ease-in-out infinite;
+}
+
+.float-effect {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.glow-orb {
+  animation: glow-orb 4s ease-in-out infinite;
+}
+
+/* Efectos de profundidad */
+.depth-1 { box-shadow: 0 2px 8px var(--shadow); }
+.depth-2 { box-shadow: 0 4px 16px var(--shadow); }
+.depth-3 { box-shadow: 0 8px 32px var(--shadow); }
+.depth-4 { box-shadow: 0 16px 48px var(--shadow); }
+.depth-5 { box-shadow: 0 24px 64px var(--shadow); }
+
+/* Gradientes épicos */
+.epic-gradient-gold {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover), #fef3cd);
+}
+
+.epic-gradient-purple {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover), #a78bfa);
+}
+
+/* Mejoras de rendimiento */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Soporte para modo alto contraste */
+@media (prefers-contrast: high) {
+  :root {
+    --apolo-shadow: rgba(0, 0, 0, 0.6);
+    --hecate-shadow: rgba(0, 0, 0, 0.8);
+  }
 }

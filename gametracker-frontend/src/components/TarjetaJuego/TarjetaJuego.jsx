@@ -1,149 +1,215 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import './TarjetaJuego.css';
 
 const TarjetaJuego = ({ juego, onEdit, onDelete }) => {
   const { isDarkMode } = useTheme();
+  const [isHovered, setIsHovered] = useState(false);
+  const [showActions, setShowActions] = useState(false);
 
-  const handleEdit = () => {
-    if (onEdit) onEdit(juego);
-  };
-
-  const handleDelete = () => {
-    if (onDelete) onDelete(juego.id);
-  };
-
-  const getGodBadge = () => {
-    switch(juego.dios) {
-      case 'Apolo':
-        return { icon: '☀️', text: 'Bendición de Apolo', class: 'badge-apolo' };
-      case 'Hécate':
-        return { icon: '🌙', text: 'Protección de Hécate', class: 'badge-hecate' };
-      case 'Ambos':
-        return { icon: '⚡', text: 'Favor Divino', class: 'badge-divine' };
-      default:
-        return { icon: '🎮', text: 'Leyenda Mortal', class: 'badge-mortal' };
+  const getGodIcon = () => {
+    switch (juego.dios) {
+      case 'Apolo': return '☀️';
+      case 'Hécate': return '🌙';
+      case 'Ambos': return '⚡';
+      default: return '🎮';
     }
   };
 
-  const getAchievementLevel = () => {
-    if (juego.horas >= 100) return { level: 'ÉPICO', class: 'epic-level' };
-    if (juego.horas >= 50) return { level: 'HEROICO', class: 'heroic-level' };
-    if (juego.horas >= 20) return { level: 'VALIENTE', class: 'valiant-level' };
-    return { level: 'INICIADO', class: 'initiate-level' };
+  const getGodColor = () => {
+    switch (juego.dios) {
+      case 'Apolo': return 'gold';
+      case 'Hécate': return 'purple';
+      case 'Ambos': return 'both';
+      default: return 'default';
+    }
   };
 
-  const godBadge = getGodBadge();
-  const achievement = getAchievementLevel();
+  const getStatusIcon = () => {
+    return juego.completado ? '✅' : '⏳';
+  };
+
+  const getPlatformIcon = () => {
+    const platforms = {
+      'PC': '💻',
+      'PlayStation': '🎮',
+      'Xbox': '🎮',
+      'Nintendo Switch': '🎮',
+      'Multiplataforma': '🌐'
+    };
+    return platforms[juego.plataforma] || '🎮';
+  };
+
+  const getRatingStars = (rating) => {
+    return '⭐'.repeat(rating) + '☆'.repeat(5 - rating);
+  };
+
+  const handleEdit = (e) => {
+    e.stopPropagation();
+    onEdit(juego);
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    onDelete(juego.id);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const calculateProgress = () => {
+    // Simular progreso basado en horas (para demo)
+    const maxHours = 100;
+    return Math.min((juego.horas / maxHours) * 100, 100);
+  };
 
   return (
-    <div className={`reliquia-juego ${juego.completado ? 'reliquia-completada' : ''}`}>
-      {/* Marco divino */}
-      <div className="reliquia-marco">
-        <div className="reliquia-superior">
-          <div className="dios-bendicion">
-            <span className={`badge-dios ${godBadge.class}`}>
-              {godBadge.icon} {godBadge.text}
-            </span>
-          </div>
-          <div className="nivel-hazaña">
-            <span className={`badge-hazaña ${achievement.class}`}>
-              {achievement.level}
-            </span>
-          </div>
-        </div>
-
-        {/* Portada sagrada */}
-        <div className="reliquia-portada">
-          <img src={juego.portada} alt={juego.titulo} />
-          {juego.completado && (
-            <div className="sello-completado">
-              <span className="sello-icono">🏆</span>
-              <span className="sello-texto">HAZAÑA COMPLETADA</span>
-            </div>
-          )}
-          <div className="velo-sagrado">
-            <button className="btn-oraculo ver-profecia">
-              🔮 Ver Profecía
-            </button>
-          </div>
-        </div>
+    <div 
+      className={`tarjeta-juego ${getGodColor()} ${isHovered ? 'hovered' : ''} ${juego.completado ? 'completado' : 'en-progreso'}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => setShowActions(!showActions)}
+    >
+      {/* Efecto de brillo divino */}
+      <div className="divine-glow"></div>
+      
+      {/* Portada épica con efectos */}
+      <div className="portada-container">
+        <div className="portada-overlay"></div>
+        <img 
+          src={juego.portada} 
+          alt={juego.titulo}
+          className="portada-imagen"
+          onError={(e) => {
+            e.target.src = `https://via.placeholder.com/300x400/${isDarkMode ? '1a1a2e' : 'fef9e7'}/${
+              isDarkMode ? '8b5cf6' : 'd4af37'
+            }?text=${encodeURIComponent(juego.titulo)}`;
+          }}
+        />
         
-        {/* Contenido de la reliquia */}
-        <div className="reliquia-contenido">
-          <h3 className="reliquia-titulo">{juego.titulo}</h3>
+        {/* Badges divinos */}
+        <div className="badges-container">
+          <div className={`badge god-badge ${getGodColor()}`}>
+            <span className="badge-icon">{getGodIcon()}</span>
+            <span className="badge-text">{juego.dios}</span>
+          </div>
           
-          {/* Metadatos épicos */}
-          <div className="cronicas-juego">
-            <div className="cronica-gloria">
-              <span className="cronica-icono">⭐</span>
-              <span className="cronica-texto">
-                <strong>Gloria:</strong> {juego.rating}/5
-              </span>
-              <div className="estrellas-divinas">
-                {'✦'.repeat(juego.rating)}
-                {'☆'.repeat(5 - juego.rating)}
-              </div>
-            </div>
-            
-            <div className="cronica-tiempo">
-              <span className="cronica-icono">⏳</span>
-              <span className="cronica-texto">
-                <strong>Jornada:</strong> {juego.horas} horas
-              </span>
-            </div>
-          </div>
-
-          {/* Información del oráculo */}
-          <div className="oraculo-info">
-            <div className="profecia-genero">
-              <span className="profecia-icono">🎭</span>
-              <span className="profecia-texto">{juego.genero}</span>
-            </div>
-            <div className="profecia-plataforma">
-              <span className="profecia-icono">⚔️</span>
-              <span className="profecia-texto">{juego.plataforma}</span>
-            </div>
-          </div>
-
-          {/* Estado de la misión */}
-          <div className="estado-mision">
-            <span className={`estado ${juego.completado ? 'completada' : 'en-progreso'}`}>
-              {juego.completado ? (
-                <>
-                  <span className="estado-icono">🎯</span>
-                  MISIÓN CUMPLIDA
-                </>
-              ) : (
-                <>
-                  <span className="estado-icono">🗺️</span>
-                  EN BUSCA DE LA GLORIA
-                </>
-              )}
+          <div className={`badge status-badge ${juego.completado ? 'completado' : 'progreso'}`}>
+            <span className="badge-icon">{getStatusIcon()}</span>
+            <span className="badge-text">
+              {juego.completado ? 'Completado' : 'En Progreso'}
             </span>
-          </div>
-
-          {/* Acciones del héroe */}
-          <div className="acciones-heroe">
-            <button 
-              className="btn-hechizo btn-editar-cronica"
-              onClick={handleEdit}
-            >
-              <span className="btn-icono">📜</span>
-              EDITAR CRÓNICA
-            </button>
-            <button 
-              className="btn-maldicion btn-destierro"
-              onClick={handleDelete}
-            >
-              <span className="btn-icono">⚰️</span>
-              AL OLVIDO
-            </button>
           </div>
         </div>
 
-        {/* Efectos de partículas */}
-        <div className="particulas-divinas"></div>
+        {/* Efecto de brillo al hover */}
+        <div className="hover-glow"></div>
+      </div>
+
+      {/* Contenido de la tarjeta */}
+      <div className="tarjeta-contenido">
+        {/* Header con título y plataforma */}
+        <div className="tarjeta-header">
+          <h3 className="juego-titulo epic-text">{juego.titulo}</h3>
+          <div className="plataforma-icon" title={juego.plataforma}>
+            {getPlatformIcon()}
+          </div>
+        </div>
+
+        {/* Género */}
+        <div className="juego-genero">
+          <span className="genero-text">{juego.genero}</span>
+        </div>
+
+        {/* Rating estelar */}
+        <div className="rating-container">
+          <div className="estrellas">
+            {getRatingStars(juego.rating)}
+          </div>
+          <span className="rating-text">{juego.rating}/5</span>
+        </div>
+
+        {/* Estadísticas del héroe */}
+        <div className="estadisticas-heroe">
+          <div className="stat-item">
+            <span className="stat-icon">⏱️</span>
+            <span className="stat-value">{juego.horas}h</span>
+            <span className="stat-label">de Gloria</span>
+          </div>
+          
+          <div className="progress-container">
+            <div className="progress-bar">
+              <div 
+                className="progress-fill"
+                style={{ width: `${calculateProgress()}%` }}
+              ></div>
+            </div>
+            <span className="progress-text">
+              {Math.round(calculateProgress())}% de Maestría
+            </span>
+          </div>
+        </div>
+
+        {/* Fechas épicas */}
+        <div className="fechas-sagradas">
+          <div className="fecha-item">
+            <span className="fecha-label">Adquirido:</span>
+            <span className="fecha-valor">{formatDate(juego.fechaAdquisicion)}</span>
+          </div>
+          <div className="fecha-item">
+            <span className="fecha-label">Última Sesión:</span>
+            <span className="fecha-valor">{formatDate(juego.ultimaSesion)}</span>
+          </div>
+        </div>
+
+        {/* Acciones divinas */}
+        <div className={`acciones-divinas ${showActions ? 'show' : ''}`}>
+          <button 
+            className="btn-accion btn-editar glow-on-hover"
+            onClick={handleEdit}
+            title="Editar crónicas del juego"
+          >
+            <span className="accion-icon">📝</span>
+            <span className="accion-text">Editar</span>
+          </button>
+          
+          <button 
+            className="btn-accion btn-eliminar glow-on-hover"
+            onClick={handleDelete}
+            title="Desterrar de la biblioteca"
+          >
+            <span className="accion-icon">🗑️</span>
+            <span className="accion-text">Desterrar</span>
+          </button>
+          
+          <button 
+            className="btn-accion btn-detalles glow-on-hover"
+            title="Ver detalles completos"
+          >
+            <span className="accion-icon">🔍</span>
+            <span className="accion-text">Detalles</span>
+          </button>
+        </div>
+
+        {/* Sello divino */}
+        <div className="sello-divino">
+          <div className="sello-icon">{getGodIcon()}</div>
+          <div className="sello-text">
+            {juego.completado ? 'Leyenda Consumada' : 'Leyenda en Marcha'}
+          </div>
+        </div>
+      </div>
+
+      {/* Efectos de partículas */}
+      <div className="particulas-juego">
+        <div className="particula"></div>
+        <div className="particula"></div>
+        <div className="particula"></div>
       </div>
     </div>
   );

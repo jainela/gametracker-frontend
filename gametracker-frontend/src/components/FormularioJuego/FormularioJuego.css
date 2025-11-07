@@ -1,142 +1,725 @@
-.santuario-formulario {
-  padding: 2rem;
+.formulario-container {
   min-height: calc(100vh - 80px);
+  padding: 2rem;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+/* Fondo de forja divina */
+.theme-apolo .formulario-container {
+  background: 
+    var(--marble),
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(252, 243, 208, 0.08) 0%, transparent 50%);
+}
+
+.theme-hecate .formulario-container {
+  background: 
+    var(--midnight),
+    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(76, 81, 191, 0.08) 0%, transparent 50%);
+}
+
+/* Header del formulario épico */
+.formulario-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.forge-banner {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.theme-apolo .santuario-formulario {
-  background: linear-gradient(135deg, 
-    var(--apolo-bg-primary) 0%, 
-    var(--apolo-marble) 50%, 
-    var(--apolo-gold-light) 100%);
+.forge-banner h1 {
+  font-size: 3rem;
+  margin: 0;
+  text-shadow: 
+    2px 2px 8px var(--shadow),
+    0 0 30px var(--glow);
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover), #fef3cd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.theme-hecate .santuario-formulario {
-  background: linear-gradient(135deg, 
-    var(--hecate-bg-primary) 0%, 
-    var(--hecate-midnight) 50%, 
-    var(--hecate-purple-light) 100%);
+.forge-icon {
+  font-size: 4rem;
+  filter: drop-shadow(0 6px 20px var(--shadow));
+  animation: float-gentle 3s ease-in-out infinite;
 }
 
-.altar-creacion {
+.temple-instruction {
+  color: var(--accent);
+  font-size: 1.4rem;
+  font-style: italic;
+  margin-bottom: 0.8rem;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 2px 4px var(--shadow);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Layout del formulario */
+.form-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* Formulario principal */
+.formulario-juego {
   background: var(--card-bg);
-  border-radius: 24px;
   padding: 3rem;
+  border-radius: 24px;
   border: 4px solid var(--border);
   box-shadow: 
     0 16px 48px var(--shadow),
     inset 0 2px 8px rgba(255, 255, 255, 0.1);
-  max-width: 600px;
-  width: 100%;
-  text-align: center;
+  backdrop-filter: blur(15px);
   position: relative;
   overflow: hidden;
 }
 
-.altar-creacion::before {
+.formulario-juego::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover), var(--accent));
 }
 
-.oraculo-header {
+/* Secciones del formulario */
+.form-section {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--border);
+  position: relative;
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
   margin-bottom: 2rem;
 }
 
-.oraculo-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 8px var(--shadow);
-}
-
-.oraculo-subtitulo {
-  color: var(--text-secondary);
-  font-size: 1.2rem;
-  font-style: italic;
+.section-title {
+  color: var(--accent);
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
   font-family: 'Cinzel', serif;
-}
-
-.piedra-sagrada {
-  background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 2rem;
-  margin: 2rem 0;
-  border: 2px solid var(--border);
-}
-
-.runas-poder {
+  text-shadow: 0 2px 4px var(--shadow);
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.runa {
-  font-size: 2rem;
-  filter: drop-shadow(0 4px 8px var(--shadow));
-  animation: float 3s ease-in-out infinite;
-}
-
-.runa:nth-child(1) { animation-delay: 0s; }
-.runa:nth-child(2) { animation-delay: 0.5s; }
-.runa:nth-child(3) { animation-delay: 1s; }
-.runa:nth-child(4) { animation-delay: 1.5s; }
-
-.mensaje-oraculo p {
-  color: var(--text-primary);
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-}
-
-.profecias-pendientes {
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 0.8rem;
 }
 
-.profecia {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  padding: 0.8rem;
-  background: var(--card-bg);
-  border-radius: 8px;
-  border-left: 3px solid var(--accent);
+/* Grupos de input mejorados */
+.input-group {
+  margin-bottom: 2rem;
+  position: relative;
 }
 
-.acciones-sagradas {
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.input-label {
   display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+  font-family: 'Cinzel', serif;
+}
+
+.label-icon {
+  font-size: 1.2rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.input-field {
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  background: var(--bg-secondary);
+  border: 3px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 
+    0 0 0 3px var(--glow),
+    0 8px 25px var(--shadow);
+  transform: translateY(-2px);
+}
+
+.input-field::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.textarea-field {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+/* Rating con estrellas épico */
+.rating-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 3px solid var(--border);
+  border-radius: 12px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: grayscale(1);
+  transform: scale(0.9);
+}
+
+.star-btn:hover {
+  transform: scale(1.1) rotate(10deg);
+  filter: grayscale(0) drop-shadow(0 4px 8px var(--shadow));
+}
+
+.star-btn.active {
+  filter: grayscale(0) drop-shadow(0 4px 12px var(--shadow));
+  transform: scale(1.1);
+  animation: star-pulse 1s ease-in-out;
+}
+
+@keyframes star-pulse {
+  0%, 100% { transform: scale(1.1); }
+  50% { transform: scale(1.3); }
+}
+
+.rating-text {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-left: auto;
+  font-family: 'Cinzel', serif;
+}
+
+/* Checkbox épico */
+.checkbox-label {
+  display: flex;
+  align-items: center;
   gap: 1rem;
+  cursor: pointer;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 3px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkbox-label:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow);
+}
+
+.checkbox-input {
+  display: none;
+}
+
+.checkmark {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.checkbox-input:checked + .checkmark {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox-input:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--bg-primary);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.checkbox-text {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.checkbox-icon {
+  font-size: 1.2rem;
+}
+
+/* Selección de dioses épica */
+.dioses-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.dios-option {
+  cursor: pointer;
+}
+
+.dios-input {
+  display: none;
+}
+
+.dios-card {
+  padding: 2rem 1.5rem;
+  background: var(--bg-secondary);
+  border: 3px solid var(--border);
+  border-radius: 16px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.dios-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.dios-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px var(--shadow);
+  border-color: var(--accent);
+}
+
+.dios-input:checked + .dios-card {
+  background: var(--card-bg);
+  border-color: var(--accent);
+  box-shadow: 
+    0 12px 30px var(--shadow),
+    0 0 20px var(--glow);
+  transform: translateY(-5px);
+}
+
+.dios-input:checked + .dios-card::before {
+  transform: scaleX(1);
+}
+
+.dios-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 8px var(--shadow));
+  display: block;
+}
+
+.dios-name {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  font-family: 'Cinzel', serif;
+}
+
+.dios-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Acciones del formulario */
+.form-actions {
+  display: flex;
+  gap: 1.5rem;
   justify-content: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border);
+}
+
+.btn-preview {
+  padding: 1.2rem 2.5rem;
+  background: transparent;
+  color: var(--accent);
+  border: 3px solid var(--accent);
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-preview:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.btn-submit {
+  padding: 1.2rem 3rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  box-shadow: 
+    0 8px 30px var(--shadow),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    0 12px 40px var(--shadow),
+    0 0 25px var(--glow);
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+  margin-right: 0.8rem;
+}
+
+/* Vista previa épica */
+.preview-container {
+  background: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: 24px;
+  border: 4px solid var(--border);
+  box-shadow: 
+    0 16px 48px var(--shadow),
+    inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  position: sticky;
+  top: 2rem;
+}
+
+.preview-title {
+  color: var(--accent);
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 2px 4px var(--shadow);
+}
+
+.preview-card {
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.preview-name {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0;
+  flex: 1;
+  font-family: 'Cinzel', serif;
+}
+
+.preview-platform {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+
+.preview-badges {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
 }
 
-/* Responsive */
+.preview-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid;
+}
+
+.preview-badge.god-apolo {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: var(--apolo-accent);
+  color: var(--apolo-accent);
+}
+
+.preview-badge.god-hecate {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--hecate-accent);
+  color: var(--hecate-accent);
+}
+
+.preview-badge.god-ambos {
+  background: linear-gradient(135deg, 
+    rgba(212, 175, 55, 0.2), 
+    rgba(139, 92, 246, 0.2));
+  border-color: var(--apolo-accent);
+  color: var(--text-primary);
+}
+
+.preview-badge.status-completado {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.preview-badge.status-progreso {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.preview-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.preview-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.preview-stat span:first-child {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.preview-stat span:last-child {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.preview-desc {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.preview-desc p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Efectos de partículas de forja */
+.forge-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.forge-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  animation: forge-float 4s ease-in-out infinite;
+}
+
+.forge-particle:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.forge-particle:nth-child(2) {
+  top: 60%;
+  left: 80%;
+  animation-delay: 1.3s;
+}
+
+.forge-particle:nth-child(3) {
+  top: 80%;
+  left: 30%;
+  animation-delay: 2.6s;
+}
+
+@keyframes forge-float {
+  0%, 100% { 
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateY(-40px) scale(1);
+  }
+}
+
+/* Efecto de envío */
+.formulario-juego.submitting {
+  animation: form-pulse 1s ease-in-out infinite;
+}
+
+@keyframes form-pulse {
+  0%, 100% { 
+    box-shadow: 
+      0 16px 48px var(--shadow),
+      inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    box-shadow: 
+      0 16px 48px var(--shadow),
+      0 0 30px var(--glow),
+      inset 0 2px 8px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Responsive Design Épico */
+@media (max-width: 1200px) {
+  .form-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .preview-container {
+    position: static;
+  }
+}
+
 @media (max-width: 768px) {
-  .santuario-formulario {
+  .formulario-container {
     padding: 1rem;
   }
   
-  .altar-creacion {
+  .formulario-juego {
     padding: 2rem;
   }
   
-  .oraculo-header h1 {
-    font-size: 2rem;
+  .forge-banner h1 {
+    font-size: 2.2rem;
   }
   
-  .acciones-sagradas {
+  .input-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .dioses-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
     flex-direction: column;
   }
   
-  .btn {
-    width: 100%;
-    justify-content: center;
+  .preview-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .formulario-juego {
+    padding: 1.5rem;
+  }
+  
+  .forge-banner {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .forge-banner h1 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  
+  .section-title {
+    font-size: 1.3rem;
+  }
+  
+  .input-label {
+    font-size: 1rem;
   }
 }
