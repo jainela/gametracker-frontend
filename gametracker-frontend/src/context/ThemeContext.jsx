@@ -1,15 +1,12 @@
-/* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useState, useEffect, useRef } from 'react';
 
-const ThemeContext = createContext();
+// Importar sonidos (asegúrate de tener estos archivos en public/sounds/)
+import liraSound from '../sounds/lira.mp3';
+import hecateSound from '../sounds/hecate-magic.mp3';
+import clickSound from '../sounds/click.mp3';
+import hoverSound from '../sounds/hover.mp3';
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme debe usarse dentro de un ThemeProvider');
-  }
-  return context;
-};
+export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -24,38 +21,77 @@ export const ThemeProvider = ({ children }) => {
   });
 
   const [themeTransition, setThemeTransition] = useState(false);
-  const audioContextRef = useRef(null);
+  const [soundsEnabled, setSoundsEnabled] = useState(() => {
+    const saved = localStorage.getItem('gameTracker-sounds');
+    return saved ? JSON.parse(saved) : true;
+  });
+
+  const audioRefs = useRef({
+    lira: null,
+    hecate: null,
+    click: null,
+    hover: null
+  });
+
+  // Cargar sonidos
+  useEffect(() => {
+    audioRefs.current = {
+      lira: new Audio(liraSound),
+      hecate: new Audio(hecateSound),
+      click: new Audio(clickSound),
+      hover: new Audio(hoverSound)
+    };
+
+    // Configurar volumen
+    Object.values(audioRefs.current).forEach(audio => {
+      audio.volume = 0.3;
+      audio.preload = 'auto';
+    });
+
+    return () => {
+      Object.values(audioRefs.current).forEach(audio => {
+        if (audio) {
+          audio.pause();
+          audio.src = '';
+        }
+      });
+    };
+  }, []);
+
+  const playSound = (soundName) => {
+    if (!soundsEnabled) return;
+    
+    const audio = audioRefs.current[soundName];
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play().catch(e => console.log('Error reproduciendo sonido:', e));
+    }
+  };
+
+  const toggleSounds = () => {
+    setSoundsEnabled(prev => {
+      const newState = !prev;
+      localStorage.setItem('gameTracker-sounds', JSON.stringify(newState));
+      return newState;
+    });
+  };
 
   const playThemeSound = () => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    }
-
-    const context = audioContextRef.current;
-    const oscillator = context.createOscillator();
-    const gainNode = context.createGain();
-
-    oscillator.connect(gainNode);
-    gainNode.connect(context.destination);
-
-    // Sonido diferente para cada tema
     if (isDarkMode) {
-      // Sonido de transición a Apolo (más brillante)
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(392, context.currentTime); // Sol
-      oscillator.frequency.exponentialRampToValueAtTime(523.25, context.currentTime + 0.5); // Do
+      // Sonido de lira para Apolo
+      playSound('lira');
     } else {
-      // Sonido de transición a Hécate (más misterioso)
-      oscillator.type = 'triangle';
-      oscillator.frequency.setValueAtTime(329.63, context.currentTime); // Mi
-      oscillator.frequency.exponentialRampToValueAtTime(261.63, context.currentTime + 0.5); // Do
+      // Sonido mágico para Hécate
+      playSound('hecate');
     }
+  };
 
-    gainNode.gain.setValueAtTime(0.1, context.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+  const playClickSound = () => {
+    playSound('click');
+  };
 
-    oscillator.start();
-    oscillator.stop(context.currentTime + 0.5);
+  const playHoverSound = () => {
+    playSound('hover');
   };
 
   useEffect(() => {
@@ -80,7 +116,7 @@ export const ThemeProvider = ({ children }) => {
   }, [isDarkMode]);
 
   const toggleTheme = () => {
-    // Efecto de sonido
+    // Efecto de sonido temático
     playThemeSound();
     
     // Efecto visual
@@ -135,7 +171,11 @@ export const ThemeProvider = ({ children }) => {
       themeTransition,
       themeQuote: isDarkMode 
         ? "En la oscuridad, Hécate guía tu camino gaming" 
-        : "Bajo el sol, Apolo bendice tu destreza gaming"
+        : "Bajo el sol, Apolo bendice tu destreza gaming",
+      soundsEnabled,
+      toggleSounds,
+      playClickSound,
+      playHoverSound
     }}>
       <div className={`${isDarkMode ? 'theme-hecate' : 'theme-apolo'} ${themeTransition ? 'theme-changing' : ''}`}>
         {children}

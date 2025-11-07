@@ -462,3 +462,162 @@
     font-size: 1.2rem;
   }
 }
+/* Notificación de logro desbloqueado */
+.logro-notification {
+  position: fixed;
+  top: 100px;
+  right: 2rem;
+  z-index: 1000;
+  animation: slideInRight 0.5s ease-out;
+}
+
+.logro-notification-content {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 3px solid var(--border);
+  box-shadow: 
+    0 12px 40px var(--shadow),
+    0 0 30px var(--glow);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.logro-notification-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--success), var(--accent), var(--success));
+}
+
+.logro-notification-icon {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 12px var(--shadow));
+}
+
+.logro-notification-text {
+  flex: 1;
+  color: var(--bg-primary);
+}
+
+.logro-notification-text h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-family: 'Cinzel', serif;
+}
+
+.logro-notification-text p {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.logro-notification-text span {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.logro-notification-rareza {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--bg-primary);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mejoras a los logros con rarezas */
+.logro-card.comun {
+  border-color: var(--success);
+}
+
+.logro-card.raro {
+  border-color: #3b82f6;
+}
+
+.logro-card.epico {
+  border-color: #8b5cf6;
+}
+
+.logro-card.legendario {
+  border-color: #f59e0b;
+}
+
+.logro-card.mitico {
+  border-color: #ef4444;
+}
+
+.logro-card.divino {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--accent) 100%);
+}
+
+.logro-rareza-badge {
+  position: absolute;
+  top: -8px;
+  right: 1rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.logro-rareza-badge.comun {
+  background: var(--success);
+  color: white;
+}
+
+.logro-rareza-badge.raro {
+  background: #3b82f6;
+  color: white;
+}
+
+.logro-rareza-badge.epico {
+  background: #8b5cf6;
+  color: white;
+}
+
+.logro-rareza-badge.legendario {
+  background: #f59e0b;
+  color: black;
+}
+
+.logro-rareza-badge.mitico {
+  background: #ef4444;
+  color: white;
+}
+
+.logro-rareza-badge.divino {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: var(--bg-primary);
+}
+
+.logro-fecha {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: 0.5rem;
+}

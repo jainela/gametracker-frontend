@@ -64,7 +64,7 @@ const FloatingParticles = () => {
 };
 
 const Navbar = ({ currentView, onNavigate }) => {
-  const { isDarkMode, toggleTheme, themeName } = useTheme();
+  const { isDarkMode, toggleTheme, themeName, soundsEnabled, toggleSounds, playClickSound, playHoverSound } = useTheme();
 
   const navItems = [
     { key: 'biblioteca', label: 'Biblioteca', icon: '📜', description: 'Salón de los Héroes' },
@@ -72,6 +72,25 @@ const Navbar = ({ currentView, onNavigate }) => {
     { key: 'reseñas', label: 'Reseñas', icon: '⭐', description: 'Crónicas Divinas' },
     { key: 'estadisticas', label: 'Estadísticas', icon: '📊', description: 'Oráculo del Progreso' },
   ];
+
+  const handleNavClick = (viewKey) => {
+    playClickSound();
+    onNavigate(viewKey);
+  };
+
+  const handleThemeToggle = () => {
+    playClickSound();
+    toggleTheme();
+  };
+
+  const handleSoundToggle = () => {
+    playClickSound();
+    toggleSounds();
+  };
+
+  const handleHover = () => {
+    playHoverSound();
+  };
 
   const getThemeQuote = () => {
     return isDarkMode 
@@ -93,7 +112,8 @@ const Navbar = ({ currentView, onNavigate }) => {
               <button
                 key={item.key}
                 className={`nav-link ${currentView === item.key ? 'active' : ''}`}
-                onClick={() => onNavigate(item.key)}
+                onClick={() => handleNavClick(item.key)}
+                onMouseEnter={handleHover}
                 title={item.description}
               >
                 <span className="nav-icon">{item.icon}</span>
@@ -103,9 +123,24 @@ const Navbar = ({ currentView, onNavigate }) => {
           </div>
 
           <div className="nav-actions">
+            {/* Botón de sonido */}
+            <button 
+              className="sound-toggle"
+              onClick={handleSoundToggle}
+              onMouseEnter={handleHover}
+              aria-label={soundsEnabled ? 'Desactivar sonidos' : 'Activar sonidos'}
+              title={soundsEnabled ? '🔊 Sonidos activados' : '🔇 Sonidos desactivados'}
+            >
+              <span className="sound-icon">
+                {soundsEnabled ? '🔊' : '🔇'}
+              </span>
+            </button>
+            
+            {/* Botón de tema */}
             <button 
               className="theme-toggle"
-              onClick={toggleTheme}
+              onClick={handleThemeToggle}
+              onMouseEnter={handleHover}
               aria-label={`Cambiar a templo de ${isDarkMode ? 'Apolo' : 'Hécate'}`}
             >
               <span className="theme-icon">
