@@ -134,18 +134,19 @@ const EstadisticasPersonales = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const simularDesbloqueoLogro = (logroId) => {
-    const logro = estadisticas.logros.find(l => l.id === logroId);
-    if (logro && !logro.completado) {
-      setLogroDesbloqueado(logro);
-      playClickSound();
-      
-      // Simular efecto de desbloqueo
-      setTimeout(() => {
-        setLogroDesbloqueado(null);
-      }, 4000);
-    }
-  };
+ // En la función simularDesbloqueoLogro, agregar:
+const simularDesbloqueoLogro = (logroId) => {
+  const logro = estadisticas.logros.find(l => l.id === logroId);
+  if (logro && !logro.completado) {
+    setLogroDesbloqueado(logro);
+    playClickSound(); // ← Agregar esta línea
+    
+    // Simular efecto de desbloqueo
+    setTimeout(() => {
+      setLogroDesbloqueado(null);
+    }, 4000);
+  }
+};
 
   const getTempleQuote = () => {
     return isDarkMode 
