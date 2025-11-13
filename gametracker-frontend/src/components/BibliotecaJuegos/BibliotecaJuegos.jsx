@@ -7,16 +7,17 @@ const BibliotecaJuegos = () => {
   const { isDarkMode, themeName } = useTheme();
   const [juegos, setJuegos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filter, setFilter] = useState('todos');
   const [sortBy, setSortBy] = useState('fecha');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Datos de ejemplo optimizados
+  // Datos de ejemplo optimizados (como fallback)
   const juegosEjemplo = useMemo(() => [
     {
       id: 1,
       titulo: 'The Legend of Zelda: Breath of the Wild',
-      portada: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1wya.jpg',
+      portada: 'https://www.nintendo.com/eu/media/images/10_share_images/games_15/wiiu_14/SI_WiiU_TheLegendOfZeldaBreathOfTheWild_image1600w.jpg',
       completado: true,
       horas: 85,
       rating: 5,
@@ -30,7 +31,7 @@ const BibliotecaJuegos = () => {
     {
       id: 2,
       titulo: 'Hollow Knight',
-      portada: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1r7h.jpg',
+      portada: 'https://assets.nintendo.com/image/upload/ar_16:9,b_auto:border,c_lpad/b_white/f_auto/q_auto/dpr_1.5/c_scale,w_800/store/software/switch/70010000003208/4643fb058642335c523910f3a7910575f56372f612f7c0c9a497aaae978d3e51',
       completado: false,
       horas: 42,
       rating: 4,
@@ -72,7 +73,7 @@ const BibliotecaJuegos = () => {
     {
       id: 5,
       titulo: 'Hades',
-      portada: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co2c1l.jpg',
+      portada: 'https://upload.wikimedia.org/wikipedia/commons/1/13/Hades_logo.png',
       completado: true,
       horas: 92,
       rating: 5,
@@ -86,7 +87,7 @@ const BibliotecaJuegos = () => {
     {
       id: 6,
       titulo: 'Journey',
-      portada: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1r5z.jpg',
+      portada: 'https://upload.wikimedia.org/wikipedia/en/6/64/Journey_Title_Poster.png',
       completado: true,
       horas: 4,
       rating: 4,
@@ -96,17 +97,110 @@ const BibliotecaJuegos = () => {
       fechaAdquisicion: '2023-12-01',
       ultimaSesion: '2024-01-10',
       tags: ['Aventura', 'Arte', 'Corto']
+    },
+    {
+      id: 7,
+      titulo: 'Silksong',
+      portada: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1030300/7983574d464e6559ac7e24275727f73a8bcca1f3/header.jpg?t=1756994410',
+      completado: false,
+      horas: 6,
+      rating: 5,
+      genero: 'Metroidvania Oscuro',
+      plataforma: 'PC',
+      dios: 'Hécate',
+      fechaAdquisicion: '2025-11-10',
+      ultimaSesion: '2025-11-12',
+      tags: ['Metroidvania', 'Indie', 'Desafiante']
+    },
+    {
+      id: 8,
+      titulo: 'Elden Ring',
+      portada: 'https://p325k7wa.twic.pics/high/elden-ring/elden-ring/00-page-setup/eldenring_new.png?twic=v1/resize=800/step=10/quality=80',
+      completado: false,
+      horas: 120,
+      rating: 5,
+      genero: 'Acción RPG',
+      plataforma: 'Multiplataforma',
+      dios: 'Ambos',
+      fechaAdquisicion: '2023-10-25',
+      ultimaSesion: '2024-01-21',
+      tags: ['RPG', 'Mundo Abierto', 'Desafiante']
+    },
+    {
+      id: 9,
+      titulo: "Sky: Children of the Light",
+      portada: "https://upload.wikimedia.org/wikipedia/en/6/69/Sky_video_game.jpg",
+      completado: false,
+      horas: 15,
+      rating: 4,
+      genero: "Aventura Social",
+      plataforma: "Multiplataforma",
+      dios: "Apolo",
+      fechaAdquisicion: "2023-06-30",
+      ultimaSesion: "2024-01-19",
+      tags: ["Aventura", "Social", "Indie"]
+    },
+    {      id: 10,
+      titulo: "Celeste",
+      portada: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Celeste_box_art_full.png/320px-Celeste_box_art_full.png",
+      completado: true,
+      horas: 25,
+      rating: 5,
+      genero: "Plataformas Desafiante",
+      plataforma: "Multiplataforma",
+      dios: "Hécate",
+      fechaAdquisicion: "2023-04-12",
+      ultimaSesion: "2024-01-14",
+      tags: ["Plataformas", "Indie", "Desafiante"]
+
     }
+
   ], []);
 
+  // Cargar juegos desde la API
   useEffect(() => {
-    // Simular carga épica con datos optimizados
-    const timer = setTimeout(() => {
-      setJuegos(juegosEjemplo);
-      setLoading(false);
-    }, 1200);
+    const cargarJuegos = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Intenta cargar desde la API
+        const respuesta = await fetch('http://localhost:3000/api/juegos');
+        
+        if (respuesta.ok) {
+          const datos = await respuesta.json();
+          
+          // Transformar datos de la API al formato esperado
+          const juegosTransformados = datos.map(juego => ({
+            id: juego._id || juego.id,
+            titulo: juego.nombre || juego.titulo,
+            portada: juego.portadaURL || juego.portada,
+            completado: juego.completado || false,
+            horas: juego.horas || 0,
+            rating: juego.rating || 0,
+            genero: juego.genero || 'Sin género',
+            plataforma: juego.plataforma || 'Desconocida',
+            dios: juego.dios || 'Apolo',
+            fechaAdquisicion: juego.fechaAdquisicion || new Date().toISOString().split('T')[0],
+            ultimaSesion: juego.ultimaSesion || new Date().toISOString().split('T')[0],
+            tags: juego.tags || []
+          }));
+          
+          setJuegos(juegosTransformados);
+        } else {
+          throw new Error(`Error ${respuesta.status}: No se pudieron cargar los juegos`);
+        }
+      } catch (err) {
+        console.error('Error al cargar juegos:', err);
+        setError(err.message);
+        // Fallback a datos de ejemplo
+        setJuegos(juegosEjemplo);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    cargarJuegos();
   }, [juegosEjemplo]);
 
   // Estadísticas épicas optimizadas con useMemo
@@ -144,7 +238,7 @@ const BibliotecaJuegos = () => {
       const matchesSearch = searchTerm === '' || 
         juego.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         juego.genero.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        juego.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+        (juego.tags && juego.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())));
 
       return matchesFilter && matchesSearch;
     });
@@ -165,28 +259,51 @@ const BibliotecaJuegos = () => {
     });
   }, [juegos, filter, searchTerm, sortBy]);
 
-  const handleEditJuego = (juego) => {
+  const handleEditJuego = async (juego) => {
     // Efecto visual mejorado
     const elemento = document.getElementById(`juego-${juego.id}`);
     elemento?.classList.add('editando');
     
-    setTimeout(() => {
+    try {
+      // Aquí iría la llamada a tu API para editar
+      // await fetch(`http://localhost:3000/api/juegos/${juego.id}`, {
+      //   method: 'PUT',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(juego)
+      // });
+      
+      setTimeout(() => {
+        elemento?.classList.remove('editando');
+        console.log('Editando juego:', juego);
+        alert(`📜 Editando las crónicas de: ${juego.titulo}`);
+      }, 800);
+    } catch (err) {
+      console.error('Error al editar juego:', err);
       elemento?.classList.remove('editando');
-      console.log('Editando juego:', juego);
-      alert(`📜 Editando las crónicas de: ${juego.titulo}`);
-    }, 800);
+    }
   };
 
-  const handleDeleteJuego = (juegoId) => {
+  const handleDeleteJuego = async (juegoId) => {
     const juego = juegos.find(j => j.id === juegoId);
     if (confirm(`¿Estás seguro de que deseas desterrar "${juego?.titulo}" de tu biblioteca?`)) {
       // Efecto visual de eliminación mejorado
       const elemento = document.getElementById(`juego-${juegoId}`);
       elemento?.classList.add('destierro');
       
-      setTimeout(() => {
-        setJuegos(juegos.filter(juego => juego.id !== juegoId));
-      }, 600);
+      try {
+        // Aquí iría la llamada a tu API para eliminar
+        // await fetch(`http://localhost:3000/api/juegos/${juegoId}`, {
+        //   method: 'DELETE'
+        // });
+        
+        setTimeout(() => {
+          setJuegos(juegos.filter(juego => juego.id !== juegoId));
+        }, 600);
+      } catch (err) {
+        console.error('Error al eliminar juego:', err);
+        elemento?.classList.remove('destierro');
+        alert('❌ Error al eliminar el juego. Por favor, intenta nuevamente.');
+      }
     }
   };
 
@@ -196,12 +313,19 @@ const BibliotecaJuegos = () => {
     // En una implementación real, esto navegaría a FormularioJuego
   };
 
-  const handleSortChange = (newSort) => {
+  const handleSortChange = (newSort, event) => {
     setSortBy(newSort);
     // Feedback visual
     const sortButtons = document.querySelectorAll('.sort-btn');
     sortButtons.forEach(btn => btn.classList.remove('active'));
     event?.target?.classList.add('active');
+  };
+
+  const handleRetryLoad = () => {
+    setLoading(true);
+    setError(null);
+    // Recargar la página para intentar nuevamente
+    window.location.reload();
   };
 
   const getTempleGreeting = () => {
@@ -246,6 +370,29 @@ const BibliotecaJuegos = () => {
     );
   }
 
+  // Renderizado de error
+  if (error && juegos.length === 0) {
+    return (
+      <div className="santuario-error">
+        <div className="error-oraculo">
+          <div className="error-emblema">⚡</div>
+          <h2 className="epic-text">¡Por los Dioses! Ocurrió un Error</h2>
+          <p className="error-mensaje">{error}</p>
+          <p className="error-descripcion">
+            Se están usando datos de ejemplo. Tu santuario funcionará, pero los cambios no se guardarán.
+          </p>
+          <button 
+            className="btn btn-epic btn-reintentar"
+            onClick={handleRetryLoad}
+          >
+            <span className="btn-icon">🔄</span>
+            <span className="btn-text">Reintentar Conexión</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="biblioteca-container">
       {/* Header épico del templo con animaciones */}
@@ -260,6 +407,14 @@ const BibliotecaJuegos = () => {
         </div>
         <p className="temple-greeting">{getTempleGreeting()}</p>
         <p className="god-quote">"{getGodQuote()}"</p>
+        
+        {/* Indicador de estado de conexión */}
+        {error && (
+          <div className="connection-warning">
+            <span className="warning-icon">⚠️</span>
+            Modo sin conexión - Usando datos locales
+          </div>
+        )}
       </header>
 
       {/* Tablilla de estadísticas divinas mejorada */}
@@ -332,48 +487,46 @@ const BibliotecaJuegos = () => {
 
           {/* Filtros y ordenamiento */}
           <div className="filters-section">
-            <div className="filters-container">
-              <h3 className="filters-title">🔮 Filtros del Oráculo</h3>
-              
-              <div className="filters-group">
-                <div className="filter-options">
+            <h3 className="filters-title">🔮 Filtros del Oráculo</h3>
+            
+            <div className="filters-group">
+              <div className="filter-options">
+                {[
+                  { key: 'todos', label: '🌟 Todos', icon: '🌟' },
+                  { key: 'completados', label: '✅ Completados', icon: '✅' },
+                  { key: 'apolo', label: '☀️ Apolo', icon: '☀️' },
+                  { key: 'hecate', label: '🌙 Hécate', icon: '🌙' },
+                  { key: 'ambos', label: '⚡ Ambos', icon: '⚡' }
+                ].map(option => (
+                  <button
+                    key={option.key}
+                    className={`filtro-btn ${filter === option.key ? 'activo' : ''}`}
+                    onClick={() => setFilter(option.key)}
+                  >
+                    <span className="filter-icon">{option.icon}</span>
+                    <span className="filter-label">{option.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="sort-options">
+                <span className="sort-label">Ordenar por:</span>
+                <div className="sort-buttons">
                   {[
-                    { key: 'todos', label: '🌟 Todos', icon: '🌟' },
-                    { key: 'completados', label: '✅ Completados', icon: '✅' },
-                    { key: 'apolo', label: '☀️ Apolo', icon: '☀️' },
-                    { key: 'hecate', label: '🌙 Hécate', icon: '🌙' },
-                    { key: 'ambos', label: '⚡ Ambos', icon: '⚡' }
+                    { key: 'fecha', label: '📅 Fecha', icon: '📅' },
+                    { key: 'titulo', label: '🔤 Título', icon: '🔤' },
+                    { key: 'horas', label: '⏱️ Horas', icon: '⏱️' },
+                    { key: 'rating', label: '⭐ Rating', icon: '⭐' }
                   ].map(option => (
                     <button
                       key={option.key}
-                      className={`filtro-btn ${filter === option.key ? 'activo' : ''}`}
-                      onClick={() => setFilter(option.key)}
+                      className={`sort-btn ${sortBy === option.key ? 'active' : ''}`}
+                      onClick={(e) => handleSortChange(option.key, e)}
                     >
-                      <span className="filter-icon">{option.icon}</span>
-                      <span className="filter-label">{option.label}</span>
+                      <span className="sort-icon">{option.icon}</span>
+                      <span className="sort-label">{option.label}</span>
                     </button>
                   ))}
-                </div>
-
-                <div className="sort-options">
-                  <span className="sort-label">Ordenar por:</span>
-                  <div className="sort-buttons">
-                    {[
-                      { key: 'fecha', label: '📅 Fecha', icon: '📅' },
-                      { key: 'titulo', label: '🔤 Título', icon: '🔤' },
-                      { key: 'horas', label: '⏱️ Horas', icon: '⏱️' },
-                      { key: 'rating', label: '⭐ Rating', icon: '⭐' }
-                    ].map(option => (
-                      <button
-                        key={option.key}
-                        className={`sort-btn ${sortBy === option.key ? 'active' : ''}`}
-                        onClick={() => handleSortChange(option.key)}
-                      >
-                        <span className="sort-icon">{option.icon}</span>
-                        <span className="sort-label">{option.label}</span>
-                      </button>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
@@ -413,15 +566,6 @@ const BibliotecaJuegos = () => {
               <span className="btn-icon">⚔️</span>
               <span className="btn-text">Forjar Nueva Leyenda</span>
             </button>
-            
-            <div className="view-controls">
-              <button className="btn btn-magic btn-view active" title="Vista de cuadrícula">
-                <span className="btn-icon">⏹️</span>
-              </button>
-              <button className="btn btn-magic btn-view" title="Vista de lista">
-                <span className="btn-icon">📋</span>
-              </button>
-            </div>
           </div>
         </div>
 

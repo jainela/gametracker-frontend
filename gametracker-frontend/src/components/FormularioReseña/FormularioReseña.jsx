@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import './FormularioReseña.css';
 
@@ -86,37 +86,37 @@ const FormularioReseña = () => {
 
   const plataformas = ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch', 'Multiplataforma'];
 
-  // Handlers optimizados
-  const handleInputChange = (field, value) => {
+  // Handlers optimizados con useCallback
+  const handleInputChange = useCallback((field, value) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
-  };
+  }, []);
 
-  const handleRatingChange = (rating) => {
+  const handleRatingChange = useCallback((rating) => {
     handleInputChange('rating', rating);
-  };
+  }, [handleInputChange]);
 
-  const handleTagAdd = () => {
+  const handleTagAdd = useCallback(() => {
     if (currentTag.trim() && !formData.tags.includes(currentTag.trim())) {
       handleInputChange('tags', [...formData.tags, currentTag.trim()]);
       setCurrentTag('');
     }
-  };
+  }, [currentTag, formData.tags, handleInputChange]);
 
-  const handleTagRemove = (tagToRemove) => {
+  const handleTagRemove = useCallback((tagToRemove) => {
     handleInputChange('tags', formData.tags.filter(tag => tag !== tagToRemove));
-  };
+  }, [formData.tags, handleInputChange]);
 
-  const handleTagKeyPress = (e) => {
+  const handleTagKeyPress = useCallback((e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleTagAdd();
     }
-  };
+  }, [handleTagAdd]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     
     if (!formData.diosSeleccionado) {
@@ -150,10 +150,11 @@ const FormularioReseña = () => {
       completado: false,
       plataforma: ''
     });
+    setCurrentTag('');
     setIsSubmitting(false);
-  };
+  }, [formData]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     if (confirm('¿Estás seguro de que deseas descartar esta crónica?')) {
       setFormData({
         diosSeleccionado: '',
@@ -167,10 +168,11 @@ const FormularioReseña = () => {
         completado: false,
         plataforma: ''
       });
+      setCurrentTag('');
     }
-  };
+  }, []);
 
-  // Estadísticas en tiempo real
+  // Estadísticas en tiempo real con useMemo
   const estadisticas = useMemo(() => {
     const palabras = formData.contenido.trim() ? formData.contenido.split(/\s+/).length : 0;
     const caracteres = formData.contenido.length;
@@ -179,7 +181,7 @@ const FormularioReseña = () => {
     return { palabras, caracteres, densidad };
   }, [formData.contenido]);
 
-  const getConsejoOraculo = () => {
+  const getConsejoOraculo = useCallback(() => {
     if (!formData.diosSeleccionado) {
       return "Elige un dios patrón para inspirar tu escritura";
     }
@@ -207,18 +209,22 @@ const FormularioReseña = () => {
 
     const diosConsejos = consejos[formData.diosSeleccionado] || [];
     return diosConsejos[Math.floor(Math.random() * diosConsejos.length)];
-  };
+  }, [formData.diosSeleccionado]);
 
-  const getJuegoSeleccionado = () => {
+  const getJuegoSeleccionado = useCallback(() => {
     return juegos.find(juego => juego.titulo === formData.juegoSeleccionado);
-  };
+  }, [formData.juegoSeleccionado, juegos]);
+
+  const isFormValid = useMemo(() => {
+    return formData.diosSeleccionado && formData.juegoSeleccionado;
+  }, [formData.diosSeleccionado, formData.juegoSeleccionado]);
 
   return (
     <div className="templo-escritura">
       <div className="atalaya-cronista">
         {/* Header Épico */}
         <div className="rollo-principal">
-          <h1 className="epic-text gold-text text-glow">✍️ TABLILLA DEL CRONISTA</h1>
+          <h1>✍️ TABLILLA DEL CRONISTA</h1>
           <p className="instruccion-oraculo">
             {isDarkMode 
               ? "Que Hécate inspire tus palabras en la oscuridad" 
@@ -236,6 +242,7 @@ const FormularioReseña = () => {
             {dioses.map(dios => (
               <button 
                 key={dios.value}
+                type="button"
                 className={`opcion-dios ${dios.color} ${formData.diosSeleccionado === dios.value ? 'seleccionado' : ''}`}
                 onClick={() => handleInputChange('diosSeleccionado', dios.value)}
               >
@@ -386,7 +393,7 @@ const FormularioReseña = () => {
                 placeholder="Describe tus hazañas, reflexiones, secretos descubiertos, momentos memorables..."
                 value={formData.contenido}
                 onChange={(e) => handleInputChange('contenido', e.target.value)}
-                rows="8"
+                rows="6"
                 required
               ></textarea>
               <div className="estadisticas-escritura">
@@ -485,7 +492,7 @@ const FormularioReseña = () => {
           <div className="acciones-finales">
             <button 
               type="button"
-              className="btn btn-magic btn-descansar"
+              className="btn btn-descansar"
               onClick={handleReset}
               disabled={isSubmitting}
             >
@@ -495,8 +502,8 @@ const FormularioReseña = () => {
             
             <button 
               type="submit"
-              className="btn btn-epic btn-inmortalizar"
-              disabled={isSubmitting || !formData.diosSeleccionado || !formData.juegoSeleccionado}
+              className="btn btn-inmortalizar"
+              disabled={isSubmitting || !isFormValid}
             >
               {isSubmitting ? (
                 <>

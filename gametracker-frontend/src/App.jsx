@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import BibliotecaJuegos from './components/BibliotecaJuegos/BibliotecaJuegos';
 import FormularioJuego from './components/FormularioJuego/FormularioJuego';
@@ -8,14 +8,18 @@ import EstadisticasPersonales from './components/EstadisticasPersonales/Estadist
 import './styles/themes.css';
 import './App.css';
 
+// Componente de partículas optimizado
 const FloatingParticles = () => {
   const { isDarkMode } = useTheme();
   
   useEffect(() => {
     const createParticle = () => {
-      // Menos partículas en móvil para mejor performance
+      // Optimización para móviles - menos partículas
       const isMobile = window.innerWidth < 768;
-      if (isMobile && Math.random() > 0.3) return;
+      const isTablet = window.innerWidth < 1024;
+      
+      if (isMobile && Math.random() > 0.4) return;
+      if (isTablet && Math.random() > 0.2) return;
       
       const particle = document.createElement('div');
       particle.className = 'floating-particle';
@@ -27,21 +31,22 @@ const FloatingParticles = () => {
         particle.style.background = `radial-gradient(circle, ${getRandomGold()}, transparent)`;
       }
       
-      const size = isMobile ? Math.random() * 3 + 1 : Math.random() * 4 + 2;
+      const size = isMobile ? Math.random() * 2 + 1 : Math.random() * 3 + 1;
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
       particle.style.left = `${Math.random() * 100}vw`;
       particle.style.top = `${Math.random() * 100}vh`;
-      particle.style.animationDuration = `${Math.random() * 12 + 6}s`;
+      particle.style.animationDuration = `${Math.random() * 15 + 8}s`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
       
       document.body.appendChild(particle);
       
-      // Limpieza automática
+      // Limpieza automática optimizada
       setTimeout(() => {
         if (particle.parentNode) {
           particle.parentNode.removeChild(particle);
         }
-      }, 18000);
+      }, 20000);
     };
     
     const getRandomGold = () => {
@@ -54,50 +59,105 @@ const FloatingParticles = () => {
       return purples[Math.floor(Math.random() * purples.length)];
     };
     
-    // Crear partículas iniciales optimizadas
-    const initialParticles = window.innerWidth < 768 ? 6 : 12;
+    // Crear partículas iniciales optimizadas según dispositivo
+    const isMobile = window.innerWidth < 768;
+    const isTablet = window.innerWidth < 1024;
+    const initialParticles = isMobile ? 4 : isTablet ? 8 : 12;
+    
     for (let i = 0; i < initialParticles; i++) {
-      setTimeout(createParticle, i * 800);
+      setTimeout(createParticle, i * 1000);
     }
     
-    // Intervalo más largo para mejor performance
-    const interval = setInterval(createParticle, 3000);
+    // Intervalo adaptativo para mejor performance
+    const intervalTime = isMobile ? 4000 : isTablet ? 2500 : 2000;
+    const interval = setInterval(createParticle, intervalTime);
     
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      // Limpiar partículas existentes
+      document.querySelectorAll('.floating-particle').forEach(particle => {
+        particle.remove();
+      });
+    };
   }, [isDarkMode]);
   
   return null;
 };
 
-const Navbar = ({ currentView, onNavigate }) => {
+// Navbar optimizado y responsive
+const Navbar = React.memo(({ currentView, onNavigate }) => {
   const { isDarkMode, toggleTheme, themeName } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Detectar scroll para efectos
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
-    { key: 'biblioteca', label: 'Biblioteca', icon: '📜', description: 'Salón de los Héroes' },
-    { key: 'agregar-juego', label: 'Agregar Juego', icon: '⚔️', description: 'Forjar Leyenda' },
-    { key: 'reseñas', label: 'Reseñas', icon: '⭐', description: 'Crónicas Divinas' },
-    { key: 'estadisticas', label: 'Estadísticas', icon: '📊', description: 'Oráculo del Progreso' },
+    { 
+      key: 'biblioteca', 
+      label: 'Biblioteca', 
+      icon: '📜', 
+      description: 'Salón de los Héroes' 
+    },
+    { 
+      key: 'agregar-juego', 
+      label: 'Agregar Juego', 
+      icon: '⚔️', 
+      description: 'Forjar Leyenda' 
+    },
+    { 
+      key: 'reseñas', 
+      label: 'Reseñas', 
+      icon: '⭐', 
+      description: 'Crónicas Divinas' 
+    },
+    { 
+      key: 'estadisticas', 
+      label: 'Estadísticas', 
+      icon: '📊', 
+      description: 'Oráculo del Progreso' 
+    },
   ];
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(prev => !prev);
+  }, []);
 
-  const handleNavigation = (view) => {
+  const handleNavigation = useCallback((view) => {
     onNavigate(view);
     setIsMobileMenuOpen(false);
-  };
+  }, [onNavigate]);
 
-  const getThemeQuote = () => {
+  const getThemeQuote = useCallback(() => {
     return isDarkMode 
       ? "Bajo el manto de Hécate, tus juegos encuentran misterio"
       : "Bajo la luz de Apolo, tus juegos alcanzan la gloria";
-  };
+  }, [isDarkMode]);
+
+  // Cerrar menú móvil al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileMenuOpen && !event.target.closest('.navbar')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobileMenuOpen]);
 
   return (
     <>
-      <nav className="navbar">
+      <nav className={`navbar ${isScrolled ? 'scrolled' : ''} ${isMobileMenuOpen ? 'menu-open' : ''}`}>
         <div className="nav-container">
           {/* Logo y Brand Responsive */}
           <div className="nav-brand">
@@ -113,6 +173,7 @@ const Navbar = ({ currentView, onNavigate }) => {
                 className={`nav-link ${currentView === item.key ? 'active' : ''}`}
                 onClick={() => handleNavigation(item.key)}
                 title={item.description}
+                aria-current={currentView === item.key ? 'page' : undefined}
               >
                 <span className="nav-icon">{item.icon}</span>
                 <span className="nav-label epic-text">{item.label}</span>
@@ -157,6 +218,7 @@ const Navbar = ({ currentView, onNavigate }) => {
                 key={item.key}
                 className={`mobile-nav-link ${currentView === item.key ? 'active' : ''}`}
                 onClick={() => handleNavigation(item.key)}
+                aria-current={currentView === item.key ? 'page' : undefined}
               >
                 <span className="mobile-nav-icon">{item.icon}</span>
                 <span className="mobile-nav-label">{item.label}</span>
@@ -170,15 +232,27 @@ const Navbar = ({ currentView, onNavigate }) => {
       {/* Pilares decorativos - Solo en desktop */}
       <div className="temple-decoration pillar-left desktop-only"></div>
       <div className="temple-decoration pillar-right desktop-only"></div>
+
+      {/* Overlay para móvil */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-menu-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
     </>
   );
-};
+});
 
+Navbar.displayName = 'Navbar';
+
+// Contenido principal de la app
 const AppContent = () => {
   const [currentView, setCurrentView] = useState('biblioteca');
   const { isDarkMode } = useTheme();
 
-  const renderView = () => {
+  const renderView = useCallback(() => {
     const views = {
       'biblioteca': <BibliotecaJuegos />,
       'agregar-juego': <FormularioJuego />,
@@ -188,10 +262,10 @@ const AppContent = () => {
     };
     
     return views[currentView] || <BibliotecaJuegos />;
-  };
+  }, [currentView]);
 
   return (
-    <div className={`App ${isDarkMode ? 'temple-hecate' : 'temple-apolo'}`}>
+    <div className={`App ${isDarkMode ? 'theme-hecate' : 'theme-apolo'}`}>
       <FloatingParticles />
       <Navbar currentView={currentView} onNavigate={setCurrentView} />
       <main className="main-content">

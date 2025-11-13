@@ -1,9 +1,11 @@
 /* Contenedor Principal Responsive */
 .biblioteca-container {
   min-height: calc(100vh - 80px);
-  padding: clamp(1rem, 3vw, 2rem);
+  padding: clamp(0.8rem, 2vw, 2rem);
   position: relative;
   transform-style: preserve-3d;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Fondo de templo mejorado */
@@ -28,53 +30,55 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 2rem;
-  padding: 2rem;
+  gap: 1.5rem;
+  padding: 1rem;
+  text-align: center;
 }
 
 .oraculo-cargando {
   text-align: center;
-  padding: clamp(2rem, 5vw, 3rem);
+  padding: clamp(1.5rem, 4vw, 3rem);
   background: var(--card-bg);
-  border-radius: 24px;
+  border-radius: 20px;
   border: 3px solid var(--border);
   box-shadow: 0 16px 48px var(--shadow);
-  max-width: min(500px, 90vw);
+  max-width: min(450px, 90vw);
   width: 100%;
 }
 
 .esfera-carga {
-  width: clamp(60px, 15vw, 80px);
-  height: clamp(60px, 15vw, 80px);
+  width: clamp(50px, 12vw, 70px);
+  height: clamp(50px, 12vw, 70px);
   border-radius: 50%;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 1.5rem auto;
   background: linear-gradient(135deg, var(--accent), var(--accent-hover));
   box-shadow: 0 0 40px var(--glow);
   animation: glow-orb 2s ease-in-out infinite;
 }
 
 .oraculo-cargando h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
   margin-bottom: 1rem;
   font-family: 'Cinzel', serif;
+  line-height: 1.3;
 }
 
 .oraculo-cargando p {
   color: var(--text-secondary);
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
-  margin-bottom: 2rem;
-  line-height: 1.5;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
 }
 
 .runas-cargando {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.8rem;
   flex-wrap: wrap;
 }
 
 .runas-cargando .runa {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
   animation: float-gentle 3s ease-in-out infinite;
 }
 
@@ -82,24 +86,149 @@
 .runas-cargando .runa:nth-child(2) { animation-delay: 1s; }
 .runas-cargando .runa:nth-child(3) { animation-delay: 2s; }
 
+/* Estado de Error Mejorado */
+.santuario-error {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.error-oraculo {
+  text-align: center;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  background: var(--card-bg);
+  border-radius: 20px;
+  border: 3px solid #ff6b6b;
+  box-shadow: 0 16px 48px rgba(255, 107, 107, 0.3);
+  max-width: min(450px, 90vw);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.error-oraculo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b6b, #ee5a24, #ff6b6b);
+  border-radius: 20px 20px 0 0;
+}
+
+.error-emblema {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  margin-bottom: 1rem;
+  animation: shake 0.8s ease-in-out;
+  display: block;
+}
+
+.error-oraculo h2 {
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+  margin-bottom: 1rem;
+  font-family: 'Cinzel', serif;
+  color: #ff6b6b;
+  text-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  line-height: 1.3;
+}
+
+.error-mensaje {
+  color: #ff6b6b;
+  font-weight: 600;
+  margin: 1rem 0;
+  font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+  line-height: 1.4;
+}
+
+.error-descripcion {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+}
+
+.btn-reintentar {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: clamp(0.8rem, 2vw, 1.1rem) clamp(1.2rem, 3vw, 2rem);
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-family: 'Cinzel', serif;
+  position: relative;
+  overflow: hidden;
+  min-height: 44px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  justify-content: center;
+  width: 100%;
+  max-width: 250px;
+}
+
+.btn-reintentar:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 
+    0 8px 25px rgba(255, 107, 107, 0.4),
+    0 0 20px rgba(255, 107, 107, 0.3);
+}
+
+/* Indicador de Conexión */
+.connection-warning {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: 0.7rem 1.2rem;
+  border-radius: 20px;
+  font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+  margin: 0.8rem auto 0 auto;
+  animation: pulse 2s infinite;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: fit-content;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  text-align: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.warning-icon {
+  font-size: 1rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
 /* Header del templo mejorado */
 .biblioteca-header {
   text-align: center;
-  margin-bottom: clamp(2rem, 5vw, 3rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   position: relative;
+  padding: 0 0.5rem;
 }
 
 .temple-banner {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(1rem, 3vw, 1.5rem);
-  margin-bottom: 1.5rem;
+  gap: clamp(0.8rem, 2.5vw, 1.2rem);
+  margin-bottom: 1.2rem;
   flex-wrap: wrap;
 }
 
 .temple-banner h1 {
-  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
   margin: 0;
   text-shadow: 
     2px 2px 8px var(--shadow),
@@ -114,11 +243,11 @@
 
 .god-emblems {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .emblem {
-  font-size: clamp(2rem, 6vw, 3rem);
+  font-size: clamp(1.6rem, 5vw, 2.5rem);
   filter: drop-shadow(0 4px 12px var(--shadow));
   animation: float-gentle 4s ease-in-out infinite;
 }
@@ -135,52 +264,55 @@
 
 .temple-greeting {
   color: var(--text-secondary);
-  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   font-style: italic;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.7rem;
   font-family: 'Cinzel', serif;
   text-shadow: 0 2px 4px var(--shadow);
-  line-height: 1.4;
+  line-height: 1.3;
+  padding: 0 0.5rem;
 }
 
 .god-quote {
   color: var(--accent);
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-size: clamp(0.9rem, 2.2vw, 1.1rem);
   font-weight: 500;
-  max-width: min(700px, 90vw);
+  max-width: min(600px, 90vw);
   margin: 0 auto;
-  border-left: 4px solid var(--accent);
-  padding-left: 1.5rem;
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
   font-style: italic;
   text-shadow: 0 2px 4px var(--shadow);
-  line-height: 1.5;
+  line-height: 1.4;
+  padding: 0 0.5rem;
 }
 
 /* Estadísticas divinas mejoradas */
 .divine-stats {
-  margin-bottom: clamp(2rem, 5vw, 3rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  padding: 0 0.5rem;
 }
 
 .oracle-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
-  gap: clamp(1rem, 3vw, 1.8rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: clamp(0.8rem, 2.5vw, 1.5rem);
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .oracle-card {
   background: var(--card-bg);
-  padding: clamp(1.5rem, 4vw, 2.2rem) clamp(1.2rem, 3vw, 1.8rem);
-  border-radius: 20px;
+  padding: clamp(1.2rem, 3vw, 2rem) clamp(1rem, 2.5vw, 1.5rem);
+  border-radius: 16px;
   text-align: center;
-  border: 3px solid var(--border);
-  box-shadow: 0 12px 40px var(--shadow);
+  border: 2px solid var(--border);
+  box-shadow: 0 8px 32px var(--shadow);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
-  min-height: 180px;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -192,53 +324,53 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(90deg, var(--accent), var(--accent-hover));
-  border-radius: 20px 20px 0 0;
+  border-radius: 16px 16px 0 0;
 }
 
 .oracle-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-5px) scale(1.02);
   box-shadow: 
-    0 20px 60px var(--shadow),
-    0 0 25px var(--glow);
+    0 16px 48px var(--shadow),
+    0 0 20px var(--glow);
 }
 
 .oracle-icon {
-  font-size: clamp(2.5rem, 6vw, 3rem);
-  margin-bottom: 1rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  margin-bottom: 0.8rem;
   filter: drop-shadow(0 4px 12px var(--shadow));
   display: block;
 }
 
 .oracle-card h3 {
   color: var(--text-secondary);
-  font-size: clamp(0.8rem, 2vw, 0.95rem);
-  margin-bottom: 0.8rem;
+  font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+  margin-bottom: 0.6rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   font-family: 'Cinzel', serif;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .oracle-number {
   color: var(--accent);
-  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
   font-weight: 900;
   display: block;
   font-family: 'Cinzel', serif;
   text-shadow: 2px 2px 8px var(--shadow);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
   line-height: 1;
 }
 
 .oracle-subtitle {
   color: var(--text-secondary);
-  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+  font-size: clamp(0.65rem, 1.5vw, 0.75rem);
   font-style: italic;
   opacity: 0.8;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .god-card {
@@ -254,24 +386,25 @@
 
 /* Panel de Control Mejorado */
 .control-panel {
-  margin-bottom: clamp(2rem, 5vw, 3rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 0.5rem;
 }
 
 .control-container {
   background: var(--card-bg);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border-radius: 20px;
-  border: 3px solid var(--border);
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border-radius: 16px;
+  border: 2px solid var(--border);
   box-shadow: 0 8px 32px var(--shadow);
   backdrop-filter: blur(10px);
 }
 
 /* Búsqueda Divina */
 .search-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .search-container {
@@ -282,22 +415,22 @@
 
 .search-icon {
   position: absolute;
-  left: 1.2rem;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--text-secondary);
   z-index: 2;
 }
 
 .search-input {
   width: 100%;
-  padding: 1.2rem 1.2rem 1.2rem 3rem;
+  padding: 1rem 1rem 1rem 2.8rem;
   background: var(--bg-secondary);
-  border: 3px solid var(--border);
-  border-radius: 12px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-family: inherit;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -317,13 +450,13 @@
 
 .clear-search {
   position: absolute;
-  right: 1rem;
+  right: 0.8rem;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   color: var(--text-secondary);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
   padding: 0.2rem;
   border-radius: 50%;
@@ -337,13 +470,13 @@
 
 /* Filtros y Ordenamiento Mejorados */
 .filters-section {
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .filters-title {
   color: var(--text-primary);
-  font-size: clamp(1.2rem, 3vw, 1.4rem);
-  margin-bottom: 1.5rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  margin-bottom: 1.2rem;
   font-family: 'Cinzel', serif;
   text-align: center;
   text-shadow: 0 2px 4px var(--shadow);
@@ -352,12 +485,12 @@
 .filters-group {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .filter-options {
   display: flex;
-  gap: 0.8rem;
+  gap: 0.6rem;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -365,10 +498,10 @@
 .filtro-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.9rem 1.4rem;
+  gap: 0.4rem;
+  padding: 0.8rem 1.2rem;
   border: 2px solid var(--border);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--bg-secondary);
   color: var(--text-primary);
   font-weight: 600;
@@ -378,6 +511,7 @@
   position: relative;
   overflow: hidden;
   min-width: fit-content;
+  font-size: 0.85rem;
 }
 
 .filtro-btn::before {
@@ -412,11 +546,11 @@
 }
 
 .filter-icon {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .filter-label {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   white-space: nowrap;
 }
 
@@ -425,20 +559,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.8rem;
   flex-wrap: wrap;
 }
 
 .sort-label {
   color: var(--text-secondary);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   white-space: nowrap;
 }
 
 .sort-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -446,16 +580,16 @@
 .sort-btn {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.7rem 1rem;
+  gap: 0.3rem;
+  padding: 0.6rem 0.8rem;
   border: 2px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--bg-secondary);
   color: var(--text-primary);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 .sort-btn:hover {
@@ -470,22 +604,23 @@
 }
 
 .sort-icon {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 /* Salón de juegos mejorado */
 .hall-of-games {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 0.5rem;
 }
 
 .hall-header {
   text-align: center;
-  margin-bottom: clamp(2rem, 5vw, 3rem);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(1.2rem, 3vw, 2rem);
   background: var(--card-bg);
-  border-radius: 20px;
-  border: 3px solid var(--border);
+  border-radius: 16px;
+  border: 2px solid var(--border);
   box-shadow: 
     0 8px 32px var(--shadow),
     inset 0 1px 4px rgba(255, 255, 255, 0.1);
@@ -504,8 +639,8 @@
 }
 
 .hall-header h2 {
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  margin-bottom: 0.8rem;
   text-shadow: 
     2px 2px 8px var(--shadow),
     0 0 20px var(--glow);
@@ -513,20 +648,20 @@
 }
 
 .hall-info {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
 }
 
 .hall-subtitle {
   color: var(--text-secondary);
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  margin-bottom: 1rem;
+  font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+  margin-bottom: 0.8rem;
   font-style: italic;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 .hall-stats {
   display: flex;
-  gap: 1rem;
+  gap: 0.8rem;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -534,24 +669,24 @@
 .stat-badge {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
 .stat-icon {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 /* Acciones Divinas */
 .divine-actions {
   display: flex;
-  gap: 1rem;
+  gap: 0.8rem;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
@@ -559,21 +694,22 @@
 
 /* Botones épicos mejorados */
 .btn {
-  padding: clamp(0.9rem, 2vw, 1.2rem) clamp(1.5rem, 3vw, 2.2rem);
+  padding: clamp(0.8rem, 2vw, 1.1rem) clamp(1.2rem, 3vw, 2rem);
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  gap: 0.6rem;
+  font-size: clamp(0.85rem, 2vw, 1rem);
   font-family: inherit;
   position: relative;
   overflow: hidden;
-  min-height: 48px;
+  min-height: 44px;
+  justify-content: center;
 }
 
 .btn::before {
@@ -626,7 +762,7 @@
 }
 
 .btn-icon {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .btn-text {
@@ -636,11 +772,11 @@
 /* Controles de Vista */
 .view-controls {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .btn-view {
-  padding: 0.8rem;
+  padding: 0.7rem;
   min-height: auto;
 }
 
@@ -652,30 +788,32 @@
 /* Grid sagrado mejorado */
 .sacred-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+  margin-bottom: 1.5rem;
 }
 
 .game-item {
   transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
 }
 
 /* Santuario vacío mejorado */
 .empty-sanctuary {
   text-align: center;
-  padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(2rem, 6vw, 4rem) clamp(1.2rem, 3vw, 2rem);
   background: var(--card-bg);
-  border-radius: 20px;
+  border-radius: 16px;
   border: 3px dashed var(--border);
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
   backdrop-filter: blur(10px);
 }
 
 .empty-icon {
-  font-size: clamp(3rem, 10vw, 5rem);
-  margin-bottom: 2rem;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  margin-bottom: 1.5rem;
   filter: drop-shadow(0 4px 12px var(--shadow));
   display: block;
   animation: float-gentle 4s ease-in-out infinite;
@@ -683,25 +821,25 @@
 
 .empty-sanctuary h3 {
   color: var(--text-primary);
-  margin-bottom: 1.5rem;
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: 1.2rem;
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
   font-family: 'Cinzel', serif;
   line-height: 1.3;
 }
 
 .empty-sanctuary p {
   color: var(--text-secondary);
-  margin-bottom: 2.5rem;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  line-height: 1.6;
-  max-width: 400px;
+  margin-bottom: 2rem;
+  font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+  line-height: 1.4;
+  max-width: 350px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .empty-actions {
   display: flex;
-  gap: 1rem;
+  gap: 0.8rem;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -709,28 +847,29 @@
 /* Sección de cargar más */
 .load-more-section {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .btn-load-more {
-  padding: 1rem 2rem;
+  padding: 0.9rem 1.8rem;
 }
 
 /* Pie del templo mejorado */
 .temple-footer {
-  margin-top: clamp(3rem, 6vw, 5rem);
-  padding-top: 2rem;
+  margin-top: clamp(2rem, 5vw, 4rem);
+  padding-top: 1.5rem;
   border-top: 2px solid var(--border);
+  padding: 0 0.5rem;
 }
 
 .altar-wisdom {
   text-align: center;
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
   background: var(--card-bg);
-  border-radius: 20px;
-  border: 3px solid var(--border);
+  border-radius: 16px;
+  border: 2px solid var(--border);
   box-shadow: 
     0 8px 32px var(--shadow),
     inset 0 1px 4px rgba(255, 255, 255, 0.1);
@@ -746,38 +885,38 @@
   right: 0;
   height: 3px;
   background: linear-gradient(90deg, var(--accent), var(--accent-hover), var(--accent));
-  border-radius: 20px 20px 0 0;
+  border-radius: 16px 16px 0 0;
 }
 
 .wisdom-text {
   color: var(--accent);
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   font-style: italic;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-family: 'Cinzel', serif;
-  line-height: 1.5;
+  line-height: 1.4;
   text-shadow: 0 2px 8px var(--shadow);
 }
 
 .altar-offerings {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
-  gap: 1rem;
-  max-width: 600px;
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  gap: 0.8rem;
+  max-width: 500px;
   margin: 0 auto;
 }
 
 .offering {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  padding: 1rem;
+  gap: 0.5rem;
+  padding: 0.8rem;
   background: var(--bg-secondary);
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid var(--border);
   transition: all 0.3s ease;
   flex-direction: column;
@@ -791,7 +930,7 @@
 }
 
 .offering-icon {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   filter: drop-shadow(0 2px 4px var(--shadow));
 }
 
@@ -830,7 +969,26 @@
   animation: destierro-anim 0.6s ease-in-out forwards;
 }
 
-/* Animaciones */
+/* NUEVAS ANIMACIONES PARA ERRORES */
+@keyframes shake {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-8px) rotate(-2deg); }
+  50% { transform: translateX(8px) rotate(2deg); }
+  75% { transform: translateX(-4px) rotate(-1deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+/* Animaciones principales */
 @keyframes float-gentle {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
   33% { transform: translateY(-5px) rotate(1deg); }
@@ -848,21 +1006,22 @@
   }
 }
 
-/* MEDIA QUERIES ESTRATÉGICAS */
+/* MEDIA QUERIES ESTRATÉGICAS MEJORADAS */
 
 /* Tablet */
 @media (max-width: 1024px) {
   .oracle-cards {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.2rem;
   }
   
   .sacred-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
   }
   
   .filters-group {
-    gap: 1.5rem;
+    gap: 1.2rem;
   }
   
   .divine-actions {
@@ -872,46 +1031,94 @@
   
   .btn {
     justify-content: center;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .connection-warning {
+    margin: 0.5rem auto 0 auto;
+    text-align: center;
+    padding: 0.6rem 1rem;
   }
 }
 
 /* Mobile Large */
 @media (max-width: 768px) {
+  .biblioteca-container {
+    padding: 0.5rem;
+  }
+  
   .temple-banner {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.8rem;
+  }
+  
+  .temple-banner h1 {
+    text-align: center;
   }
   
   .filter-options {
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
   
   .filtro-btn {
-    width: 200px;
+    width: 100%;
+    max-width: 250px;
     justify-content: center;
   }
   
   .sort-options {
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.6rem;
+    width: 100%;
   }
   
   .sort-buttons {
     justify-content: center;
+    width: 100%;
+  }
+  
+  .sort-btn {
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
   }
   
   .sacred-grid {
     grid-template-columns: 1fr;
+    gap: 1.2rem;
   }
   
   .empty-actions {
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
   
   .empty-actions .btn {
-    width: 200px;
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .connection-warning {
+    font-size: 0.7rem;
+    padding: 0.5rem 0.8rem;
+    width: 90%;
+  }
+  
+  .hall-header {
+    padding: 1.2rem;
+  }
+  
+  .divine-actions {
+    gap: 0.6rem;
+  }
+  
+  .view-controls {
+    width: 100%;
     justify-content: center;
   }
 }
@@ -919,59 +1126,110 @@
 /* Mobile Small */
 @media (max-width: 480px) {
   .biblioteca-container {
-    padding: 0.8rem;
+    padding: 0.3rem;
   }
   
   .temple-banner h1 {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
   }
   
   .oracle-cards {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .oracle-card {
+    padding: 1rem;
+    min-height: 120px;
   }
   
   .control-container {
-    padding: 1.5rem;
+    padding: 1rem;
   }
   
   .hall-header {
-    padding: 1.5rem;
+    padding: 1rem;
   }
   
   .hall-header h2 {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
   }
   
   .altar-offerings {
     grid-template-columns: 1fr;
+    gap: 0.6rem;
   }
   
   .offering {
     flex-direction: row;
     justify-content: flex-start;
     text-align: left;
+    padding: 0.7rem;
+  }
+  
+  .connection-warning {
+    font-size: 0.65rem;
+    padding: 0.4rem 0.7rem;
+  }
+  
+  .error-oraculo {
+    padding: 1.2rem;
+  }
+  
+  .error-emblema {
+    font-size: 2rem;
+  }
+  
+  .search-input {
+    padding: 0.8rem 0.8rem 0.8rem 2.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .search-icon {
+    left: 0.8rem;
+  }
+  
+  .filtro-btn {
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .sort-btn {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.7rem;
   }
 }
 
 /* Pantallas muy grandes */
 @media (min-width: 1600px) {
   .oracle-cards {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
   
   .sacred-grid {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   }
 }
 
 /* Modo landscape en móviles */
 @media (max-height: 500px) and (orientation: landscape) {
-  .santuario-cargando {
-    padding: 1rem;
+  .santuario-cargando,
+  .santuario-error {
+    padding: 0.5rem;
+    min-height: auto;
   }
   
-  .oraculo-cargando {
-    padding: 2rem;
+  .oraculo-cargando,
+  .error-oraculo {
+    padding: 1.5rem;
+  }
+  
+  .connection-warning {
+    margin: 0.3rem auto 0 auto;
+  }
+  
+  .sacred-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
 
@@ -987,6 +1245,10 @@
   
   .btn {
     border-width: 2px;
+  }
+  
+  .connection-warning {
+    border: 2px solid white;
   }
 }
 
@@ -1008,5 +1270,75 @@
   
   .esfera-carga {
     animation: none;
+  }
+  
+  .empty-icon {
+    animation: none;
+  }
+  
+  .runas-cargando .runa {
+    animation: none;
+  }
+  
+  .connection-warning {
+    animation: none;
+  }
+  
+  .error-emblema {
+    animation: none;
+  }
+  
+  .oracle-card:hover {
+    transform: none;
+  }
+  
+  .filtro-btn:hover {
+    transform: none;
+  }
+  
+  .btn:hover {
+    transform: none;
+  }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-transparency: reduce) {
+  .oracle-card,
+  .control-container,
+  .hall-header,
+  .altar-wisdom {
+    backdrop-filter: none;
+  }
+}
+
+/* Modo oscuro automático */
+@media (prefers-color-scheme: dark) {
+  .theme-system .biblioteca-container {
+    background: var(--midnight);
+  }
+}
+
+/* Mejoras de impresión */
+@media print {
+  .biblioteca-container {
+    padding: 0;
+    background: white !important;
+  }
+  
+  .control-panel,
+  .divine-actions,
+  .connection-warning,
+  .temple-footer {
+    display: none;
+  }
+  
+  .sacred-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .oracle-cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import './FormularioJuego.css';
 
@@ -17,6 +17,19 @@ const FormularioJuego = () => {
   });
   const [showPreview, setShowPreview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar si es móvil
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const generos = [
     'Aventura Épica', 'RPG Legendario', 'Estrategia Divina', 'Acción Heroica',
@@ -93,17 +106,29 @@ const FormularioJuego = () => {
     return currentQuotes[Math.floor(Math.random() * currentQuotes.length)];
   };
 
+  // En móvil, no mostrar preview automáticamente
+  useEffect(() => {
+    if (isMobile) {
+      setShowPreview(false);
+    }
+  }, [isMobile]);
+
   return (
     <div className="formulario-container">
       {/* Header épico del formulario */}
       <header className="formulario-header">
         <div className="forge-banner">
-          <h1 className="epic-text gold-text text-glow">⚔️ FORJAR NUEVA LEYENDA</h1>
+          <h1 className="epic-text gold-text text-glow">
+            {isMobile ? '⚔️ NUEVA LEYENDA' : '⚔️ FORJAR NUEVA LEYENDA'}
+          </h1>
           <div className="forge-icon float-effect">🔥</div>
         </div>
         <p className="temple-instruction">{getTempleQuote()}</p>
         <p className="form-subtitle">
-          Completa los campos sagrados para añadir una nueva leyenda a tu biblioteca
+          {isMobile 
+            ? 'Completa los campos para añadir una nueva leyenda'
+            : 'Completa los campos sagrados para añadir una nueva leyenda a tu biblioteca'
+          }
         </p>
       </header>
 
@@ -111,13 +136,16 @@ const FormularioJuego = () => {
         {/* Formulario principal */}
         <form className="formulario-juego" onSubmit={handleSubmit}>
           <div className="form-section">
-            <h3 className="section-title">📜 Información Básica</h3>
+            <h3 className="section-title">
+              <span>📜</span>
+              {isMobile ? 'Información Básica' : 'Información de la Leyenda'}
+            </h3>
             
             {/* Título */}
             <div className="input-group">
               <label className="input-label">
                 <span className="label-icon">🏷️</span>
-                Nombre de la Leyenda
+                {isMobile ? 'Nombre del Juego' : 'Nombre de la Leyenda'}
               </label>
               <input
                 type="text"
@@ -125,7 +153,7 @@ const FormularioJuego = () => {
                 value={formData.titulo}
                 onChange={handleChange}
                 className="input-field"
-                placeholder="Ej: The Legend of Zelda: Breath of the Wild"
+                placeholder={isMobile ? "Ej: Zelda: Breath of the Wild" : "Ej: The Legend of Zelda: Breath of the Wild"}
                 required
               />
             </div>
@@ -135,7 +163,7 @@ const FormularioJuego = () => {
               <div className="input-group">
                 <label className="input-label">
                   <span className="label-icon">🎭</span>
-                  Género Épico
+                  {isMobile ? 'Género' : 'Género Épico'}
                 </label>
                 <select
                   name="genero"
@@ -154,7 +182,7 @@ const FormularioJuego = () => {
               <div className="input-group">
                 <label className="input-label">
                   <span className="label-icon">🎮</span>
-                  Plataforma Divina
+                  {isMobile ? 'Plataforma' : 'Plataforma Divina'}
                 </label>
                 <select
                   name="plataforma"
@@ -175,28 +203,34 @@ const FormularioJuego = () => {
             <div className="input-group">
               <label className="input-label">
                 <span className="label-icon">📖</span>
-                Crónica de la Leyenda
+                {isMobile ? 'Descripción' : 'Crónica de la Leyenda'}
               </label>
               <textarea
                 name="descripcion"
                 value={formData.descripcion}
                 onChange={handleChange}
                 className="input-field textarea-field"
-                placeholder="Describe tu épica aventura, tus hazañas y los desafíos que enfrentaste..."
-                rows="4"
+                placeholder={isMobile 
+                  ? "Describe tu aventura..." 
+                  : "Describe tu épica aventura, tus hazañas y los desafíos que enfrentaste..."
+                }
+                rows={isMobile ? "3" : "4"}
               />
             </div>
           </div>
 
           <div className="form-section">
-            <h3 className="section-title">⭐ Progreso del Héroe</h3>
+            <h3 className="section-title">
+              <span>⭐</span>
+              {isMobile ? 'Tu Progreso' : 'Progreso del Héroe'}
+            </h3>
             
             {/* Horas y Rating */}
             <div className="input-row">
               <div className="input-group">
                 <label className="input-label">
                   <span className="label-icon">⏱️</span>
-                  Horas de Gloria
+                  {isMobile ? 'Horas Jugadas' : 'Horas de Gloria'}
                 </label>
                 <input
                   type="number"
@@ -213,7 +247,7 @@ const FormularioJuego = () => {
               <div className="input-group">
                 <label className="input-label">
                   <span className="label-icon">⭐</span>
-                  Calificación Divina
+                  {isMobile ? 'Calificación' : 'Calificación Divina'}
                 </label>
                 <div className="rating-input">
                   {[1, 2, 3, 4, 5].map(star => (
@@ -222,6 +256,7 @@ const FormularioJuego = () => {
                       type="button"
                       className={`star-btn ${formData.rating >= star ? 'active' : ''}`}
                       onClick={() => setFormData(prev => ({ ...prev, rating: star }))}
+                      aria-label={`Calificar con ${star} estrella${star > 1 ? 's' : ''}`}
                     >
                       ⭐
                     </button>
@@ -245,7 +280,7 @@ const FormularioJuego = () => {
                   <span className="checkmark"></span>
                   <span className="checkbox-text">
                     <span className="checkbox-icon">✅</span>
-                    Leyenda Consumada
+                    {isMobile ? 'Completado' : 'Leyenda Consumada'}
                   </span>
                 </label>
               </div>
@@ -253,7 +288,7 @@ const FormularioJuego = () => {
               <div className="input-group">
                 <label className="input-label">
                   <span className="label-icon">📅</span>
-                  Fecha de Adquisición
+                  {isMobile ? 'Fecha' : 'Fecha de Adquisición'}
                 </label>
                 <input
                   type="date"
@@ -268,7 +303,10 @@ const FormularioJuego = () => {
           </div>
 
           <div className="form-section">
-            <h3 className="section-title">🙏 Bendición Divina</h3>
+            <h3 className="section-title">
+              <span>🙏</span>
+              {isMobile ? 'Estilo' : 'Bendición Divina'}
+            </h3>
             
             {/* Selección de Dios */}
             <div className="dioses-container">
@@ -285,8 +323,10 @@ const FormularioJuego = () => {
                   <div className={`dios-card ${formData.dios === dios.value ? 'active' : ''}`}>
                     <div className="dios-icon">{dios.icon}</div>
                     <div className="dios-info">
-                      <div className="dios-name">{dios.value}</div>
-                      <div className="dios-desc">{dios.desc}</div>
+                      <div className="dios-name">{isMobile ? dios.value : dios.value}</div>
+                      <div className="dios-desc">
+                        {isMobile ? dios.desc.split(' ').slice(0, 3).join(' ') + '...' : dios.desc}
+                      </div>
                     </div>
                   </div>
                 </label>
@@ -296,14 +336,16 @@ const FormularioJuego = () => {
 
           {/* Acciones del formulario */}
           <div className="form-actions">
-            <button
-              type="button"
-              className="btn btn-magic btn-preview"
-              onClick={() => setShowPreview(!showPreview)}
-            >
-              <span className="btn-icon">👁️</span>
-              {showPreview ? 'Ocultar' : 'Ver'} Previa
-            </button>
+            {!isMobile && (
+              <button
+                type="button"
+                className="btn btn-magic btn-preview"
+                onClick={() => setShowPreview(!showPreview)}
+              >
+                <span className="btn-icon">👁️</span>
+                {showPreview ? 'Ocultar' : 'Ver'} Previa
+              </button>
+            )}
             
             <button
               type="submit"
@@ -313,25 +355,40 @@ const FormularioJuego = () => {
               {isSubmitting ? (
                 <>
                   <span className="btn-icon">⚡</span>
-                  Forjando Leyenda...
+                  {isMobile ? 'Forjando...' : 'Forjando Leyenda...'}
                 </>
               ) : (
                 <>
                   <span className="btn-icon">🔥</span>
-                  Forjar Leyenda
+                  {isMobile ? 'Crear' : 'Forjar Leyenda'}
                 </>
               )}
             </button>
+
+            {isMobile && (
+              <button
+                type="button"
+                className="btn btn-magic btn-preview"
+                onClick={() => setShowPreview(!showPreview)}
+              >
+                <span className="btn-icon">👁️</span>
+                {showPreview ? 'Ocultar' : 'Vista Previa'}
+              </button>
+            )}
           </div>
         </form>
 
         {/* Vista previa épica */}
         {showPreview && (
           <div className="preview-container">
-            <h3 className="preview-title">👁️ VISTA PREVIA DE LA LEYENDA</h3>
+            <h3 className="preview-title">
+              {isMobile ? '👁️ VISTA PREVIA' : '👁️ VISTA PREVIA DE LA LEYENDA'}
+            </h3>
             <div className="preview-card">
               <div className="preview-header">
-                <h4 className="preview-name">{formData.titulo || 'Nombre de la Leyenda'}</h4>
+                <h4 className="preview-name">
+                  {formData.titulo || 'Nombre de la Leyenda'}
+                </h4>
                 <div className="preview-platform">
                   {formData.plataforma ? getPlatformIcon(formData.plataforma) : '🎮'}
                 </div>
@@ -340,7 +397,7 @@ const FormularioJuego = () => {
               <div className="preview-badges">
                 <div className={`preview-badge god-${formData.dios.toLowerCase()}`}>
                   {formData.dios === 'Apolo' ? '☀️' : formData.dios === 'Hécate' ? '🌙' : '⚡'} 
-                  {formData.dios}
+                  {isMobile ? '' : ` ${formData.dios}`}
                 </div>
                 <div className={`preview-badge status-${formData.completado ? 'completado' : 'progreso'}`}>
                   {formData.completado ? '✅ Completado' : '⏳ En Progreso'}
@@ -350,11 +407,11 @@ const FormularioJuego = () => {
               <div className="preview-stats">
                 <div className="preview-stat">
                   <span>⏱️</span>
-                  <span>{formData.horas}h</span>
+                  <span>{formData.horas || 0}h</span>
                 </div>
                 <div className="preview-stat">
                   <span>⭐</span>
-                  <span>{formData.rating}/5</span>
+                  <span>{formData.rating || 0}/5</span>
                 </div>
                 <div className="preview-stat">
                   <span>🎭</span>
@@ -364,7 +421,12 @@ const FormularioJuego = () => {
               
               {formData.descripcion && (
                 <div className="preview-desc">
-                  <p>{formData.descripcion}</p>
+                  <p>
+                    {isMobile && formData.descripcion.length > 100 
+                      ? `${formData.descripcion.substring(0, 100)}...` 
+                      : formData.descripcion
+                    }
+                  </p>
                 </div>
               )}
             </div>

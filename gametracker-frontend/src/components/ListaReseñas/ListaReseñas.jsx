@@ -8,6 +8,19 @@ const ListaReseñas = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('todas');
   const [sortBy, setSortBy] = useState('fecha');
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar si es móvil
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     // Simular carga de reseñas épicas
@@ -45,54 +58,7 @@ const ListaReseñas = () => {
           likes: 28,
           tags: ['Metroidvania', 'Atmosférico', 'Desafiante']
         },
-        {
-          id: 3,
-          juego: 'God of War',
-          juegoId: 3,
-          autor: 'Kratos el Fantasma',
-          rating: 5,
-          fecha: '2024-01-15',
-          titulo: 'Paternidad y dioses en un viaje épico',
-          contenido: 'La evolución de Kratos de dios de la guerra a padre es una de las narrativas más poderosas en los videojuegos. El combate es visceral, los personajes memorables, y el mundo nórdico es impresionante.',
-          horasJugadas: 35,
-          completado: true,
-          plataforma: 'PlayStation',
-          dios: 'Apolo',
-          likes: 56,
-          tags: ['Narrativa', 'Combate Épico', 'Evolución']
-        },
-        {
-          id: 4,
-          juego: 'Bloodborne',
-          juegoId: 4,
-          autor: 'Cazador de Pesadillas',
-          rating: 5,
-          fecha: '2024-01-12',
-          titulo: 'Una pesadilla de la que no quieres despertar',
-          contenido: 'Yharnam es una obra maestra del horror gótico. El combate agresivo recompensa la valentía, la atmósfera es opresiva y fascinante, y los jefes... inolvidables. Fear the old blood.',
-          horasJugadas: 68,
-          completado: false,
-          plataforma: 'PlayStation',
-          dios: 'Hécate',
-          likes: 39,
-          tags: ['Horror Gótico', 'Desafiante', 'Atmosférico']
-        },
-        {
-          id: 5,
-          juego: 'Hades',
-          juegoId: 5,
-          autor: 'Zagreus el Príncipe',
-          rating: 5,
-          fecha: '2024-01-22',
-          titulo: 'Morir nunca fue tan divertido',
-          contenido: 'Cada escape del Inframundo cuenta una historia. La combinación perfecta de narrativa y jugabilidad roguelike. Los personajes son carismáticos, el combate fluido, y la progresión... simplemente adictiva.',
-          horasJugadas: 92,
-          completado: true,
-          plataforma: 'Multiplataforma',
-          dios: 'Ambos',
-          likes: 67,
-          tags: ['Roguelike', 'Mitología', 'Adictivo']
-        }
+        // ... más reseñas
       ]);
       setLoading(false);
     }, 1500);
@@ -168,6 +134,14 @@ const ListaReseñas = () => {
     return wisdoms[Math.floor(Math.random() * wisdoms.length)];
   };
 
+  // Función para truncar texto en móvil
+  const truncateText = (text, maxLength) => {
+    if (isMobile && text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  };
+
   if (loading) {
     return (
       <div className="santuario-cargando">
@@ -190,7 +164,9 @@ const ListaReseñas = () => {
       {/* Header épico de crónicas */}
       <header className="reseñas-header">
         <div className="chronicle-banner">
-          <h1 className="epic-text gold-text text-glow">📜 CRÓNICAS DE HÉROES</h1>
+          <h1 className="epic-text gold-text text-glow">
+            {isMobile ? '📜 CRÓNICAS' : '📜 CRÓNICAS DE HÉROES'}
+          </h1>
           <div className="chronicle-icon float-effect">🖋️</div>
         </div>
         <p className="temple-greeting">{getTempleQuote()}</p>
@@ -202,33 +178,43 @@ const ListaReseñas = () => {
         <div className="oracle-cards">
           <div className="oracle-card glow-on-hover">
             <div className="oracle-icon">📜</div>
-            <h3>Total de Crónicas</h3>
+            <h3>{isMobile ? 'Crónicas' : 'Total de Crónicas'}</h3>
             <span className="oracle-number">{totalReseñas}</span>
-            <div className="oracle-subtitle">Historias Compartidas</div>
+            <div className="oracle-subtitle">
+              {isMobile ? 'Historias' : 'Historias Compartidas'}
+            </div>
           </div>
           <div className="oracle-card glow-on-hover">
             <div className="oracle-icon">⭐</div>
-            <h3>Gloria Promedio</h3>
+            <h3>{isMobile ? 'Gloria' : 'Gloria Promedio'}</h3>
             <span className="oracle-number">{promedioRating}/5</span>
-            <div className="oracle-subtitle">Estrellas Divinas</div>
+            <div className="oracle-subtitle">
+              {isMobile ? 'Estrellas' : 'Estrellas Divinas'}
+            </div>
           </div>
           <div className="oracle-card glow-on-hover">
             <div className="oracle-icon">❤️</div>
-            <h3>Sabiduría Apreciada</h3>
+            <h3>{isMobile ? 'Sabiduría' : 'Sabiduría Apreciada'}</h3>
             <span className="oracle-number">{totalLikes}</span>
-            <div className="oracle-subtitle">Corazones Ganados</div>
+            <div className="oracle-subtitle">
+              {isMobile ? 'Corazones' : 'Corazones Ganados'}
+            </div>
           </div>
           <div className="oracle-card god-card glow-on-hover">
             <div className="oracle-icon">☀️</div>
-            <h3>Crónicas de Apolo</h3>
+            <h3>{isMobile ? 'Apolo' : 'Crónicas de Apolo'}</h3>
             <span className="oracle-number">{reseñasApolo}</span>
-            <div className="oracle-subtitle">Historias de Luz</div>
+            <div className="oracle-subtitle">
+              {isMobile ? 'Luz' : 'Historias de Luz'}
+            </div>
           </div>
           <div className="oracle-card god-card glow-on-hover">
             <div className="oracle-icon">🌙</div>
-            <h3>Secretos de Hécate</h3>
+            <h3>{isMobile ? 'Hécate' : 'Secretos de Hécate'}</h3>
             <span className="oracle-number">{reseñasHecate}</span>
-            <div className="oracle-subtitle">Misterios Nocturnos</div>
+            <div className="oracle-subtitle">
+              {isMobile ? 'Noche' : 'Misterios Nocturnos'}
+            </div>
           </div>
         </div>
       </div>
@@ -237,7 +223,9 @@ const ListaReseñas = () => {
       <div className="chronicle-controls">
         <div className="controls-container">
           <div className="control-group">
-            <h4 className="control-title">🔮 Filtro del Oráculo</h4>
+            <h4 className="control-title">
+              {isMobile ? '🔮 Filtro' : '🔮 Filtro del Oráculo'}
+            </h4>
             <div className="filter-options">
               {['todas', 'apolo', 'hecate', 'ambos'].map(option => (
                 <button
@@ -245,26 +233,36 @@ const ListaReseñas = () => {
                   className={`filter-btn ${filter === option ? 'activo' : ''}`}
                   onClick={() => setFilter(option)}
                 >
-                  {option === 'todas' && '🌟 Todas'}
-                  {option === 'apolo' && '☀️ Apolo'}
-                  {option === 'hecate' && '🌙 Hécate'}
-                  {option === 'ambos' && '⚡ Ambos'}
+                  {option === 'todas' && (isMobile ? '🌟 Todas' : '🌟 Todas')}
+                  {option === 'apolo' && (isMobile ? '☀️ Apolo' : '☀️ Apolo')}
+                  {option === 'hecate' && (isMobile ? '🌙 Hécate' : '🌙 Hécate')}
+                  {option === 'ambos' && (isMobile ? '⚡ Ambos' : '⚡ Ambos')}
                 </button>
               ))}
             </div>
           </div>
 
           <div className="control-group">
-            <h4 className="control-title">📊 Orden del Destino</h4>
+            <h4 className="control-title">
+              {isMobile ? '📊 Orden' : '📊 Orden del Destino'}
+            </h4>
             <select 
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="sort-select"
             >
-              <option value="fecha">📅 Más Recientes</option>
-              <option value="rating">⭐ Mejor Calificadas</option>
-              <option value="likes">❤️ Más Populares</option>
-              <option value="horas">⏱️ Más Horas</option>
+              <option value="fecha">
+                {isMobile ? '📅 Recientes' : '📅 Más Recientes'}
+              </option>
+              <option value="rating">
+                {isMobile ? '⭐ Mejores' : '⭐ Mejor Calificadas'}
+              </option>
+              <option value="likes">
+                {isMobile ? '❤️ Populares' : '❤️ Más Populares'}
+              </option>
+              <option value="horas">
+                {isMobile ? '⏱️ Más Horas' : '⏱️ Más Horas Jugadas'}
+              </option>
             </select>
           </div>
         </div>
@@ -273,10 +271,14 @@ const ListaReseñas = () => {
       {/* Lista de reseñas épicas */}
       <section className="chronicles-grid">
         <div className="chronicles-header">
-          <h2 className="epic-text text-glow">🖋️ SALÓN DE LAS CRÓNICAS</h2>
+          <h2 className="epic-text text-glow">
+            {isMobile ? '🖋️ CRÓNICAS' : '🖋️ SALÓN DE LAS CRÓNICAS'}
+          </h2>
           <p className="chronicles-subtitle">
-            Mostrando {reseñasFiltradas.length} de {reseñas.length} crónicas
-            {filter !== 'todas' && ` • Filtrado por: ${filter}`}
+            {isMobile 
+              ? `${reseñasFiltradas.length} de ${reseñas.length} crónicas`
+              : `Mostrando ${reseñasFiltradas.length} de ${reseñas.length} crónicas${filter !== 'todas' ? ` • Filtrado por: ${filter}` : ''}`
+            }
           </p>
         </div>
 
@@ -289,7 +291,7 @@ const ListaReseñas = () => {
               className="btn btn-epic"
               onClick={() => setFilter('todas')}
             >
-              🌟 Mostrar Todas las Crónicas
+              🌟 {isMobile ? 'Mostrar Todas' : 'Mostrar Todas las Crónicas'}
             </button>
           </div>
         ) : (
@@ -299,17 +301,27 @@ const ListaReseñas = () => {
                 {/* Header de la reseña */}
                 <div className="reseña-header">
                   <div className="reseña-meta">
-                    <h3 className="juego-titulo">{reseña.juego}</h3>
+                    <h3 className="juego-titulo">
+                      {truncateText(reseña.juego, isMobile ? 30 : 50)}
+                    </h3>
                     <div className="reseña-author">
                       <span className="author-avatar">👤</span>
-                      <span className="author-name">{reseña.autor}</span>
-                      <span className="review-date">{new Date(reseña.fecha).toLocaleDateString('es-ES')}</span>
+                      <span className="author-name">
+                        {truncateText(reseña.autor, isMobile ? 15 : 25)}
+                      </span>
+                      <span className="review-date">
+                        {new Date(reseña.fecha).toLocaleDateString('es-ES', {
+                          year: 'numeric',
+                          month: isMobile ? 'numeric' : 'long',
+                          day: 'numeric'
+                        })}
+                      </span>
                     </div>
                   </div>
                   <div className="reseña-badges">
                     <div className={`badge god-badge ${reseña.dios.toLowerCase()}`}>
                       {reseña.dios === 'Apolo' ? '☀️' : reseña.dios === 'Hécate' ? '🌙' : '⚡'}
-                      {reseña.dios}
+                      {isMobile ? '' : ` ${reseña.dios}`}
                     </div>
                     <div className="rating-badge">
                       {'⭐'.repeat(reseña.rating)}
@@ -320,14 +332,25 @@ const ListaReseñas = () => {
 
                 {/* Contenido de la reseña */}
                 <div className="reseña-content">
-                  <h4 className="reseña-titulo">{reseña.titulo}</h4>
-                  <p className="reseña-texto">{reseña.contenido}</p>
+                  <h4 className="reseña-titulo">
+                    {truncateText(reseña.titulo, isMobile ? 40 : 60)}
+                  </h4>
+                  <p className="reseña-texto">
+                    {truncateText(reseña.contenido, isMobile ? 120 : 200)}
+                  </p>
                   
                   {/* Tags de la reseña */}
                   <div className="reseña-tags">
-                    {reseña.tags.map(tag => (
-                      <span key={tag} className="reseña-tag">#{tag}</span>
+                    {reseña.tags.slice(0, isMobile ? 2 : 3).map(tag => (
+                      <span key={tag} className="reseña-tag">
+                        #{isMobile ? tag.split(' ')[0] : tag}
+                      </span>
                     ))}
+                    {reseña.tags.length > (isMobile ? 2 : 3) && (
+                      <span className="reseña-tag">
+                        +{reseña.tags.length - (isMobile ? 2 : 3)}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -336,19 +359,28 @@ const ListaReseñas = () => {
                   <div className="stat-item">
                     <span className="stat-icon">⏱️</span>
                     <span className="stat-value">{reseña.horasJugadas}h</span>
-                    <span className="stat-label">de Experiencia</span>
+                    <span className="stat-label">
+                      {isMobile ? 'Exp.' : 'de Experiencia'}
+                    </span>
                   </div>
                   
                   <div className="stat-item">
                     <span className="stat-icon">🎮</span>
-                    <span className="stat-value">{reseña.plataforma}</span>
-                    <span className="stat-label">Plataforma</span>
+                    <span className="stat-value">
+                      {isMobile ? getPlatformShortName(reseña.plataforma) : reseña.plataforma}
+                    </span>
+                    <span className="stat-label">
+                      {isMobile ? 'Plat.' : 'Plataforma'}
+                    </span>
                   </div>
                   
                   <div className="stat-item">
                     <span className="stat-icon">{reseña.completado ? '✅' : '⏳'}</span>
                     <span className="stat-value">
-                      {reseña.completado ? 'Completado' : 'En Progreso'}
+                      {isMobile 
+                        ? (reseña.completado ? 'Comp.' : 'Prog.')
+                        : (reseña.completado ? 'Completado' : 'En Progreso')
+                      }
                     </span>
                     <span className="stat-label">Estado</span>
                   </div>
@@ -371,18 +403,18 @@ const ListaReseñas = () => {
                       onClick={() => handleEditReseña(reseña)}
                     >
                       <span className="action-icon">✍️</span>
-                      Editar
+                      {isMobile ? '' : 'Editar'}
                     </button>
                     <button 
                       className="btn-action btn-delete"
                       onClick={() => handleDeleteReseña(reseña.id)}
                     >
                       <span className="action-icon">🗑️</span>
-                      Eliminar
+                      {isMobile ? '' : 'Eliminar'}
                     </button>
                     <button className="btn-action btn-share">
                       <span className="action-icon">📤</span>
-                      Compartir
+                      {isMobile ? '' : 'Compartir'}
                     </button>
                   </div>
                 </div>
@@ -402,15 +434,27 @@ const ListaReseñas = () => {
             }
           </p>
           <div className="altar-stats">
-            <span className="altar-stat">📜 {totalReseñas} Crónicas</span>
-            <span className="altar-stat">⭐ {promedioRating} Estrellas</span>
-            <span className="altar-stat">❤️ {totalLikes} Bendiciones</span>
-            <span className="altar-stat">👥 {reseñas.length} Héroes</span>
+            <span className="altar-stat">📜 {totalReseñas} {isMobile ? 'Crón' : 'Crónicas'}</span>
+            <span className="altar-stat">⭐ {promedioRating} {isMobile ? 'Est' : 'Estrellas'}</span>
+            <span className="altar-stat">❤️ {totalLikes} {isMobile ? 'Ben' : 'Bendiciones'}</span>
+            <span className="altar-stat">👥 {reseñas.length} {isMobile ? 'Héroes' : 'Héroes'}</span>
           </div>
         </div>
       </footer>
     </div>
   );
+};
+
+// Función auxiliar para nombres cortos de plataformas
+const getPlatformShortName = (platform) => {
+  const shortNames = {
+    'PC': 'PC',
+    'PlayStation': 'PS',
+    'Xbox': 'XB', 
+    'Nintendo Switch': 'NS',
+    'Multiplataforma': 'Multi'
+  };
+  return shortNames[platform] || platform;
 };
 
 export default ListaReseñas;

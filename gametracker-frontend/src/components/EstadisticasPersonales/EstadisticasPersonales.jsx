@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import './EstadisticasPersonales.css';
 
@@ -8,91 +8,94 @@ const EstadisticasPersonales = () => {
   const [loading, setLoading] = useState(true);
   const [periodo, setPeriodo] = useState('todos');
 
+  // Datos de ejemplo optimizados con useMemo
+  const datosEstadisticas = useMemo(() => ({
+    general: {
+      totalJuegos: 24,
+      totalHoras: 856,
+      juegosCompletados: 18,
+      promedioRating: 4.3,
+      juegosEnProgreso: 6,
+      dineroInvertido: 420
+    },
+    porGenero: [
+      { genero: 'Aventura Épica', cantidad: 8, horas: 320, porcentaje: 33 },
+      { genero: 'RPG Legendario', cantidad: 6, horas: 285, porcentaje: 25 },
+      { genero: 'Acción Heroica', cantidad: 4, horas: 156, porcentaje: 17 },
+      { genero: 'Estrategia Divina', cantidad: 3, horas: 95, porcentaje: 12 },
+      { genero: 'Otros', cantidad: 3, horas: 0, porcentaje: 13 }
+    ],
+    porPlataforma: [
+      { plataforma: 'PlayStation', cantidad: 10, porcentaje: 42 },
+      { plataforma: 'PC', cantidad: 8, porcentaje: 33 },
+      { plataforma: 'Nintendo Switch', cantidad: 4, porcentaje: 17 },
+      { plataforma: 'Xbox', cantidad: 2, porcentaje: 8 }
+    ],
+    porDios: [
+      { dios: 'Apolo', cantidad: 14, porcentaje: 58, icon: '☀️' },
+      { dios: 'Hécate', cantidad: 8, porcentaje: 33, icon: '🌙' },
+      { dios: 'Ambos', cantidad: 2, porcentaje: 9, icon: '⚡' }
+    ],
+    progresionMensual: [
+      { mes: 'Ene', juegos: 2, horas: 45, completados: 1 },
+      { mes: 'Feb', juegos: 3, horas: 68, completados: 2 },
+      { mes: 'Mar', juegos: 1, horas: 32, completados: 1 },
+      { mes: 'Abr', juegos: 4, horas: 89, completados: 3 },
+      { mes: 'May', juegos: 2, horas: 56, completados: 1 },
+      { mes: 'Jun', juegos: 3, horas: 72, completados: 2 },
+      { mes: 'Jul', juegos: 5, horas: 124, completados: 4 },
+      { mes: 'Ago', juegos: 2, horas: 48, completados: 1 },
+      { mes: 'Sep', juegos: 3, horas: 67, completados: 2 },
+      { mes: 'Oct', juegos: 4, horas: 95, completados: 3 },
+      { mes: 'Nov', juegos: 2, horas: 52, completados: 1 },
+      { mes: 'Dic', juegos: 3, horas: 78, completados: 2 }
+    ],
+    logros: [
+      { id: 1, nombre: 'Iniciado', descripcion: 'Completar tu primer juego', completado: true, icon: '🎮' },
+      { id: 2, nombre: 'Coleccionista', descripcion: 'Tener 10 juegos en tu biblioteca', completado: true, icon: '📚' },
+      { id: 3, nombre: 'Veterano', descripcion: 'Alcanzar 500 horas de juego', completado: true, icon: '⏱️' },
+      { id: 4, nombre: 'Perfeccionista', descripcion: 'Completar 15 juegos', completado: true, icon: '✅' },
+      { id: 5, nombre: 'Crítico', descripcion: 'Escribir 10 reseñas', completado: false, icon: '📝' },
+      { id: 6, nombre: 'Leyenda', descripcion: 'Alcanzar 1000 horas de juego', completado: false, icon: '🏆' },
+      { id: 7, nombre: 'Omnipotente', descripcion: 'Juegos de Apolo y Hécate al 50%', completado: false, icon: '⚡' },
+      { id: 8, nombre: 'Inmortal', descripcion: 'Completar 25 juegos', completado: false, icon: '👑' }
+    ]
+  }), []);
+
   useEffect(() => {
-    // Simular carga de estadísticas épicas
     const timer = setTimeout(() => {
-      setEstadisticas({
-        general: {
-          totalJuegos: 24,
-          totalHoras: 856,
-          juegosCompletados: 18,
-          promedioRating: 4.3,
-          juegosEnProgreso: 6,
-          dineroInvertido: 420
-        },
-        porGenero: [
-          { genero: 'Aventura Épica', cantidad: 8, horas: 320, porcentaje: 33 },
-          { genero: 'RPG Legendario', cantidad: 6, horas: 285, porcentaje: 25 },
-          { genero: 'Acción Heroica', cantidad: 4, horas: 156, porcentaje: 17 },
-          { genero: 'Estrategia Divina', cantidad: 3, horas: 95, porcentaje: 12 },
-          { genero: 'Otros', cantidad: 3, horas: 0, porcentaje: 13 }
-        ],
-        porPlataforma: [
-          { plataforma: 'PlayStation', cantidad: 10, porcentaje: 42 },
-          { plataforma: 'PC', cantidad: 8, porcentaje: 33 },
-          { plataforma: 'Nintendo Switch', cantidad: 4, porcentaje: 17 },
-          { plataforma: 'Xbox', cantidad: 2, porcentaje: 8 }
-        ],
-        porDios: [
-          { dios: 'Apolo', cantidad: 14, porcentaje: 58, icon: '☀️' },
-          { dios: 'Hécate', cantidad: 8, porcentaje: 33, icon: '🌙' },
-          { dios: 'Ambos', cantidad: 2, porcentaje: 9, icon: '⚡' }
-        ],
-        progresionMensual: [
-          { mes: 'Ene', juegos: 2, horas: 45, completados: 1 },
-          { mes: 'Feb', juegos: 3, horas: 68, completados: 2 },
-          { mes: 'Mar', juegos: 1, horas: 32, completados: 1 },
-          { mes: 'Abr', juegos: 4, horas: 89, completados: 3 },
-          { mes: 'May', juegos: 2, horas: 56, completados: 1 },
-          { mes: 'Jun', juegos: 3, horas: 72, completados: 2 },
-          { mes: 'Jul', juegos: 5, horas: 124, completados: 4 },
-          { mes: 'Ago', juegos: 2, horas: 48, completados: 1 },
-          { mes: 'Sep', juegos: 3, horas: 67, completados: 2 },
-          { mes: 'Oct', juegos: 4, horas: 95, completados: 3 },
-          { mes: 'Nov', juegos: 2, horas: 52, completados: 1 },
-          { mes: 'Dic', juegos: 3, horas: 78, completados: 2 }
-        ],
-        logros: [
-          { id: 1, nombre: 'Iniciado', descripcion: 'Completar tu primer juego', completado: true, icon: '🎮' },
-          { id: 2, nombre: 'Coleccionista', descripcion: 'Tener 10 juegos en tu biblioteca', completado: true, icon: '📚' },
-          { id: 3, nombre: 'Veterano', descripcion: 'Alcanzar 500 horas de juego', completado: true, icon: '⏱️' },
-          { id: 4, nombre: 'Perfeccionista', descripcion: 'Completar 15 juegos', completado: true, icon: '✅' },
-          { id: 5, nombre: 'Crítico', descripcion: 'Escribir 10 reseñas', completado: false, icon: '📝' },
-          { id: 6, nombre: 'Leyenda', descripcion: 'Alcanzar 1000 horas de juego', completado: false, icon: '🏆' },
-          { id: 7, nombre: 'Omnipotente', descripcion: 'Juegos de Apolo y Hécate al 50%', completado: false, icon: '⚡' },
-          { id: 8, nombre: 'Inmortal', descripcion: 'Completar 25 juegos', completado: false, icon: '👑' }
-        ]
-      });
+      setEstadisticas(datosEstadisticas);
       setLoading(false);
-    }, 2000);
+    }, 1500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [datosEstadisticas]);
 
-  const getTempleQuote = () => {
-    return isDarkMode 
-      ? "Los números revelan patrones, los patrones revelan destinos"
-      : "Las estadísticas son el eco de tu gloria gaming";
-  };
+  const getTempleQuote = useCallback(() => {
+    const quotes = {
+      apolo: "Las estadísticas son el eco de tu gloria gaming",
+      hecate: "Los números revelan patrones, los patrones revelan destinos"
+    };
+    return isDarkMode ? quotes.hecate : quotes.apolo;
+  }, [isDarkMode]);
 
-  const getNivelHeroico = () => {
+  const getNivelHeroico = useCallback(() => {
     const horas = estadisticas?.general.totalHoras || 0;
     if (horas >= 1000) return { nivel: 'Dios del Olimpo', icon: '👑', color: 'gold' };
     if (horas >= 500) return { nivel: 'Héroe Legendario', icon: '⚡', color: 'purple' };
     if (horas >= 250) return { nivel: 'Guerrero Experimentado', icon: '🛡️', color: 'blue' };
     if (horas >= 100) return { nivel: 'Aventurero Valiente', icon: '⚔️', color: 'green' };
     return { nivel: 'Iniciado', icon: '🎮', color: 'gray' };
-  };
+  }, [estadisticas]);
 
-  const calcularEficiencia = () => {
+  const calcularEficiencia = useCallback(() => {
     if (!estadisticas) return 0;
     const completados = estadisticas.general.juegosCompletados;
     const total = estadisticas.general.totalJuegos;
     return total > 0 ? Math.round((completados / total) * 100) : 0;
-  };
+  }, [estadisticas]);
 
-  const getRecomendacionDivina = () => {
-    const nivel = getNivelHeroico();
+  const getRecomendacionDivina = useCallback(() => {
     const eficiencia = calcularEficiencia();
     
     if (eficiencia >= 80) {
@@ -104,14 +107,21 @@ const EstadisticasPersonales = () => {
     } else {
       return "Eres un explorador nato. Quizás sea momento de terminar algunas historias.";
     }
-  };
+  }, [calcularEficiencia]);
+
+  const periodoOpciones = useMemo(() => [
+    { value: 'semana', label: '📅 Esta Semana' },
+    { value: 'mes', label: '🌙 Este Mes' },
+    { value: 'año', label: '☀️ Este Año' },
+    { value: 'todos', label: '🌟 Todos los Tiempos' }
+  ], []);
 
   if (loading) {
     return (
       <div className="santuario-cargando">
         <div className="oraculo-cargando">
-          <div className="esfera-carga glow-orb"></div>
-          <h2 className="epic-text gold-text">Consultando el Oráculo...</h2>
+          <div className="esfera-carga"></div>
+          <h2>Consultando el Oráculo...</h2>
           <p>El destino de tus estadísticas se revela</p>
           <div className="runas-cargando">
             <span className="runa">📊</span>
@@ -131,8 +141,8 @@ const EstadisticasPersonales = () => {
       {/* Header épico del oráculo */}
       <header className="estadisticas-header">
         <div className="oracle-banner">
-          <h1 className="epic-text gold-text text-glow">🔮 ORÁCULO DEL PROGRESO</h1>
-          <div className="oracle-icon float-effect">📊</div>
+          <h1>🔮 ORÁCULO DEL PROGRESO</h1>
+          <div className="oracle-icon">📊</div>
         </div>
         <p className="temple-greeting">{getTempleQuote()}</p>
         
@@ -152,16 +162,13 @@ const EstadisticasPersonales = () => {
         <div className="filtros-container">
           <h3 className="filtros-titulo">⏳ Período del Destino</h3>
           <div className="periodo-opciones">
-            {['semana', 'mes', 'año', 'todos'].map(option => (
+            {periodoOpciones.map(option => (
               <button
-                key={option}
-                className={`periodo-btn ${periodo === option ? 'activo' : ''}`}
-                onClick={() => setPeriodo(option)}
+                key={option.value}
+                className={`periodo-btn ${periodo === option.value ? 'activo' : ''}`}
+                onClick={() => setPeriodo(option.value)}
               >
-                {option === 'semana' && '📅 Esta Semana'}
-                {option === 'mes' && '🌙 Este Mes'}
-                {option === 'año' && '☀️ Este Año'}
-                {option === 'todos' && '🌟 Todos los Tiempos'}
+                {option.label}
               </button>
             ))}
           </div>
@@ -173,7 +180,7 @@ const EstadisticasPersonales = () => {
         <h2 className="seccion-titulo">⭐ PANORAMA DIVINO</h2>
         
         <div className="stats-grid">
-          <div className="stat-card grande glow-on-hover">
+          <div className="stat-card grande">
             <div className="stat-icon">🎮</div>
             <div className="stat-info">
               <div className="stat-valor">{estadisticas.general.totalJuegos}</div>
@@ -182,7 +189,7 @@ const EstadisticasPersonales = () => {
             <div className="stat-tendencia positiva">+12%</div>
           </div>
 
-          <div className="stat-card grande glow-on-hover">
+          <div className="stat-card grande">
             <div className="stat-icon">⏱️</div>
             <div className="stat-info">
               <div className="stat-valor">{estadisticas.general.totalHoras}h</div>
@@ -191,7 +198,7 @@ const EstadisticasPersonales = () => {
             <div className="stat-tendencia positiva">+8%</div>
           </div>
 
-          <div className="stat-card grande glow-on-hover">
+          <div className="stat-card grande">
             <div className="stat-icon">✅</div>
             <div className="stat-info">
               <div className="stat-valor">{estadisticas.general.juegosCompletados}</div>
@@ -200,7 +207,7 @@ const EstadisticasPersonales = () => {
             <div className="stat-tendencia positiva">+15%</div>
           </div>
 
-          <div className="stat-card grande glow-on-hover">
+          <div className="stat-card grande">
             <div className="stat-icon">⭐</div>
             <div className="stat-info">
               <div className="stat-valor">{estadisticas.general.promedioRating}/5</div>
@@ -217,7 +224,7 @@ const EstadisticasPersonales = () => {
             <div className="eficiencia-stats">
               <div className="eficiencia-circular">
                 <div className="circular-progress">
-                  <svg width="120" height="120" viewBox="0 0 120 120">
+                  <svg width="100%" height="100%" viewBox="0 0 120 120">
                     <circle cx="60" cy="60" r="54" fill="none" stroke="var(--border)" strokeWidth="8"/>
                     <circle cx="60" cy="60" r="54" fill="none" stroke="var(--accent)" strokeWidth="8" 
                             strokeLinecap="round" strokeDasharray="339.3" 
@@ -254,7 +261,7 @@ const EstadisticasPersonales = () => {
         
         <div className="distribuciones-grid">
           {/* Por Género */}
-          <div className="distribucion-card glow-on-hover">
+          <div className="distribucion-card">
             <h3 className="distribucion-titulo">🎭 POR GÉNERO ÉPICO</h3>
             <div className="distribucion-content">
               {estadisticas.porGenero.map((item, index) => (
@@ -282,7 +289,7 @@ const EstadisticasPersonales = () => {
           </div>
 
           {/* Por Plataforma */}
-          <div className="distribucion-card glow-on-hover">
+          <div className="distribucion-card">
             <h3 className="distribucion-titulo">🎮 POR PLATAFORMA DIVINA</h3>
             <div className="plataformas-grid">
               {estadisticas.porPlataforma.map(item => (
@@ -312,7 +319,7 @@ const EstadisticasPersonales = () => {
           </div>
 
           {/* Por Dios */}
-          <div className="distribucion-card glow-on-hover">
+          <div className="distribucion-card">
             <h3 className="distribucion-titulo">🙏 BENDICIÓN DIVINA</h3>
             <div className="dioses-stats">
               {estadisticas.porDios.map(item => (
@@ -342,7 +349,7 @@ const EstadisticasPersonales = () => {
       <section className="progresion-section">
         <h2 className="seccion-titulo">📈 CRÓNICA DEL PROGRESO</h2>
         
-        <div className="progresion-card glow-on-hover">
+        <div className="progresion-card">
           <div className="progresion-header">
             <h3>Evolución Mensual de Tu Gloria</h3>
             <div className="progresion-leyenda">
@@ -394,7 +401,7 @@ const EstadisticasPersonales = () => {
         
         <div className="logros-grid">
           {estadisticas.logros.map(logro => (
-            <div key={logro.id} className={`logro-card ${logro.completado ? 'completado' : 'pendiente'} glow-on-hover`}>
+            <div key={logro.id} className={`logro-card ${logro.completado ? 'completado' : 'pendiente'}`}>
               <div className="logro-icon">{logro.icon}</div>
               <div className="logro-content">
                 <h4 className="logro-nombre">{logro.nombre}</h4>

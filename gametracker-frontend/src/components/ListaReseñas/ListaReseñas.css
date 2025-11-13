@@ -54,6 +54,11 @@
   animation: float-gentle 3s ease-in-out infinite;
 }
 
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
 .temple-greeting {
   color: var(--text-secondary);
   font-size: 1.5rem;
@@ -78,6 +83,55 @@
 /* Estadísticas de crónicas */
 .chronicle-stats {
   margin-bottom: 3rem;
+}
+
+.oracle-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.oracle-card {
+  background: var(--card-bg);
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  border: 3px solid var(--border);
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.oracle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px var(--shadow);
+}
+
+.oracle-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.oracle-card h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  font-family: 'Cinzel', serif;
+}
+
+.oracle-number {
+  color: var(--accent);
+  font-size: 2rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.oracle-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
 }
 
 /* Controles de crónicas */
@@ -310,8 +364,8 @@
 .god-badge {
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.6rem;
+  font-weight: 690;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border: 2px solid;
@@ -655,25 +709,113 @@
   border-color: var(--accent);
 }
 
-/* Responsive Design Épico */
-@media (max-width: 968px) {
+/* =============================== */
+/* RESPONSIVE DESIGN MEJORADO */
+/* =============================== */
+
+@media (max-width: 1200px) {
   .reseñas-container {
     padding: 1.5rem;
   }
+  
+  .chronicle-controls {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 968px) {
+  .reseñas-container {
+    padding: 1rem;
+  }
+
+  .chronicle-banner {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
 
   .chronicle-banner h1 {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+
+  .chronicle-icon {
+    font-size: 3rem;
+  }
+
+  .temple-greeting {
+    font-size: 1.3rem;
+    padding: 0 1rem;
+  }
+
+  .wisdom-quote {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+    border-left: none;
+    border-top: 3px solid var(--accent);
+    padding-top: 1rem;
+    padding-left: 0;
+  }
+
+  .oracle-cards {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .oracle-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .oracle-icon {
     font-size: 2.5rem;
+  }
+
+  .oracle-number {
+    font-size: 1.8rem;
   }
 
   .controls-container {
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding: 2rem;
+  }
+
+  .control-group {
+    gap: 1rem;
+  }
+
+  .control-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .filter-options {
+    justify-content: center;
+  }
+
+  .sort-select {
+    min-width: 100%;
+  }
+
+  .chronicles-header {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .chronicles-header h2 {
+    font-size: 2rem;
+  }
+
+  .chronicles-subtitle {
+    font-size: 1.1rem;
   }
 
   .reseña-header {
     flex-direction: column;
     gap: 1.5rem;
     align-items: flex-start;
+    padding: 2rem;
   }
 
   .reseña-badges {
@@ -683,48 +825,83 @@
     justify-content: space-between;
   }
 
+  .reseña-content {
+    padding: 1.5rem 2rem;
+  }
+
+  .reseña-titulo {
+    font-size: 1.3rem;
+  }
+
+  .reseña-texto {
+    font-size: 1rem;
+  }
+
   .reseña-stats {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
+    padding: 1.5rem 2rem;
   }
 
   .reseña-actions {
     flex-direction: column;
     gap: 1.5rem;
     align-items: stretch;
+    padding: 1.5rem 2rem;
   }
 
   .action-buttons {
     justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-action {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+
+  .altar-content {
+    padding: 2rem;
+    margin: 0 1rem;
+  }
+
+  .wisdom-text {
+    font-size: 1.2rem;
+  }
+
+  .altar-stats {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .chronicle-banner {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .chronicle-banner h1 {
-    font-size: 2rem;
-    text-align: center;
-  }
-
-  .filter-options {
-    justify-content: center;
-  }
-
-  .reseña-content {
-    padding: 1.5rem;
-  }
-
-  .altar-stats {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 480px) {
   .chronicle-banner h1 {
     font-size: 1.8rem;
+  }
+
+  .chronicle-icon {
+    font-size: 2.5rem;
+  }
+
+  .temple-greeting {
+    font-size: 1.1rem;
+  }
+
+  .oracle-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .oracle-card {
+    padding: 1.2rem 0.8rem;
+  }
+
+  .oracle-icon {
+    font-size: 2rem;
+  }
+
+  .oracle-number {
+    font-size: 1.6rem;
   }
 
   .controls-container {
@@ -733,13 +910,224 @@
 
   .filter-options {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-btn {
+    text-align: center;
+  }
+
+  .reseña-header {
+    padding: 1.5rem;
+  }
+
+  .juego-titulo {
+    font-size: 1.5rem;
+  }
+
+  .reseña-author {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .review-date {
+    margin-left: 0;
+  }
+
+  .reseña-content {
+    padding: 1.5rem;
+  }
+
+  .reseña-badges {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+
+  .god-badge,
+  .rating-badge {
+    width: 100%;
+    justify-content: center;
   }
 
   .action-buttons {
     flex-direction: column;
   }
 
+  .btn-action {
+    width: 100%;
+  }
+
+  .empty-chronicles {
+    padding: 3rem 1.5rem;
+    margin: 0 1rem;
+  }
+
+  .empty-chronicles .empty-icon {
+    font-size: 3.5rem;
+  }
+
+  .empty-chronicles h3 {
+    font-size: 1.5rem;
+  }
+
+  .empty-chronicles p {
+    font-size: 1.1rem;
+  }
+
   .altar-stats {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .reseñas-container {
+    padding: 0.5rem;
+  }
+
+  .chronicle-banner h1 {
+    font-size: 1.6rem;
+  }
+
+  .chronicle-icon {
+    font-size: 2rem;
+  }
+
+  .temple-greeting {
+    font-size: 1rem;
+  }
+
+  .wisdom-quote {
+    font-size: 0.9rem;
+  }
+
+  .oracle-cards {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .controls-container {
+    padding: 1rem;
+  }
+
+  .control-title {
+    font-size: 1.1rem;
+  }
+
+  .chronicles-header {
+    padding: 1.5rem;
+  }
+
+  .chronicles-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .chronicles-subtitle {
+    font-size: 1rem;
+  }
+
+  .reseñas-list {
+    gap: 1.5rem;
+  }
+
+  .reseña-card {
+    border-radius: 16px;
+  }
+
+  .reseña-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .juego-titulo {
+    font-size: 1.3rem;
+  }
+
+  .reseña-content {
+    padding: 1rem;
+  }
+
+  .reseña-titulo {
+    font-size: 1.2rem;
+  }
+
+  .reseña-texto {
+    font-size: 0.9rem;
+  }
+
+  .reseña-tags {
+    gap: 0.5rem;
+  }
+
+  .reseña-tag {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .reseña-stats {
+    padding: 1rem;
+  }
+
+  .reseña-stats .stat-item {
+    padding: 0.8rem 0.5rem;
+  }
+
+  .reseña-stats .stat-icon {
+    font-size: 1.2rem;
+  }
+
+  .reseña-stats .stat-value {
+    font-size: 0.9rem;
+  }
+
+  .reseña-actions {
+    padding: 1rem;
+  }
+
+  .btn-like {
+    padding: 0.6rem 1rem;
+  }
+
+  .wisdom-altar {
+    margin-top: 3rem;
+  }
+
+  .altar-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .wisdom-text {
+    font-size: 1rem;
+  }
+
+  .altar-stat {
+    font-size: 0.9rem;
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .chronicle-banner h1 {
+    font-size: 1.4rem;
+  }
+
+  .oracle-card {
+    padding: 1rem 0.5rem;
+  }
+
+  .oracle-icon {
+    font-size: 1.8rem;
+  }
+
+  .oracle-number {
+    font-size: 1.4rem;
+  }
+
+  .juego-titulo {
+    font-size: 1.2rem;
+  }
+
+  .reseña-titulo {
+    font-size: 1.1rem;
   }
 }

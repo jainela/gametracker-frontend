@@ -36,6 +36,11 @@
   --hecate-warning: #f59e0b;
   --hecate-error: #ef4444;
   --hecate-glow: rgba(139, 92, 246, 0.6);
+
+  /* Transiciones optimizadas */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .theme-apolo {
@@ -56,6 +61,8 @@
   --gold-dark: var(--apolo-gold-dark);
   --marble: var(--apolo-marble);
   --glow: var(--apolo-glow);
+  
+  color-scheme: light;
 }
 
 .theme-hecate {
@@ -76,28 +83,102 @@
   --purple-dark: var(--hecate-purple-dark);
   --midnight: var(--hecate-midnight);
   --glow: var(--hecate-glow);
+  
+  color-scheme: dark;
 }
 
-* {
+/* Transiciones optimizadas - Solo propiedades esenciales */
+.theme-apolo,
+.theme-hecate {
   transition: 
-    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color var(--transition-normal),
+    color var(--transition-normal),
+    border-color var(--transition-normal);
 }
 
+/* Estados de cambio de tema */
+.theme-changing {
+  transition: 
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast) !important;
+}
+
+/* Base del body optimizada */
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   margin: 0;
   padding: 0;
-  font-family: 'Cinzel', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Cinzel', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  transition: 
+    background-color var(--transition-normal),
+    color var(--transition-normal);
 }
 
-/* Efectos de partículas avanzados */
+/* SCROLLBAR CON COLORES ESPECÍFICOS - SIN VARIABLES VERDES */
+/* Scrollbar base común */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+/* Apolo: Dorado/Oro específico */
+.theme-apolo ::-webkit-scrollbar-thumb {
+  background: #d4af37; /* Dorado específico */
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.theme-apolo ::-webkit-scrollbar-thumb:hover {
+  background: #b8941f; /* Dorado oscuro específico */
+  opacity: 0.9;
+}
+
+.theme-apolo ::-webkit-scrollbar-thumb:active {
+  background: #b8941f;
+  opacity: 1;
+}
+
+/* Hécate: Púrpura/Morado específico */
+.theme-hecate ::-webkit-scrollbar-thumb {
+  background: #8b5cf6; /* Púrpura específico */
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.theme-hecate ::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed; /* Púrpura oscuro específico */
+  opacity: 0.9;
+}
+
+.theme-hecate ::-webkit-scrollbar-thumb:active {
+  background: #7c3aed;
+  opacity: 1;
+}
+
+/* Firefox con colores específicos */
+.theme-apolo {
+  scrollbar-color: #d4af37 transparent;
+}
+
+.theme-hecate {
+  scrollbar-color: #8b5cf6 transparent;
+}
+
+* {
+  scrollbar-width: thin;
+}
+
+/* Efectos de partículas ligeros */
 .theme-apolo::before {
   content: '';
   position: fixed;
@@ -106,12 +187,9 @@ body {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(252, 243, 208, 0.08) 0%, transparent 50%),
-    linear-gradient(45deg, transparent 30%, rgba(212, 175, 55, 0.03) 100%);
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
-  animation: particle-float 20s ease-in-out infinite;
 }
 
 .theme-hecate::before {
@@ -122,140 +200,160 @@ body {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(76, 81, 191, 0.08) 0%, transparent 50%),
-    linear-gradient(45deg, transparent 30%, rgba(139, 92, 246, 0.03) 100%);
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
-  animation: particle-float 20s ease-in-out infinite;
 }
 
-@keyframes particle-float {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-20px) scale(1.02); }
-}
-
-/* Scrollbar épico mejorado */
-::-webkit-scrollbar {
-  width: 14px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  margin: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-  border-radius: 8px;
-  border: 3px solid var(--bg-secondary);
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
-  box-shadow: 0 0 12px var(--glow);
-}
-
-/* Efectos de texto mejorados */
+/* Efectos de texto optimizados */
 .theme-apolo {
   -webkit-font-smoothing: antialiased;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
 }
 
 .theme-hecate {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-rendering: optimizeSpeed;
 }
 
-/* Animaciones avanzadas */
-@keyframes gold-shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-
-@keyframes purple-pulse {
-  0%, 100% { 
-    opacity: 0.6;
-    box-shadow: 0 0 20px var(--glow);
-  }
-  50% { 
-    opacity: 1;
-    box-shadow: 0 0 40px var(--glow), 0 0 60px var(--glow);
-  }
-}
-
+/* Animaciones simples */
 @keyframes float-gentle {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-8px) rotate(1deg); }
-  66% { transform: translateY(-4px) rotate(-1deg); }
-}
-
-@keyframes glow-orb {
   0%, 100% { 
-    transform: scale(1);
-    box-shadow: 0 0 20px var(--glow);
+    transform: translateY(0px); 
   }
   50% { 
-    transform: scale(1.1);
-    box-shadow: 0 0 40px var(--glow), 0 0 60px var(--glow);
+    transform: translateY(-4px); 
   }
-}
-
-.gold-effect {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(212, 175, 55, 0.4),
-    transparent
-  );
-  background-size: 1000px 100%;
-  animation: gold-shimmer 3s infinite linear;
-}
-
-.purple-effect {
-  animation: purple-pulse 3s ease-in-out infinite;
 }
 
 .float-effect {
   animation: float-gentle 6s ease-in-out infinite;
 }
 
-.glow-orb {
-  animation: glow-orb 4s ease-in-out infinite;
+/* Efectos de profundidad ligeros */
+.depth-1 { 
+  box-shadow: 0 1px 3px var(--shadow);
 }
 
-/* Efectos de profundidad */
-.depth-1 { box-shadow: 0 2px 8px var(--shadow); }
-.depth-2 { box-shadow: 0 4px 16px var(--shadow); }
-.depth-3 { box-shadow: 0 8px 32px var(--shadow); }
-.depth-4 { box-shadow: 0 16px 48px var(--shadow); }
-.depth-5 { box-shadow: 0 24px 64px var(--shadow); }
+.depth-2 { 
+  box-shadow: 0 2px 6px var(--shadow);
+}
 
-/* Gradientes épicos */
+.depth-3 { 
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+/* Gradientes básicos */
 .epic-gradient-gold {
-  background: linear-gradient(135deg, var(--accent), var(--accent-hover), #fef3cd);
+  background: linear-gradient(135deg, #d4af37, #b8941f);
 }
 
 .epic-gradient-purple {
-  background: linear-gradient(135deg, var(--accent), var(--accent-hover), #a78bfa);
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
 }
 
-/* Mejoras de rendimiento */
+/* Utilidades de tema */
+.gold-text {
+  color: #d4af37;
+  font-weight: 600;
+}
+
+.purple-text {
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+.text-glow {
+  text-shadow: 0 0 8px var(--glow);
+}
+
+/* Mejoras de rendimiento y accesibilidad */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  
+  .theme-apolo::before,
+  .theme-hecate::before {
+    background-image: none !important;
+  }
+  
+  .float-effect {
+    animation: none !important;
+  }
+}
+
+/* Optimizaciones para móviles */
+@media (max-width: 768px) {
+  .theme-apolo::before,
+  .theme-hecate::before {
+    display: none;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+}
+
+/* Estados de focus para accesibilidad */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+/* Selection styles - Usando colores específicos */
+.theme-apolo ::selection {
+  background-color: #d4af37;
+  color: var(--bg-primary);
+}
+
+.theme-apolo ::-moz-selection {
+  background-color: #d4af37;
+  color: var(--bg-primary);
+}
+
+.theme-hecate ::selection {
+  background-color: #8b5cf6;
+  color: var(--bg-primary);
+}
+
+.theme-hecate ::-moz-selection {
+  background-color: #8b5cf6;
+  color: var(--bg-primary);
 }
 
 /* Soporte para modo alto contraste */
 @media (prefers-contrast: high) {
-  :root {
-    --apolo-shadow: rgba(0, 0, 0, 0.6);
-    --hecate-shadow: rgba(0, 0, 0, 0.8);
+  .theme-apolo {
+    --apolo-shadow: rgba(0, 0, 0, 0.8);
+    --apolo-border: #2c1810;
+  }
+  
+  .theme-hecate {
+    --hecate-shadow: rgba(0, 0, 0, 0.9);
+    --hecate-border: #e2e8f0;
+  }
+}
+
+/* Print styles */
+@media print {
+  .theme-apolo::before,
+  .theme-hecate::before {
+    display: none;
+  }
+  
+  .theme-apolo,
+  .theme-hecate {
+    --bg-primary: white !important;
+    --text-primary: black !important;
   }
 }

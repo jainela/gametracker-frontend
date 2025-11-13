@@ -11,12 +11,23 @@ const Navbar = ({ onNavigate, currentView = 'biblioteca' }) => {
     }
   };
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
   const navItems = [
     { key: 'biblioteca', label: '📚 Biblioteca', path: '/' },
     { key: 'agregar-juego', label: '➕ Agregar Juego', path: '/agregar-juego' },
     { key: 'reseñas', label: '⭐ Reseñas', path: '/reseñas' },
     { key: 'estadisticas', label: '📊 Estadísticas', path: '/estadisticas' }
   ];
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleNavClick = (view) => {
+    handleNavigation(view);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <nav className="navbar">
@@ -26,12 +37,23 @@ const Navbar = ({ onNavigate, currentView = 'biblioteca' }) => {
           <span className="nav-subtitle">Tu Biblioteca de Videojuegos</span>
         </div>
 
-        <div className="nav-links">
+        {/* Menú hamburguesa para móvil */}
+        <button 
+          className="mobile-menu-toggle"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div className={`nav-links ${isMobileMenuOpen ? 'nav-links-open' : ''}`}>
           {navItems.map(item => (
             <button
               key={item.key}
               className={currentView === item.key ? 'nav-link active' : 'nav-link'}
-              onClick={() => handleNavigation(item.key)}
+              onClick={() => handleNavClick(item.key)}
             >
               {item.label}
             </button>
@@ -44,6 +66,14 @@ const Navbar = ({ onNavigate, currentView = 'biblioteca' }) => {
           </button>
         </div>
       </div>
+      
+      {/* Overlay para cerrar menú móvil */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-menu-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+        ></div>
+      )}
     </nav>
   );
 };
