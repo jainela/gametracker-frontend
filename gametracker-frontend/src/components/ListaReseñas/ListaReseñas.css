@@ -1,16 +1,22 @@
+/* Importación de bibliotecas de animación (CDN) */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+@import url('https://unpkg.com/aos@2.3.1/dist/aos.css');
+
 .reseñas-container {
   min-height: calc(100vh - 80px);
   padding: 2rem;
   position: relative;
   transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
-/* Fondo de crónicas divinas */
+/* Fondo de crónicas divinas con animaciones */
 .theme-apolo .reseñas-container {
   background: 
     var(--marble),
     radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(252, 243, 208, 0.05) 0%, transparent 50%);
+  animation: apoloGlow 8s ease-in-out infinite;
 }
 
 .theme-hecate .reseñas-container {
@@ -18,13 +24,33 @@
     var(--midnight),
     radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(76, 81, 191, 0.05) 0%, transparent 50%);
+  animation: hecatePulse 10s ease-in-out infinite;
 }
 
-/* Header de crónicas épico */
+@keyframes apoloGlow {
+  0%, 100% { 
+    background-position: 0% 0%, 20% 80%, 80% 20%; 
+  }
+  50% { 
+    background-position: 0% 0%, 25% 85%, 85% 25%; 
+  }
+}
+
+@keyframes hecatePulse {
+  0%, 100% { 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0.95; 
+  }
+}
+
+/* Header de crónicas épico con animaciones mejoradas */
 .reseñas-header {
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
+  animation: fadeInDown 1s ease-out;
 }
 
 .chronicle-banner {
@@ -33,6 +59,7 @@
   justify-content: center;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .chronicle-banner h1 {
@@ -46,17 +73,30 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .chronicle-icon {
   font-size: 4rem;
   filter: drop-shadow(0 6px 20px var(--shadow));
-  animation: float-gentle 3s ease-in-out infinite;
+  animation: float-gentle 3s ease-in-out infinite, iconGlow 4s ease-in-out infinite;
 }
 
 @keyframes float-gentle {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(2deg); }
+  75% { transform: translateY(-5px) rotate(-2deg); }
+}
+
+@keyframes iconGlow {
+  0%, 100% { filter: drop-shadow(0 6px 20px var(--shadow)); }
+  50% { filter: drop-shadow(0 6px 25px var(--glow)); }
 }
 
 .temple-greeting {
@@ -66,6 +106,7 @@
   margin-bottom: 0.8rem;
   font-family: 'Cinzel', serif;
   text-shadow: 0 2px 4px var(--shadow);
+  animation: fadeIn 1.5s ease-out 0.3s both;
 }
 
 .wisdom-quote {
@@ -78,9 +119,10 @@
   padding-left: 1.5rem;
   font-style: italic;
   text-shadow: 0 2px 4px var(--shadow);
+  animation: slideInRight 1s ease-out 0.5s both;
 }
 
-/* Estadísticas de crónicas */
+/* Estadísticas de crónicas con animaciones escalonadas */
 .chronicle-stats {
   margin-bottom: 3rem;
 }
@@ -101,10 +143,29 @@
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 8px 25px var(--shadow);
+  animation: zoomIn 0.6s ease-out both;
+  animation-delay: calc(var(--card-index, 0) * 0.1s);
+  position: relative;
+  overflow: hidden;
+}
+
+.oracle-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.oracle-card:hover::before {
+  left: 100%;
 }
 
 .oracle-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.02);
   box-shadow: 0 12px 35px var(--shadow);
 }
 
@@ -112,6 +173,7 @@
   font-size: 3rem;
   margin-bottom: 1rem;
   display: block;
+  animation: pulse 2s infinite;
 }
 
 .oracle-card h3 {
@@ -127,6 +189,18 @@
   font-weight: 800;
   display: block;
   margin-bottom: 0.5rem;
+  animation: countUp 1.5s ease-out;
+}
+
+@keyframes countUp {
+  from { 
+    transform: scale(0.5); 
+    opacity: 0; 
+  }
+  to { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
 }
 
 .oracle-subtitle {
@@ -134,12 +208,13 @@
   font-size: 0.9rem;
 }
 
-/* Controles de crónicas */
+/* Controles de crónicas con animaciones mejoradas */
 .chronicle-controls {
   margin-bottom: 3rem;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+  animation: fadeInUp 0.8s ease-out 0.7s both;
 }
 
 .controls-container {
@@ -153,6 +228,25 @@
   grid-template-columns: 1fr auto;
   gap: 3rem;
   align-items: start;
+  position: relative;
+  overflow: hidden;
+}
+
+.controls-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shimmer 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
 .control-group {
@@ -218,6 +312,12 @@
     0 4px 15px var(--shadow),
     inset 0 2px 4px rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
+  animation: buttonPulse 2s infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% { box-shadow: 0 4px 15px var(--shadow), inset 0 2px 4px rgba(255, 255, 255, 0.3); }
+  50% { box-shadow: 0 4px 20px var(--glow), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
 }
 
 .sort-select {
@@ -232,6 +332,7 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 200px;
+  animation: fadeInRight 0.8s ease-out 0.9s both;
 }
 
 .sort-select:focus {
@@ -244,6 +345,7 @@
 .chronicles-grid {
   max-width: 1200px;
   margin: 0 auto;
+  animation: fadeIn 1s ease-out 1s both;
 }
 
 .chronicles-header {
@@ -257,6 +359,7 @@
     0 12px 40px var(--shadow),
     inset 0 2px 8px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
+  animation: bounceIn 1s ease-out;
 }
 
 .chronicles-header h2 {
@@ -274,14 +377,14 @@
   font-style: italic;
 }
 
-/* Lista de reseñas */
+/* Lista de reseñas con animaciones escalonadas */
 .reseñas-list {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
 }
 
-/* Tarjeta de reseña épica */
+/* Tarjeta de reseña épica con animaciones mejoradas */
 .reseña-card {
   background: var(--card-bg);
   border-radius: 20px;
@@ -291,6 +394,8 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
   position: relative;
+  animation: slideInUp 0.6s ease-out both;
+  animation-delay: calc(var(--card-index, 0) * 0.1s + 1.2s);
 }
 
 .reseña-card::before {
@@ -301,10 +406,17 @@
   right: 0;
   height: 4px;
   background: linear-gradient(90deg, var(--accent), var(--accent-hover), var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.reseña-card:hover::before {
+  transform: scaleX(1);
 }
 
 .reseña-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-8px) scale(1.01);
   box-shadow: 
     0 20px 60px var(--shadow),
     0 0 25px var(--glow);
@@ -317,6 +429,7 @@
   align-items: flex-start;
   padding: 2.5rem 2.5rem 1.5rem;
   border-bottom: 2px solid var(--border);
+  animation: fadeIn 0.8s ease-out 0.2s both;
 }
 
 .reseña-meta {
@@ -330,6 +443,23 @@
   margin: 0 0 1rem 0;
   font-family: 'Cinzel', serif;
   text-shadow: 0 2px 4px var(--shadow);
+  position: relative;
+  display: inline-block;
+}
+
+.juego-titulo::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.reseña-card:hover .juego-titulo::after {
+  width: 100%;
 }
 
 .reseña-author {
@@ -340,6 +470,7 @@
 
 .author-avatar {
   font-size: 1.2rem;
+  animation: bounceIn 1s ease-out;
 }
 
 .author-name {
@@ -369,6 +500,8 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border: 2px solid;
+  animation: flipInX 0.8s ease-out both;
+  animation-delay: 0.4s;
 }
 
 .god-badge.apolo {
@@ -400,6 +533,7 @@
   border-radius: 8px;
   border: 2px solid var(--border);
   font-weight: 700;
+  animation: zoomIn 0.6s ease-out 0.6s both;
 }
 
 .rating-number {
@@ -411,6 +545,7 @@
 .reseña-content {
   padding: 2rem 2.5rem;
   border-bottom: 2px solid var(--border);
+  animation: fadeIn 0.8s ease-out 0.4s both;
 }
 
 .reseña-titulo {
@@ -427,6 +562,24 @@
   font-size: 1.1rem;
   line-height: 1.6;
   margin: 0 0 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.reseña-texto::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(transparent, var(--card-bg));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.reseña-card:hover .reseña-texto::after {
+  opacity: 1;
 }
 
 .reseña-tags {
@@ -444,12 +597,14 @@
   font-size: 0.8rem;
   font-weight: 600;
   transition: all 0.3s ease;
+  animation: zoomIn 0.5s ease-out both;
+  animation-delay: calc(var(--tag-index, 0) * 0.1s + 0.6s);
 }
 
 .reseña-tag:hover {
   background: var(--accent);
   color: var(--bg-primary);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.05);
 }
 
 /* Estadísticas de la reseña */
@@ -471,10 +626,12 @@
   border-radius: 10px;
   border: 1px solid var(--border);
   transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease-out both;
+  animation-delay: calc(var(--stat-index, 0) * 0.1s + 0.8s);
 }
 
 .reseña-stats .stat-item:hover {
-  transform: translateY(-3px);
+  transform: translateY(-3px) scale(1.03);
   box-shadow: 0 6px 20px var(--shadow);
   border-color: var(--accent);
 }
@@ -482,6 +639,8 @@
 .reseña-stats .stat-icon {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  animation: pulse 2s infinite;
+  animation-delay: calc(var(--stat-index, 0) * 0.2s + 1s);
 }
 
 .reseña-stats .stat-value {
@@ -503,6 +662,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2.5rem;
+  animation: fadeIn 0.8s ease-out 1s both;
 }
 
 .btn-like {
@@ -517,6 +677,23 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-like::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-like:hover::before {
+  left: 100%;
 }
 
 .btn-like:hover {
@@ -538,6 +715,11 @@
 
 .like-icon {
   font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-like:hover .like-icon {
+  transform: scale(1.2);
 }
 
 .like-count {
@@ -562,6 +744,23 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-action::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-action:hover::before {
+  left: 100%;
 }
 
 .btn-edit {
@@ -602,9 +801,14 @@
 
 .action-icon {
   font-size: 1rem;
+  transition: transform 0.3s ease;
 }
 
-/* Crónicas vacías */
+.btn-action:hover .action-icon {
+  transform: scale(1.2);
+}
+
+/* Crónicas vacías con animaciones */
 .empty-chronicles {
   text-align: center;
   padding: 5rem 3rem;
@@ -614,6 +818,7 @@
   max-width: 600px;
   margin: 0 auto;
   backdrop-filter: blur(10px);
+  animation: pulse 2s infinite, fadeIn 1s ease-out;
 }
 
 .empty-chronicles .empty-icon {
@@ -621,6 +826,12 @@
   margin-bottom: 2rem;
   filter: drop-shadow(0 6px 20px var(--shadow));
   display: block;
+  animation: bounce 2s infinite, rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .empty-chronicles h3 {
@@ -628,6 +839,7 @@
   margin-bottom: 1.5rem;
   font-size: 2rem;
   font-family: 'Cinzel', serif;
+  animation: fadeInDown 1s ease-out 0.5s both;
 }
 
 .empty-chronicles p {
@@ -635,13 +847,15 @@
   margin-bottom: 2.5rem;
   font-size: 1.2rem;
   line-height: 1.6;
+  animation: fadeInUp 1s ease-out 0.7s both;
 }
 
-/* Altar de la sabiduría */
+/* Altar de la sabiduría con animaciones */
 .wisdom-altar {
   margin-top: 5rem;
   padding-top: 3rem;
   border-top: 3px solid var(--border);
+  animation: fadeIn 1s ease-out 1.5s both;
 }
 
 .altar-content {
@@ -657,6 +871,7 @@
     inset 0 2px 8px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
   position: relative;
+  animation: zoomIn 1s ease-out 1.7s both;
 }
 
 .altar-content::before {
@@ -668,6 +883,12 @@
   height: 4px;
   background: linear-gradient(90deg, var(--accent), var(--accent-hover), var(--accent));
   border-radius: 20px 20px 0 0;
+  animation: altarGlow 3s ease-in-out infinite;
+}
+
+@keyframes altarGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 .wisdom-text {
@@ -678,6 +899,7 @@
   font-family: 'Cinzel', serif;
   line-height: 1.5;
   text-shadow: 0 2px 8px var(--shadow);
+  animation: fadeIn 1s ease-out 1.9s both;
 }
 
 .altar-stats {
@@ -701,12 +923,69 @@
   border-radius: 10px;
   border: 2px solid var(--border);
   transition: all 0.3s ease;
+  animation: fadeInUp 0.8s ease-out both;
+  animation-delay: calc(var(--stat-index, 0) * 0.1s + 2s);
 }
 
 .altar-stat:hover {
-  transform: translateY(-3px);
+  transform: translateY(-3px) scale(1.05);
   box-shadow: 0 6px 20px var(--shadow);
   border-color: var(--accent);
+}
+
+/* Efectos de partículas para fondos (simulados con CSS) */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float-particle 15s infinite linear;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(100vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Scroll personalizado */
+.reseñas-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reseñas-container::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+}
+
+.reseñas-container::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+.reseñas-container::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
 }
 
 /* =============================== */
@@ -1129,5 +1408,14 @@
 
   .reseña-titulo {
     font-size: 1.1rem;
+  }
+}
+
+/* Agregar estas reglas al final del archivo para inicializar AOS */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

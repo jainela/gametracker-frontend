@@ -33,7 +33,7 @@ const Navbar = ({ onNavigate, currentView = 'biblioteca' }) => {
     <nav className="navbar">
       <div className="nav-container">
         <div className="nav-brand">
-          <h1>🎮 GameTracker</h1>
+          <h1 className="animate">🎮 GameTracker</h1>
           <span className="nav-subtitle">Tu Biblioteca de Videojuegos</span>
         </div>
 

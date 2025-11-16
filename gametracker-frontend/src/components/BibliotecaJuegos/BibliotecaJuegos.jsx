@@ -4,7 +4,7 @@ import TarjetaJuego from '../TarjetaJuego/TarjetaJuego';
 import './BibliotecaJuegos.css';
 
 const BibliotecaJuegos = () => {
-  const { isDarkMode, themeName } = useTheme();
+  const { isDarkMode } = useTheme();
   const [juegos, setJuegos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,269 +12,90 @@ const BibliotecaJuegos = () => {
   const [sortBy, setSortBy] = useState('fecha');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Datos de ejemplo optimizados (como fallback)
-  const juegosEjemplo = useMemo(() => [
-    {
-      id: 1,
-      titulo: 'The Legend of Zelda: Breath of the Wild',
-      portada: 'https://www.nintendo.com/eu/media/images/10_share_images/games_15/wiiu_14/SI_WiiU_TheLegendOfZeldaBreathOfTheWild_image1600w.jpg',
-      completado: true,
-      horas: 85,
-      rating: 5,
-      genero: 'Aventura Épica',
-      plataforma: 'Nintendo Switch',
-      dios: 'Apolo',
-      fechaAdquisicion: '2023-05-15',
-      ultimaSesion: '2024-01-20',
-      tags: ['Mundo Abierto', 'Aventura', 'Nintendo']
-    },
-    {
-      id: 2,
-      titulo: 'Hollow Knight',
-      portada: 'https://assets.nintendo.com/image/upload/ar_16:9,b_auto:border,c_lpad/b_white/f_auto/q_auto/dpr_1.5/c_scale,w_800/store/software/switch/70010000003208/4643fb058642335c523910f3a7910575f56372f612f7c0c9a497aaae978d3e51',
-      completado: false,
-      horas: 42,
-      rating: 4,
-      genero: 'Metroidvania Oscuro',
-      plataforma: 'PC',
-      dios: 'Hécate',
-      fechaAdquisicion: '2023-08-22',
-      ultimaSesion: '2024-01-18',
-      tags: ['Metroidvania', 'Indie', 'Desafiante']
-    },
-    {
-      id: 3,
-      titulo: 'God of War',
-      portada: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1tmu.jpg',
-      completado: true,
-      horas: 35,
-      rating: 5,
-      genero: 'Mitología Nórdica',
-      plataforma: 'PlayStation',
-      dios: 'Apolo',
-      fechaAdquisicion: '2023-11-10',
-      ultimaSesion: '2024-01-15',
-      tags: ['Acción', 'Mitología', 'Historia']
-    },
-    {
-      id: 4,
-      titulo: 'Bloodborne',
-      portada: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1rba.jpg',
-      completado: false,
-      horas: 68,
-      rating: 5,
-      genero: 'Horror Gótico',
-      plataforma: 'PlayStation',
-      dios: 'Hécate',
-      fechaAdquisicion: '2023-09-05',
-      ultimaSesion: '2024-01-12',
-      tags: ['Souls-like', 'Horror', 'Desafiante']
-    },
-    {
-      id: 5,
-      titulo: 'Hades',
-      portada: 'https://upload.wikimedia.org/wikipedia/commons/1/13/Hades_logo.png',
-      completado: true,
-      horas: 92,
-      rating: 5,
-      genero: 'Roguelike Mitológico',
-      plataforma: 'Multiplataforma',
-      dios: 'Ambos',
-      fechaAdquisicion: '2023-07-18',
-      ultimaSesion: '2024-01-22',
-      tags: ['Roguelike', 'Mitología', 'Indie']
-    },
-    {
-      id: 6,
-      titulo: 'Journey',
-      portada: 'https://upload.wikimedia.org/wikipedia/en/6/64/Journey_Title_Poster.png',
-      completado: true,
-      horas: 4,
-      rating: 4,
-      genero: 'Aventura Espiritual',
-      plataforma: 'PlayStation',
-      dios: 'Apolo',
-      fechaAdquisicion: '2023-12-01',
-      ultimaSesion: '2024-01-10',
-      tags: ['Aventura', 'Arte', 'Corto']
-    },
-    {
-      id: 7,
-      titulo: 'Silksong',
-      portada: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1030300/7983574d464e6559ac7e24275727f73a8bcca1f3/header.jpg?t=1756994410',
-      completado: false,
-      horas: 6,
-      rating: 5,
-      genero: 'Metroidvania Oscuro',
-      plataforma: 'PC',
-      dios: 'Hécate',
-      fechaAdquisicion: '2025-11-10',
-      ultimaSesion: '2025-11-12',
-      tags: ['Metroidvania', 'Indie', 'Desafiante']
-    },
-    {
-      id: 8,
-      titulo: 'Elden Ring',
-      portada: 'https://p325k7wa.twic.pics/high/elden-ring/elden-ring/00-page-setup/eldenring_new.png?twic=v1/resize=800/step=10/quality=80',
-      completado: false,
-      horas: 120,
-      rating: 5,
-      genero: 'Acción RPG',
-      plataforma: 'Multiplataforma',
-      dios: 'Ambos',
-      fechaAdquisicion: '2023-10-25',
-      ultimaSesion: '2024-01-21',
-      tags: ['RPG', 'Mundo Abierto', 'Desafiante']
-    },
-    {
-      id: 9,
-      titulo: "Sky: Children of the Light",
-      portada: "https://upload.wikimedia.org/wikipedia/en/6/69/Sky_video_game.jpg",
-      completado: false,
-      horas: 15,
-      rating: 4,
-      genero: "Aventura Social",
-      plataforma: "Multiplataforma",
-      dios: "Apolo",
-      fechaAdquisicion: "2023-06-30",
-      ultimaSesion: "2024-01-19",
-      tags: ["Aventura", "Social", "Indie"]
-    },
-    {      id: 10,
-      titulo: "Celeste",
-      portada: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Celeste_box_art_full.png/320px-Celeste_box_art_full.png",
-      completado: true,
-      horas: 25,
-      rating: 5,
-      genero: "Plataformas Desafiante",
-      plataforma: "Multiplataforma",
-      dios: "Hécate",
-      fechaAdquisicion: "2023-04-12",
-      ultimaSesion: "2024-01-14",
-      tags: ["Plataformas", "Indie", "Desafiante"]
-
+  const cargarJuegos = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const respuesta = await fetch('http://localhost:3000/api/juegos');
+      if (!respuesta.ok) throw new Error(`Error ${respuesta.status}: No se pudieron cargar los juegos`);
+      const datos = await respuesta.json();
+      const juegosTransformados = datos.map(juego => ({
+        id: juego._id,
+        titulo: juego.nombre,
+        portada: juego.portadaURL,
+        completado: juego.estado === 'Completado',
+        horas: juego.horasJugadas || 0,
+        rating: juego.rating || 0,
+        genero: juego.genero || 'Sin género',
+        plataforma: juego.plataforma || 'Desconocida',
+        dios: juego.dios || 'Apolo',
+        fechaAdquisicion: juego.fechaAdquisicion || new Date().toISOString().split('T')[0],
+        ultimaSesion: juego.ultimaSesion || new Date().toISOString().split('T')[0],
+        tags: juego.tags || []
+      }));
+      setJuegos(juegosTransformados);
+    } catch (err) {
+      console.error('Error al cargar juegos:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
+  };
 
-  ], []);
-
-  // Cargar juegos desde la API
   useEffect(() => {
-    const cargarJuegos = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        // Intenta cargar desde la API
-        const respuesta = await fetch('http://localhost:3000/api/juegos');
-        
-        if (respuesta.ok) {
-          const datos = await respuesta.json();
-          
-          // Transformar datos de la API al formato esperado
-          const juegosTransformados = datos.map(juego => ({
-            id: juego._id || juego.id,
-            titulo: juego.nombre || juego.titulo,
-            portada: juego.portadaURL || juego.portada,
-            completado: juego.completado || false,
-            horas: juego.horas || 0,
-            rating: juego.rating || 0,
-            genero: juego.genero || 'Sin género',
-            plataforma: juego.plataforma || 'Desconocida',
-            dios: juego.dios || 'Apolo',
-            fechaAdquisicion: juego.fechaAdquisicion || new Date().toISOString().split('T')[0],
-            ultimaSesion: juego.ultimaSesion || new Date().toISOString().split('T')[0],
-            tags: juego.tags || []
-          }));
-          
-          setJuegos(juegosTransformados);
-        } else {
-          throw new Error(`Error ${respuesta.status}: No se pudieron cargar los juegos`);
-        }
-      } catch (err) {
-        console.error('Error al cargar juegos:', err);
-        setError(err.message);
-        // Fallback a datos de ejemplo
-        setJuegos(juegosEjemplo);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     cargarJuegos();
-  }, [juegosEjemplo]);
+  }, []);
 
-  // Estadísticas épicas optimizadas con useMemo
   const estadisticas = useMemo(() => {
-    const juegosCompletados = juegos.filter(juego => juego.completado).length;
-    const totalHoras = juegos.reduce((total, juego) => total + juego.horas, 0);
-    const ratingPromedio = juegos.length > 0 
-      ? (juegos.reduce((total, juego) => total + juego.rating, 0) / juegos.length).toFixed(1)
+    const juegosCompletados = juegos.filter(j => j.completado).length;
+    const totalHoras = juegos.reduce((acc, j) => acc + j.horas, 0);
+    const ratingPromedio = juegos.length > 0
+      ? (juegos.reduce((acc, j) => acc + j.rating, 0) / juegos.length).toFixed(1)
       : '0.0';
-    
-    const juegosApolo = juegos.filter(juego => juego.dios === 'Apolo').length;
-    const juegosHecate = juegos.filter(juego => juego.dios === 'Hécate').length;
-    const juegosAmbos = juegos.filter(juego => juego.dios === 'Ambos').length;
-
-    return {
-      juegosCompletados,
-      totalHoras,
-      ratingPromedio,
-      juegosApolo,
-      juegosHecate,
-      juegosAmbos
-    };
+    const juegosApolo = juegos.filter(j => j.dios === 'Apolo').length;
+    const juegosHecate = juegos.filter(j => j.dios === 'Hécate').length;
+    const juegosAmbos = juegos.filter(j => j.dios === 'Ambos').length;
+    return { juegosCompletados, totalHoras, ratingPromedio, juegosApolo, juegosHecate, juegosAmbos };
   }, [juegos]);
 
-  // Filtrado y ordenamiento optimizado
   const juegosFiltrados = useMemo(() => {
-    let filtered = juegos.filter(juego => {
-      const matchesFilter = 
+    let filtrados = juegos.filter(j => {
+      const porFiltro =
         filter === 'todos' ? true :
-        filter === 'completados' ? juego.completado :
-        filter === 'apolo' ? juego.dios === 'Apolo' :
-        filter === 'hecate' ? juego.dios === 'Hécate' :
-        juego.dios === 'Ambos';
-
-      const matchesSearch = searchTerm === '' || 
-        juego.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        juego.genero.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (juego.tags && juego.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())));
-
-      return matchesFilter && matchesSearch;
+        filter === 'completados' ? j.completado :
+        filter === 'apolo' ? j.dios === 'Apolo' :
+        filter === 'hecate' ? j.dios === 'Hécate' :
+        j.dios === 'Ambos';
+      const porBusqueda =
+        searchTerm === '' ||
+        j.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        j.genero.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        j.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+      return porFiltro && porBusqueda;
     });
 
-    // Ordenamiento
-    return filtered.sort((a, b) => {
+    return filtrados.sort((a, b) => {
       switch (sortBy) {
-        case 'titulo':
-          return a.titulo.localeCompare(b.titulo);
-        case 'horas':
-          return b.horas - a.horas;
-        case 'rating':
-          return b.rating - a.rating;
+        case 'titulo': return a.titulo.localeCompare(b.titulo);
+        case 'horas': return b.horas - a.horas;
+        case 'rating': return b.rating - a.rating;
         case 'fecha':
-        default:
-          return new Date(b.fechaAdquisicion) - new Date(a.fechaAdquisicion);
+        default: return new Date(b.fechaAdquisicion) - new Date(a.fechaAdquisicion);
       }
     });
   }, [juegos, filter, searchTerm, sortBy]);
 
   const handleEditJuego = async (juego) => {
-    // Efecto visual mejorado
     const elemento = document.getElementById(`juego-${juego.id}`);
     elemento?.classList.add('editando');
-    
     try {
-      // Aquí iría la llamada a tu API para editar
-      // await fetch(`http://localhost:3000/api/juegos/${juego.id}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(juego)
-      // });
-      
+      await fetch(`http://localhost:3000/api/juegos/${juego.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(juego)
+      });
       setTimeout(() => {
         elemento?.classList.remove('editando');
-        console.log('Editando juego:', juego);
         alert(`📜 Editando las crónicas de: ${juego.titulo}`);
       }, 800);
     } catch (err) {
@@ -286,19 +107,11 @@ const BibliotecaJuegos = () => {
   const handleDeleteJuego = async (juegoId) => {
     const juego = juegos.find(j => j.id === juegoId);
     if (confirm(`¿Estás seguro de que deseas desterrar "${juego?.titulo}" de tu biblioteca?`)) {
-      // Efecto visual de eliminación mejorado
       const elemento = document.getElementById(`juego-${juegoId}`);
       elemento?.classList.add('destierro');
-      
       try {
-        // Aquí iría la llamada a tu API para eliminar
-        // await fetch(`http://localhost:3000/api/juegos/${juegoId}`, {
-        //   method: 'DELETE'
-        // });
-        
-        setTimeout(() => {
-          setJuegos(juegos.filter(juego => juego.id !== juegoId));
-        }, 600);
+        await fetch(`http://localhost:3000/api/juegos/${juegoId}`, { method: 'DELETE' });
+        setJuegos(juegos.filter(j => j.id !== juegoId));
       } catch (err) {
         console.error('Error al eliminar juego:', err);
         elemento?.classList.remove('destierro');
@@ -308,31 +121,22 @@ const BibliotecaJuegos = () => {
   };
 
   const handleAddJuego = () => {
-    // Navegación mejorada para agregar juego
     alert('⚔️ Redirigiendo al forjador de leyendas...');
-    // En una implementación real, esto navegaría a FormularioJuego
+    // Aquí podrías usar React Router para navegar a un formulario
   };
 
   const handleSortChange = (newSort, event) => {
     setSortBy(newSort);
-    // Feedback visual
-    const sortButtons = document.querySelectorAll('.sort-btn');
-    sortButtons.forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
     event?.target?.classList.add('active');
   };
 
   const handleRetryLoad = () => {
-    setLoading(true);
-    setError(null);
-    // Recargar la página para intentar nuevamente
-    window.location.reload();
+    cargarJuegos();
   };
 
-  const getTempleGreeting = () => {
-    return isDarkMode 
-      ? "Bienvenido al Santuario Nocturno de Hécate"
-      : "Bienvenido al Templo Radiante de Apolo";
-  };
+  const getTempleGreeting = () =>
+    isDarkMode ? "Bienvenido al Santuario Nocturno de Hécate" : "Bienvenido al Templo Radiante de Apolo";
 
   const getGodQuote = () => {
     const apoloQuotes = [
@@ -347,7 +151,6 @@ const BibliotecaJuegos = () => {
       "Los misterios aguardan a los audaces",
       "La noche oculta tesoros inesperados"
     ];
-    
     const quotes = isDarkMode ? hecateQuotes : apoloQuotes;
     return quotes[Math.floor(Math.random() * quotes.length)];
   };

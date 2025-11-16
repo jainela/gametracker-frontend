@@ -22,48 +22,21 @@ const ListaReseñas = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // CORREGIDO: Cambiado de '/api/reseñas' a '/api/resenas'
   useEffect(() => {
-    // Simular carga de reseñas épicas
-    const timer = setTimeout(() => {
-      setReseñas([
-        {
-          id: 1,
-          juego: 'The Legend of Zelda: Breath of the Wild',
-          juegoId: 1,
-          autor: 'Link el Héroe',
-          rating: 5,
-          fecha: '2024-01-20',
-          titulo: 'Una odisea que redefine la aventura',
-          contenido: 'Hyrule nunca se había sentido tan vivo. Cada montaña escalada, cada santuario completado, cada Korok encontrado... es una experiencia mágica. La libertad absoluta que ofrece este juego es simplemente revolucionaria.',
-          horasJugadas: 85,
-          completado: true,
-          plataforma: 'Nintendo Switch',
-          dios: 'Apolo',
-          likes: 42,
-          tags: ['Aventura Épica', 'Mundo Abierto', 'Revolucionario']
-        },
-        {
-          id: 2,
-          juego: 'Hollow Knight',
-          juegoId: 2,
-          autor: 'Cazador de Sombras',
-          rating: 4,
-          fecha: '2024-01-18',
-          titulo: 'La belleza en la oscuridad',
-          contenido: 'Hallownest es un mundo increíblemente detallado y atmosférico. El combate es preciso, la exploración gratificante, y la historia... misteriosa y conmovedora. Una obra maestra del género.',
-          horasJugadas: 42,
-          completado: false,
-          plataforma: 'PC',
-          dios: 'Hécate',
-          likes: 28,
-          tags: ['Metroidvania', 'Atmosférico', 'Desafiante']
-        },
-        // ... más reseñas
-      ]);
-      setLoading(false);
-    }, 1500);
+    const cargarReseñas = async () => {
+      try {
+        const res = await fetch('http://localhost:3000/api/resenas');
+        const data = await res.json();
+        setReseñas(data);
+      } catch (err) {
+        console.error('Error al cargar reseñas:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    cargarReseñas();
   }, []);
 
   const handleLike = (reseñaId) => {

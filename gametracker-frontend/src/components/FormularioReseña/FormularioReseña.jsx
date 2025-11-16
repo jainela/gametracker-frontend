@@ -86,6 +86,12 @@ const FormularioReseña = () => {
 
   const plataformas = ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch', 'Multiplataforma'];
 
+  // Función auxiliar para obtener ID del juego
+  const obtenerIdDelJuego = useCallback((tituloJuego) => {
+    const juego = juegos.find(j => j.titulo === tituloJuego);
+    return juego ? juego.id : null;
+  }, [juegos]);
+
   // Handlers optimizados con useCallback
   const handleInputChange = useCallback((field, value) => {
     setFormData(prev => ({
@@ -116,43 +122,68 @@ const FormularioReseña = () => {
     }
   }, [handleTagAdd]);
 
+  // CORREGIDO: Cambiado de '/api/reseñas' a '/api/resenas'
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    
-    if (!formData.diosSeleccionado) {
-      alert('🏛️ Debes elegir un dios patrón para tu crónica');
-      return;
-    }
 
-    if (!formData.juegoSeleccionado) {
-      alert('🎮 Debes seleccionar una leyenda para criticar');
+    if (!formData.diosSeleccionado || !formData.juegoSeleccionado) {
+      alert('🏛️ Debes completar los campos obligatorios');
       return;
     }
 
     setIsSubmitting(true);
 
-    // Simular envío épico
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      const reseñaReal = {
+        juego: formData.juegoSeleccionado,
+        juegoId: obtenerIdDelJuego(formData.juegoSeleccionado),
+        autor: formData.autor,
+        rating: formData.rating,
+        fecha: new Date().toISOString().split('T')[0],
+        titulo: formData.titulo,
+        contenido: formData.contenido,
+        horasJugadas: formData.horasJugadas,
+        completado: formData.completado,
+        plataforma: formData.plataforma,
+        dios: formData.diosSeleccionado,
+        likes: 0,
+        tags: formData.tags
+      };
 
-    console.log('📜 Crónica inmortalizada:', formData);
-    alert(`✨ ¡Tu crónica ha sido inmortalizada bajo la bendición de ${formData.diosSeleccionado}!`);
+      // CORREGIDO: Ruta cambiada de '/api/reseñas' a '/api/resenas'
+      const res = await fetch('http://localhost:3000/api/resenas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reseñaReal)
+      });
 
-    // Resetear formulario
-    setFormData({
-      diosSeleccionado: '',
-      juegoSeleccionado: '',
-      rating: 0,
-      titulo: '',
-      contenido: '',
-      autor: '',
-      tags: [],
-      horasJugadas: 0,
-      completado: false,
-      plataforma: ''
-    });
-    setCurrentTag('');
-    setIsSubmitting(false);
-  }, [formData]);
+      if (res.ok) {
+        alert(`✨ ¡Tu crónica ha sido inmortalizada bajo la bendición de ${formData.diosSeleccionado}!`);
+        // Resetear formulario al estado inicial conocido
+        setFormData({
+          diosSeleccionado: '',
+          juegoSeleccionado: '',
+          rating: 0,
+          titulo: '',
+          contenido: '',
+          autor: '',
+          tags: [],
+          horasJugadas: 0,
+          completado: false,
+          plataforma: ''
+        });
+        setCurrentTag('');
+      } else {
+        const error = await res.json();
+        alert(`❌ Error al enviar reseña: ${error.message || 'Verifica los campos'}`);
+      }
+    } catch (err) {
+      console.error('Error al enviar reseña:', err);
+      alert('❌ No se pudo conectar con el servidor');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [formData, obtenerIdDelJuego]);
 
   const handleReset = useCallback(() => {
     if (confirm('¿Estás seguro de que deseas descartar esta crónica?')) {
