@@ -11,18 +11,27 @@ const BibliotecaJuegos = () => {
   const [filter, setFilter] = useState('todos');
   const [sortBy, setSortBy] = useState('fecha');
   const [searchTerm, setSearchTerm] = useState('');
+  const [editingJuego, setEditingJuego] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
+  // Cargar juegos desde la API
   const cargarJuegos = async () => {
     try {
       setLoading(true);
       setError(null);
       const respuesta = await fetch('http://localhost:3000/api/juegos');
-      if (!respuesta.ok) throw new Error(`Error ${respuesta.status}: No se pudieron cargar los juegos`);
+      
+      if (!respuesta.ok) {
+        throw new Error(`Error ${respuesta.status}: No se pudieron cargar los juegos`);
+      }
+      
       const datos = await respuesta.json();
+      
+      // Transformar datos de la API al formato esperado por el componente
       const juegosTransformados = datos.map(juego => ({
         id: juego._id,
         titulo: juego.nombre,
-        portada: juego.portadaURL,
+        portada: juego.portadaURL || '/placeholder-game.jpg',
         completado: juego.estado === 'Completado',
         horas: juego.horasJugadas || 0,
         rating: juego.rating || 0,
@@ -31,12 +40,16 @@ const BibliotecaJuegos = () => {
         dios: juego.dios || 'Apolo',
         fechaAdquisicion: juego.fechaAdquisicion || new Date().toISOString().split('T')[0],
         ultimaSesion: juego.ultimaSesion || new Date().toISOString().split('T')[0],
-        tags: juego.tags || []
+        tags: juego.tags || [],
+        descripcion: juego.descripcion || ''
       }));
+      
       setJuegos(juegosTransformados);
     } catch (err) {
       console.error('Error al cargar juegos:', err);
       setError(err.message);
+      // En caso de error, usar array vacío
+      setJuegos([]);
     } finally {
       setLoading(false);
     }
@@ -46,97 +59,302 @@ const BibliotecaJuegos = () => {
     cargarJuegos();
   }, []);
 
+  // Función para agregar nuevo juego
+  const handleAddJuego = async (nuevoJuego) => {
+    try {
+      // Preparar datos para la API
+      const juegoData = {
+        nombre: nuevoJuego.titulo,
+        plataforma: nuevoJuego.plataforma,
+        genero: nuevoJuego.genero,
+        horasJugadas: parseInt(nuevoJuego.horas) || 0,
+        rating: parseInt(nuevoJuego.rating) || 0,
+        estado: nuevoJuego.completado ? 'Completado' : 'Pendiente',
+        dios: nuevoJuego.dios,
+        fechaAdquisicion: nuevoJuego.fechaAdquisicion,
+        portadaURL: nuevoJuego.portadaURL || '',
+        tags: nuevoJuego.tags || [],
+        descripcion: nuevoJuego.descripcion || '',
+        ultimaSesion: new Date().toISOString().split('T')[0]
+      };
+
+      const respuesta = await fetch('http://localhost:3000/api/juegos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(juegoData)
+      });
+
+      if (!respuesta.ok) {
+        const errorData = await respuesta.json();
+        throw new Error(errorData.error || 'Error al crear el juego');
+      }
+
+      const juegoCreado = await respuesta.json();
+      
+      // Transformar y agregar a la lista
+      const juegoTransformado = {
+        id: juegoCreado._id,
+        titulo: juegoCreado.nombre,
+        portada: juegoCreado.portadaURL || '/placeholder-game.jpg',
+        completado: juegoCreado.estado === 'Completado',
+        horas: juegoCreado.horasJugadas || 0,
+        rating: juegoCreado.rating || 0,
+        genero: juegoCreado.genero || 'Sin género',
+        plataforma: juegoCreado.plataforma || 'Desconocida',
+        dios: juegoCreado.dios || 'Apolo',
+        fechaAdquisicion: juegoCreado.fechaAdquisicion || new Date().toISOString().split('T')[0],
+        ultimaSesion: juegoCreado.ultimaSesion || new Date().toISOString().split('T')[0],
+        tags: juegoCreado.tags || [],
+        descripcion: juegoCreado.descripcion || ''
+      };
+
+      setJuegos(prev => [juegoTransformado, ...prev]);
+      setShowForm(false);
+      
+      alert(`¡Leyenda forjada! "${juegoCreado.nombre}" ha sido añadido a tu biblioteca.`);
+      
+    } catch (error) {
+      console.error('Error al crear juego:', error);
+      alert(`❌ Error al crear el juego: ${error.message}`);
+    }
+  };
+
+  // Estadísticas calculadas en tiempo real
   const estadisticas = useMemo(() => {
     const juegosCompletados = juegos.filter(j => j.completado).length;
     const totalHoras = juegos.reduce((acc, j) => acc + j.horas, 0);
-    const ratingPromedio = juegos.length > 0
-      ? (juegos.reduce((acc, j) => acc + j.rating, 0) / juegos.length).toFixed(1)
+    const juegosConRating = juegos.filter(j => j.rating > 0);
+    const ratingPromedio = juegosConRating.length > 0
+      ? (juegosConRating.reduce((acc, j) => acc + j.rating, 0) / juegosConRating.length).toFixed(1)
       : '0.0';
     const juegosApolo = juegos.filter(j => j.dios === 'Apolo').length;
     const juegosHecate = juegos.filter(j => j.dios === 'Hécate').length;
     const juegosAmbos = juegos.filter(j => j.dios === 'Ambos').length;
-    return { juegosCompletados, totalHoras, ratingPromedio, juegosApolo, juegosHecate, juegosAmbos };
+    
+    return { 
+      juegosCompletados, 
+      totalHoras, 
+      ratingPromedio, 
+      juegosApolo, 
+      juegosHecate, 
+      juegosAmbos,
+      totalJuegos: juegos.length
+    };
   }, [juegos]);
 
+  // Filtrado y ordenamiento optimizado
   const juegosFiltrados = useMemo(() => {
-    let filtrados = juegos.filter(j => {
-      const porFiltro =
+    let filtrados = juegos.filter(juego => {
+      // Filtro por estado/dios
+      const coincideFiltro =
         filter === 'todos' ? true :
-        filter === 'completados' ? j.completado :
-        filter === 'apolo' ? j.dios === 'Apolo' :
-        filter === 'hecate' ? j.dios === 'Hécate' :
-        j.dios === 'Ambos';
-      const porBusqueda =
+        filter === 'completados' ? juego.completado :
+        filter === 'apolo' ? juego.dios === 'Apolo' :
+        filter === 'hecate' ? juego.dios === 'Hécate' :
+        juego.dios === 'Ambos';
+      
+      // Filtro por búsqueda
+      const coincideBusqueda =
         searchTerm === '' ||
-        j.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        j.genero.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        j.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-      return porFiltro && porBusqueda;
+        juego.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        juego.genero.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        juego.plataforma.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (juego.tags && juego.tags.some(tag => 
+          tag.toLowerCase().includes(searchTerm.toLowerCase())
+        )) ||
+        (juego.descripcion && juego.descripcion.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+      return coincideFiltro && coincideBusqueda;
     });
 
+    // Ordenamiento
     return filtrados.sort((a, b) => {
       switch (sortBy) {
-        case 'titulo': return a.titulo.localeCompare(b.titulo);
-        case 'horas': return b.horas - a.horas;
-        case 'rating': return b.rating - a.rating;
+        case 'titulo': 
+          return a.titulo.localeCompare(b.titulo);
+        case 'horas': 
+          return b.horas - a.horas;
+        case 'rating': 
+          return b.rating - a.rating;
         case 'fecha':
-        default: return new Date(b.fechaAdquisicion) - new Date(a.fechaAdquisicion);
+        default: 
+          return new Date(b.fechaAdquisicion) - new Date(a.fechaAdquisicion);
       }
     });
   }, [juegos, filter, searchTerm, sortBy]);
 
-  const handleEditJuego = async (juego) => {
-    const elemento = document.getElementById(`juego-${juego.id}`);
-    elemento?.classList.add('editando');
+  // Función para editar juego
+  const handleEditJuego = async (juegoEditado) => {
     try {
-      await fetch(`http://localhost:3000/api/juegos/${juego.id}`, {
+      const elemento = document.getElementById(`juego-${juegoEditado.id}`);
+      elemento?.classList.add('editando');
+      
+      // Preparar datos para la API
+      const datosActualizados = {
+        nombre: juegoEditado.titulo,
+        plataforma: juegoEditado.plataforma,
+        genero: juegoEditado.genero,
+        horasJugadas: juegoEditado.horas,
+        rating: juegoEditado.rating,
+        estado: juegoEditado.completado ? 'Completado' : 'Pendiente',
+        dios: juegoEditado.dios,
+        fechaAdquisicion: juegoEditado.fechaAdquisicion,
+        portadaURL: juegoEditado.portada,
+        tags: juegoEditado.tags || [],
+        descripcion: juegoEditado.descripcion || '',
+        ultimaSesion: juegoEditado.ultimaSesion || new Date().toISOString().split('T')[0]
+      };
+
+      const respuesta = await fetch(`http://localhost:3000/api/juegos/${juegoEditado.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(juego)
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datosActualizados)
       });
+
+      if (!respuesta.ok) {
+        const errorData = await respuesta.json();
+        throw new Error(errorData.error || 'Error al actualizar el juego');
+      }
+
+      const juegoActualizado = await respuesta.json();
+      
+      // Transformar respuesta
+      const juegoTransformado = {
+        id: juegoActualizado._id,
+        titulo: juegoActualizado.nombre,
+        portada: juegoActualizado.portadaURL || '/placeholder-game.jpg',
+        completado: juegoActualizado.estado === 'Completado',
+        horas: juegoActualizado.horasJugadas || 0,
+        rating: juegoActualizado.rating || 0,
+        genero: juegoActualizado.genero || 'Sin género',
+        plataforma: juegoActualizado.plataforma || 'Desconocida',
+        dios: juegoActualizado.dios || 'Apolo',
+        fechaAdquisicion: juegoActualizado.fechaAdquisicion || new Date().toISOString().split('T')[0],
+        ultimaSesion: juegoActualizado.ultimaSesion || new Date().toISOString().split('T')[0],
+        tags: juegoActualizado.tags || [],
+        descripcion: juegoActualizado.descripcion || ''
+      };
+
+      // Actualizar estado local
+      setJuegos(prev => prev.map(j => 
+        j.id === juegoTransformado.id ? juegoTransformado : j
+      ));
+      
+      setEditingJuego(null);
+      
       setTimeout(() => {
         elemento?.classList.remove('editando');
-        alert(`📜 Editando las crónicas de: ${juego.titulo}`);
+        alert(`✅ Las crónicas de "${juegoTransformado.titulo}" han sido actualizadas`);
       }, 800);
+      
     } catch (err) {
       console.error('Error al editar juego:', err);
+      const elemento = document.getElementById(`juego-${juegoEditado.id}`);
       elemento?.classList.remove('editando');
+      alert(`❌ Error al actualizar el juego: ${err.message}`);
     }
   };
 
+  // Función para eliminar juego
   const handleDeleteJuego = async (juegoId) => {
     const juego = juegos.find(j => j.id === juegoId);
-    if (confirm(`¿Estás seguro de que deseas desterrar "${juego?.titulo}" de tu biblioteca?`)) {
+    
+    if (!juego) return;
+    
+    if (confirm(`¿Estás seguro de que deseas desterrar "${juego.titulo}" de tu biblioteca?`)) {
       const elemento = document.getElementById(`juego-${juegoId}`);
       elemento?.classList.add('destierro');
+      
       try {
-        await fetch(`http://localhost:3000/api/juegos/${juegoId}`, { method: 'DELETE' });
-        setJuegos(juegos.filter(j => j.id !== juegoId));
+        const respuesta = await fetch(`http://localhost:3000/api/juegos/${juegoId}`, { 
+          method: 'DELETE' 
+        });
+
+        if (!respuesta.ok) {
+          const errorData = await respuesta.json();
+          throw new Error(errorData.error || 'Error al eliminar el juego');
+        }
+
+        // Actualizar estado local
+        setJuegos(prev => prev.filter(j => j.id !== juegoId));
+        
+        setTimeout(() => {
+          alert(`🗑️ "${juego.titulo}" ha sido desterrado del santuario`);
+        }, 300);
+        
       } catch (err) {
         console.error('Error al eliminar juego:', err);
         elemento?.classList.remove('destierro');
-        alert('❌ Error al eliminar el juego. Por favor, intenta nuevamente.');
+        alert(`❌ Error al eliminar el juego: ${err.message}`);
       }
     }
   };
 
-  const handleAddJuego = () => {
-    alert('⚔️ Redirigiendo al forjador de leyendas...');
-    // Aquí podrías usar React Router para navegar a un formulario
+  // Función para iniciar edición
+  const handleStartEdit = (juego) => {
+    setEditingJuego(juego);
   };
 
-  const handleSortChange = (newSort, event) => {
-    setSortBy(newSort);
-    document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
-    event?.target?.classList.add('active');
+  // Función para cancelar edición
+  const handleCancelEdit = () => {
+    setEditingJuego(null);
   };
 
+  // Función para recargar datos
   const handleRetryLoad = () => {
     cargarJuegos();
   };
 
+  // Función para mostrar/ocultar formulario
+  const handleShowForm = () => {
+    setShowForm(true);
+  };
+
+  // Función para cerrar formulario
+  const handleCloseForm = () => {
+    setShowForm(false);
+  };
+
+  // Función para actualizar última sesión
+  const handleUpdateLastSession = async (juegoId) => {
+    try {
+      const datosActualizados = {
+        ultimaSesion: new Date().toISOString().split('T')[0]
+      };
+
+      const respuesta = await fetch(`http://localhost:3000/api/juegos/${juegoId}`, {
+        method: 'PATCH',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datosActualizados)
+      });
+
+      if (!respuesta.ok) {
+        throw new Error('Error al actualizar última sesión');
+      }
+
+      // Actualizar estado local
+      setJuegos(prev => prev.map(j => 
+        j.id === juegoId 
+          ? { ...j, ultimaSesion: datosActualizados.ultimaSesion }
+          : j
+      ));
+
+    } catch (err) {
+      console.error('Error al actualizar última sesión:', err);
+    }
+  };
+
+  // Mensajes temáticos
   const getTempleGreeting = () =>
-    isDarkMode ? "Bienvenido al Santuario Nocturno de Hécate" : "Bienvenido al Templo Radiante de Apolo";
+    isDarkMode 
+      ? "Bienvenido al Santuario Nocturno de Hécate" 
+      : "Bienvenido al Templo Radiante de Apolo";
 
   const getGodQuote = () => {
     const apoloQuotes = [
@@ -155,7 +373,7 @@ const BibliotecaJuegos = () => {
     return quotes[Math.floor(Math.random() * quotes.length)];
   };
 
-  // Renderizado de carga optimizado
+  // Renderizado de carga
   if (loading) {
     return (
       <div className="santuario-cargando">
@@ -182,7 +400,7 @@ const BibliotecaJuegos = () => {
           <h2 className="epic-text">¡Por los Dioses! Ocurrió un Error</h2>
           <p className="error-mensaje">{error}</p>
           <p className="error-descripcion">
-            Se están usando datos de ejemplo. Tu santuario funcionará, pero los cambios no se guardarán.
+            No se pudieron cargar los juegos desde el servidor.
           </p>
           <button 
             className="btn btn-epic btn-reintentar"
@@ -198,7 +416,7 @@ const BibliotecaJuegos = () => {
 
   return (
     <div className="biblioteca-container">
-      {/* Header épico del templo con animaciones */}
+      {/* Header épico del templo */}
       <header className="biblioteca-header">
         <div className="temple-banner">
           <h1 className="epic-text gold-text text-glow">🎮 SANTUARIO DE JUEGOS</h1>
@@ -211,22 +429,22 @@ const BibliotecaJuegos = () => {
         <p className="temple-greeting">{getTempleGreeting()}</p>
         <p className="god-quote">"{getGodQuote()}"</p>
         
-        {/* Indicador de estado de conexión */}
+        {/* Indicador de estado */}
         {error && (
           <div className="connection-warning">
             <span className="warning-icon">⚠️</span>
-            Modo sin conexión - Usando datos locales
+            Error de conexión - Los datos pueden no estar actualizados
           </div>
         )}
       </header>
 
-      {/* Tablilla de estadísticas divinas mejorada */}
+      {/* Estadísticas */}
       <div className="divine-stats">
         <div className="oracle-cards">
           <div className="oracle-card glow-on-hover">
             <div className="oracle-icon">📜</div>
             <h3>Total de Leyendas</h3>
-            <span className="oracle-number">{juegos.length}</span>
+            <span className="oracle-number">{estadisticas.totalJuegos}</span>
             <div className="oracle-subtitle">En tu Panteón</div>
           </div>
           <div className="oracle-card glow-on-hover">
@@ -262,10 +480,10 @@ const BibliotecaJuegos = () => {
         </div>
       </div>
 
-      {/* Panel de control mejorado con búsqueda y filtros */}
+      {/* Panel de control */}
       <div className="control-panel">
         <div className="control-container">
-          {/* Búsqueda divina */}
+          {/* Búsqueda */}
           <div className="search-section">
             <div className="search-container">
               <span className="search-icon">🔍</span>
@@ -324,7 +542,7 @@ const BibliotecaJuegos = () => {
                     <button
                       key={option.key}
                       className={`sort-btn ${sortBy === option.key ? 'active' : ''}`}
-                      onClick={(e) => handleSortChange(option.key, e)}
+                      onClick={() => setSortBy(option.key)}
                     >
                       <span className="sort-icon">{option.icon}</span>
                       <span className="sort-label">{option.label}</span>
@@ -337,7 +555,7 @@ const BibliotecaJuegos = () => {
         </div>
       </div>
 
-      {/* Salón principal de juegos mejorado */}
+      {/* Lista de juegos */}
       <section className="hall-of-games">
         <div className="hall-header">
           <h2 className="epic-text text-glow">🏛️ SALÓN DE LOS HÉROES</h2>
@@ -364,7 +582,7 @@ const BibliotecaJuegos = () => {
           <div className="divine-actions">
             <button 
               className="btn btn-epic btn-forge glow-on-hover"
-              onClick={handleAddJuego}
+              onClick={handleShowForm}
             >
               <span className="btn-icon">⚔️</span>
               <span className="btn-text">Forjar Nueva Leyenda</span>
@@ -383,7 +601,7 @@ const BibliotecaJuegos = () => {
             <p>
               {searchTerm 
                 ? `No hay juegos que coincidan con "${searchTerm}". Prueba con otros términos.`
-                : 'No se encontraron leyendas con los filtros seleccionados'
+                : 'Comienza agregando tu primera leyenda al santuario.'
               }
             </p>
             <div className="empty-actions">
@@ -396,19 +614,17 @@ const BibliotecaJuegos = () => {
               >
                 🌟 Mostrar Todas las Leyendas
               </button>
-              {searchTerm && (
-                <button 
-                  className="btn btn-magic"
-                  onClick={() => setSearchTerm('')}
-                >
-                  🔄 Limpiar Búsqueda
-                </button>
-              )}
+              <button 
+                className="btn btn-magic"
+                onClick={handleShowForm}
+              >
+                ⚔️ Forjar Primera Leyenda
+              </button>
             </div>
           </div>
         ) : (
           <>
-            {/* Grid sagrado mejorado */}
+            {/* Grid de juegos */}
             <div className="sacred-grid">
               {juegosFiltrados.map(juego => (
                 <div key={juego.id} id={`juego-${juego.id}`} className="game-item">
@@ -416,25 +632,19 @@ const BibliotecaJuegos = () => {
                     juego={juego}
                     onEdit={handleEditJuego}
                     onDelete={handleDeleteJuego}
+                    isEditing={editingJuego?.id === juego.id}
+                    onStartEdit={handleStartEdit}
+                    onCancelEdit={handleCancelEdit}
+                    onUpdateLastSession={handleUpdateLastSession}
                   />
                 </div>
               ))}
             </div>
-
-            {/* Paginación o carga más */}
-            {juegosFiltrados.length > 6 && (
-              <div className="load-more-section">
-                <button className="btn btn-magic btn-load-more">
-                  <span className="btn-icon">⬇️</span>
-                  <span className="btn-text">Cargar Más Leyendas</span>
-                </button>
-              </div>
-            )}
           </>
         )}
       </section>
 
-      {/* Altar de reflexión mejorado */}
+      {/* Footer */}
       <footer className="temple-footer">
         <div className="altar-wisdom">
           <p className="wisdom-text text-glow">
@@ -446,7 +656,7 @@ const BibliotecaJuegos = () => {
           <div className="altar-offerings">
             <span className="offering">
               <span className="offering-icon">🎮</span>
-              {juegos.length} Leyendas
+              {estadisticas.totalJuegos} Leyendas
             </span>
             <span className="offering">
               <span className="offering-icon">⏱️</span>
@@ -463,6 +673,33 @@ const BibliotecaJuegos = () => {
           </div>
         </div>
       </footer>
+
+      {/* Modal para agregar nuevo juego */}
+      {showForm && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3 className="epic-text">⚔️ Forjar Nueva Leyenda</h3>
+              <button className="modal-close" onClick={handleCloseForm}>
+                ✕
+              </button>
+            </div>
+            <div className="modal-body">
+              {/* Aquí iría el componente FormularioJuego */}
+              <p className="modal-message">
+                El forjador de leyendas se está preparando...
+                <br />
+                <small>Esta funcionalidad estará disponible pronto</small>
+              </p>
+              <div className="modal-actions">
+                <button className="btn btn-epic" onClick={handleCloseForm}>
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

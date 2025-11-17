@@ -7,69 +7,201 @@ const EstadisticasPersonales = () => {
   const [estadisticas, setEstadisticas] = useState(null);
   const [loading, setLoading] = useState(true);
   const [periodo, setPeriodo] = useState('todos');
+  const [juegos, setJuegos] = useState([]);
+  const [reseñas, setReseñas] = useState([]);
 
-  // Datos de ejemplo optimizados con useMemo
-  const datosEstadisticas = useMemo(() => ({
-    general: {
-      totalJuegos: 24,
-      totalHoras: 856,
-      juegosCompletados: 18,
-      promedioRating: 4.3,
-      juegosEnProgreso: 6,
-      dineroInvertido: 420
-    },
-    porGenero: [
-      { genero: 'Aventura Épica', cantidad: 8, horas: 320, porcentaje: 33 },
-      { genero: 'RPG Legendario', cantidad: 6, horas: 285, porcentaje: 25 },
-      { genero: 'Acción Heroica', cantidad: 4, horas: 156, porcentaje: 17 },
-      { genero: 'Estrategia Divina', cantidad: 3, horas: 95, porcentaje: 12 },
-      { genero: 'Otros', cantidad: 3, horas: 0, porcentaje: 13 }
-    ],
-    porPlataforma: [
-      { plataforma: 'PlayStation', cantidad: 10, porcentaje: 42 },
-      { plataforma: 'PC', cantidad: 8, porcentaje: 33 },
-      { plataforma: 'Nintendo Switch', cantidad: 4, porcentaje: 17 },
-      { plataforma: 'Xbox', cantidad: 2, porcentaje: 8 }
-    ],
-    porDios: [
-      { dios: 'Apolo', cantidad: 14, porcentaje: 58, icon: '☀️' },
-      { dios: 'Hécate', cantidad: 8, porcentaje: 33, icon: '🌙' },
-      { dios: 'Ambos', cantidad: 2, porcentaje: 9, icon: '⚡' }
-    ],
-    progresionMensual: [
-      { mes: 'Ene', juegos: 2, horas: 45, completados: 1 },
-      { mes: 'Feb', juegos: 3, horas: 68, completados: 2 },
-      { mes: 'Mar', juegos: 1, horas: 32, completados: 1 },
-      { mes: 'Abr', juegos: 4, horas: 89, completados: 3 },
-      { mes: 'May', juegos: 2, horas: 56, completados: 1 },
-      { mes: 'Jun', juegos: 3, horas: 72, completados: 2 },
-      { mes: 'Jul', juegos: 5, horas: 124, completados: 4 },
-      { mes: 'Ago', juegos: 2, horas: 48, completados: 1 },
-      { mes: 'Sep', juegos: 3, horas: 67, completados: 2 },
-      { mes: 'Oct', juegos: 4, horas: 95, completados: 3 },
-      { mes: 'Nov', juegos: 2, horas: 52, completados: 1 },
-      { mes: 'Dic', juegos: 3, horas: 78, completados: 2 }
-    ],
-    logros: [
-      { id: 1, nombre: 'Iniciado', descripcion: 'Completar tu primer juego', completado: true, icon: '🎮' },
-      { id: 2, nombre: 'Coleccionista', descripcion: 'Tener 10 juegos en tu biblioteca', completado: true, icon: '📚' },
-      { id: 3, nombre: 'Veterano', descripcion: 'Alcanzar 500 horas de juego', completado: true, icon: '⏱️' },
-      { id: 4, nombre: 'Perfeccionista', descripcion: 'Completar 15 juegos', completado: true, icon: '✅' },
-      { id: 5, nombre: 'Crítico', descripcion: 'Escribir 10 reseñas', completado: false, icon: '📝' },
-      { id: 6, nombre: 'Leyenda', descripcion: 'Alcanzar 1000 horas de juego', completado: false, icon: '🏆' },
-      { id: 7, nombre: 'Omnipotente', descripcion: 'Juegos de Apolo y Hécate al 50%', completado: false, icon: '⚡' },
-      { id: 8, nombre: 'Inmortal', descripcion: 'Completar 25 juegos', completado: false, icon: '👑' }
-    ]
-  }), []);
-
+  // Cargar datos reales de la API
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setEstadisticas(datosEstadisticas);
-      setLoading(false);
-    }, 1500);
+    const cargarDatos = async () => {
+      try {
+        setLoading(true);
+        
+        const [juegosRes, reseñasRes] = await Promise.all([
+          fetch('http://localhost:3000/api/juegos'),
+          fetch('http://localhost:3000/api/resenas')
+        ]);
 
-    return () => clearTimeout(timer);
-  }, [datosEstadisticas]);
+        const juegosData = juegosRes.ok ? await juegosRes.json() : [];
+        const reseñasData = reseñasRes.ok ? await reseñasRes.json() : [];
+
+        setJuegos(juegosData);
+        setReseñas(reseñasData);
+
+        // Calcular estadísticas en tiempo real
+        const statsCalculadas = calcularEstadisticasReales(juegosData, reseñasData);
+        setEstadisticas(statsCalculadas);
+
+      } catch (error) {
+        console.error('Error cargando estadísticas:', error);
+        // En caso de error, usar datos de ejemplo
+        setEstadisticas(datosEstadisticasEjemplo);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarDatos();
+  }, []);
+
+  // Función para calcular estadísticas reales
+  const calcularEstadisticasReales = (juegosData, reseñasData) => {
+    // Estadísticas generales
+    const totalJuegos = juegosData.length;
+    const totalHoras = juegosData.reduce((sum, juego) => sum + (juego.horasJugadas || 0), 0);
+    const juegosCompletados = juegosData.filter(juego => juego.estado === 'Completado').length;
+    const juegosEnProgreso = juegosData.filter(juego => juego.estado === 'Jugando').length;
+    
+    // Calcular rating promedio
+    const ratingsJuegos = juegosData.map(j => j.rating || 0).filter(r => r > 0);
+    const promedioRating = ratingsJuegos.length > 0 
+      ? (ratingsJuegos.reduce((a, b) => a + b, 0) / ratingsJuegos.length).toFixed(1)
+      : 0;
+
+    // Estadísticas por género
+    const generosMap = {};
+    juegosData.forEach(juego => {
+      const genero = juego.genero || 'Sin género';
+      if (!generosMap[genero]) {
+        generosMap[genero] = { cantidad: 0, horas: 0 };
+      }
+      generosMap[genero].cantidad++;
+      generosMap[genero].horas += juego.horasJugadas || 0;
+    });
+
+    const porGenero = Object.entries(generosMap).map(([genero, data]) => ({
+      genero,
+      cantidad: data.cantidad,
+      horas: data.horas,
+      porcentaje: Math.round((data.cantidad / totalJuegos) * 100)
+    })).sort((a, b) => b.cantidad - a.cantidad);
+
+    // Estadísticas por plataforma
+    const plataformasMap = {};
+    juegosData.forEach(juego => {
+      const plataforma = juego.plataforma || 'Sin plataforma';
+      plataformasMap[plataforma] = (plataformasMap[plataforma] || 0) + 1;
+    });
+
+    const porPlataforma = Object.entries(plataformasMap).map(([plataforma, cantidad]) => ({
+      plataforma,
+      cantidad,
+      porcentaje: Math.round((cantidad / totalJuegos) * 100)
+    })).sort((a, b) => b.cantidad - a.cantidad);
+
+    // Estadísticas por dios
+    const diosesMap = {};
+    juegosData.forEach(juego => {
+      const dios = juego.dios || 'Apolo';
+      diosesMap[dios] = (diosesMap[dios] || 0) + 1;
+    });
+
+    const porDios = Object.entries(diosesMap).map(([dios, cantidad]) => ({
+      dios,
+      cantidad,
+      porcentaje: Math.round((cantidad / totalJuegos) * 100),
+      icon: dios === 'Apolo' ? '☀️' : dios === 'Hécate' ? '🌙' : '⚡'
+    })).sort((a, b) => b.cantidad - a.cantidad);
+
+    // Logros calculados
+    const logros = calcularLogros(juegosData, reseñasData, totalHoras);
+
+    return {
+      general: {
+        totalJuegos,
+        totalHoras,
+        juegosCompletados,
+        promedioRating: parseFloat(promedioRating),
+        juegosEnProgreso,
+        totalReseñas: reseñasData.length
+      },
+      porGenero,
+      porPlataforma,
+      porDios,
+      logros
+    };
+  };
+
+  // Calcular logros basados en datos reales
+  const calcularLogros = (juegosData, reseñasData, totalHoras) => {
+    const totalJuegos = juegosData.length;
+    const juegosCompletados = juegosData.filter(j => j.estado === 'Completado').length;
+    const totalReseñas = reseñasData.length;
+
+    return [
+      { 
+        id: 1, 
+        nombre: 'Iniciado', 
+        descripcion: 'Completar tu primer juego', 
+        completado: juegosCompletados >= 1, 
+        icon: '🎮' 
+      },
+      { 
+        id: 2, 
+        nombre: 'Coleccionista', 
+        descripcion: 'Tener 10 juegos en tu biblioteca', 
+        completado: totalJuegos >= 10, 
+        icon: '📚' 
+      },
+      { 
+        id: 3, 
+        nombre: 'Veterano', 
+        descripcion: 'Alcanzar 100 horas de juego', 
+        completado: totalHoras >= 100, 
+        icon: '⏱️' 
+      },
+      { 
+        id: 4, 
+        nombre: 'Perfeccionista', 
+        descripcion: 'Completar 5 juegos', 
+        completado: juegosCompletados >= 5, 
+        icon: '✅' 
+      },
+      { 
+        id: 5, 
+        nombre: 'Crítico', 
+        descripcion: 'Escribir 5 reseñas', 
+        completado: totalReseñas >= 5, 
+        icon: '📝' 
+      },
+      { 
+        id: 6, 
+        nombre: 'Leyenda', 
+        descripcion: 'Alcanzar 500 horas de juego', 
+        completado: totalHoras >= 500, 
+        icon: '🏆' 
+      },
+      { 
+        id: 7, 
+        nombre: 'Omnipotente', 
+        descripcion: 'Tener juegos de ambos dioses', 
+        completado: juegosData.some(j => j.dios === 'Apolo') && juegosData.some(j => j.dios === 'Hécate'), 
+        icon: '⚡' 
+      },
+      { 
+        id: 8, 
+        nombre: 'Inmortal', 
+        descripcion: 'Completar 10 juegos', 
+        completado: juegosCompletados >= 10, 
+        icon: '👑' 
+      }
+    ];
+  };
+
+  // Datos de ejemplo como fallback
+  const datosEstadisticasEjemplo = useMemo(() => ({
+    general: {
+      totalJuegos: 0,
+      totalHoras: 0,
+      juegosCompletados: 0,
+      promedioRating: 0,
+      juegosEnProgreso: 0,
+      totalReseñas: 0
+    },
+    porGenero: [],
+    porPlataforma: [],
+    porDios: [],
+    logros: []
+  }), []);
 
   const getTempleQuote = useCallback(() => {
     const quotes = {
@@ -85,7 +217,8 @@ const EstadisticasPersonales = () => {
     if (horas >= 500) return { nivel: 'Héroe Legendario', icon: '⚡', color: 'purple' };
     if (horas >= 250) return { nivel: 'Guerrero Experimentado', icon: '🛡️', color: 'blue' };
     if (horas >= 100) return { nivel: 'Aventurero Valiente', icon: '⚔️', color: 'green' };
-    return { nivel: 'Iniciado', icon: '🎮', color: 'gray' };
+    if (horas >= 50) return { nivel: 'Iniciado Prometedor', icon: '🎯', color: 'orange' };
+    return { nivel: 'Novato', icon: '🎮', color: 'gray' };
   }, [estadisticas]);
 
   const calcularEficiencia = useCallback(() => {
@@ -104,8 +237,10 @@ const EstadisticasPersonales = () => {
       return "Buen equilibrio entre exploración y culminación. Sigue así.";
     } else if (eficiencia >= 40) {
       return "Te enfocas en explorar muchos mundos. Considera completar algunas aventuras.";
-    } else {
+    } else if (eficiencia >= 20) {
       return "Eres un explorador nato. Quizás sea momento de terminar algunas historias.";
+    } else {
+      return "Tu viaje acaba de comenzar. Cada gran héroe empieza con un solo paso.";
     }
   }, [calcularEficiencia]);
 
@@ -122,7 +257,7 @@ const EstadisticasPersonales = () => {
         <div className="oraculo-cargando">
           <div className="esfera-carga"></div>
           <h2>Consultando el Oráculo...</h2>
-          <p>El destino de tus estadísticas se revela</p>
+          <p>Analizando tus hazañas épicas</p>
           <div className="runas-cargando">
             <span className="runa">📊</span>
             <span className="runa">🔮</span>
@@ -186,7 +321,7 @@ const EstadisticasPersonales = () => {
               <div className="stat-valor">{estadisticas.general.totalJuegos}</div>
               <div className="stat-label">Leyendas en Tu Panteón</div>
             </div>
-            <div className="stat-tendencia positiva">+12%</div>
+            <div className="stat-badge">Total</div>
           </div>
 
           <div className="stat-card grande">
@@ -195,7 +330,7 @@ const EstadisticasPersonales = () => {
               <div className="stat-valor">{estadisticas.general.totalHoras}h</div>
               <div className="stat-label">Horas de Gloria</div>
             </div>
-            <div className="stat-tendencia positiva">+8%</div>
+            <div className="stat-badge">Acumulado</div>
           </div>
 
           <div className="stat-card grande">
@@ -204,7 +339,7 @@ const EstadisticasPersonales = () => {
               <div className="stat-valor">{estadisticas.general.juegosCompletados}</div>
               <div className="stat-label">Hazañas Consumadas</div>
             </div>
-            <div className="stat-tendencia positiva">+15%</div>
+            <div className="stat-badge">{eficiencia}% eficiencia</div>
           </div>
 
           <div className="stat-card grande">
@@ -213,7 +348,9 @@ const EstadisticasPersonales = () => {
               <div className="stat-valor">{estadisticas.general.promedioRating}/5</div>
               <div className="stat-label">Gloria Promedio</div>
             </div>
-            <div className="stat-tendencia neutral">+0%</div>
+            <div className="stat-badge">
+              {estadisticas.general.promedioRating > 0 ? 'Calificado' : 'Sin calificar'}
+            </div>
           </div>
         </div>
 
@@ -245,8 +382,12 @@ const EstadisticasPersonales = () => {
                     <span className="detalle-valor">{estadisticas.general.totalJuegos}</span>
                   </div>
                   <div className="detalle-item">
-                    <span className="detalle-label">Tasa de Finalización:</span>
-                    <span className="detalle-valor">{eficiencia}%</span>
+                    <span className="detalle-label">En Progreso:</span>
+                    <span className="detalle-valor">{estadisticas.general.juegosEnProgreso}</span>
+                  </div>
+                  <div className="detalle-item">
+                    <span className="detalle-label">Reseñas Escritas:</span>
+                    <span className="detalle-valor">{estadisticas.general.totalReseñas}</span>
                   </div>
                 </div>
               </div>
@@ -264,27 +405,34 @@ const EstadisticasPersonales = () => {
           <div className="distribucion-card">
             <h3 className="distribucion-titulo">🎭 POR GÉNERO ÉPICO</h3>
             <div className="distribucion-content">
-              {estadisticas.porGenero.map((item, index) => (
-                <div key={item.genero} className="distribucion-item">
-                  <div className="distribucion-header">
-                    <span className="distribucion-label">{item.genero}</span>
-                    <span className="distribucion-porcentaje">{item.porcentaje}%</span>
+              {estadisticas.porGenero.length > 0 ? (
+                estadisticas.porGenero.map((item, index) => (
+                  <div key={item.genero} className="distribucion-item">
+                    <div className="distribucion-header">
+                      <span className="distribucion-label">{item.genero}</span>
+                      <span className="distribucion-porcentaje">{item.porcentaje}%</span>
+                    </div>
+                    <div className="distribucion-bar">
+                      <div 
+                        className="distribucion-fill"
+                        style={{ 
+                          width: `${item.porcentaje}%`,
+                          background: `linear-gradient(90deg, var(--accent), var(--accent-hover))`
+                        }}
+                      ></div>
+                    </div>
+                    <div className="distribucion-details">
+                      <span>{item.cantidad} juegos</span>
+                      <span>{item.horas}h</span>
+                    </div>
                   </div>
-                  <div className="distribucion-bar">
-                    <div 
-                      className="distribucion-fill"
-                      style={{ 
-                        width: `${item.porcentaje}%`,
-                        background: `linear-gradient(90deg, var(--accent), var(--accent-hover))`
-                      }}
-                    ></div>
-                  </div>
-                  <div className="distribucion-details">
-                    <span>{item.cantidad} juegos</span>
-                    <span>{item.horas}h</span>
-                  </div>
+                ))
+              ) : (
+                <div className="sin-datos">
+                  <div className="sin-datos-icon">🎮</div>
+                  <p>No hay juegos registrados aún</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
@@ -292,29 +440,37 @@ const EstadisticasPersonales = () => {
           <div className="distribucion-card">
             <h3 className="distribucion-titulo">🎮 POR PLATAFORMA DIVINA</h3>
             <div className="plataformas-grid">
-              {estadisticas.porPlataforma.map(item => (
-                <div key={item.plataforma} className="plataforma-item">
-                  <div className="plataforma-icon">
-                    {item.plataforma === 'PlayStation' && '🎮'}
-                    {item.plataforma === 'PC' && '💻'}
-                    {item.plataforma === 'Nintendo Switch' && '🎮'}
-                    {item.plataforma === 'Xbox' && '🎮'}
-                  </div>
-                  <div className="plataforma-info">
-                    <div className="plataforma-nombre">{item.plataforma}</div>
-                    <div className="plataforma-stats">
-                      <span>{item.cantidad} juegos</span>
-                      <span>{item.porcentaje}%</span>
+              {estadisticas.porPlataforma.length > 0 ? (
+                estadisticas.porPlataforma.map(item => (
+                  <div key={item.plataforma} className="plataforma-item">
+                    <div className="plataforma-icon">
+                      {item.plataforma === 'PlayStation' && '🎮'}
+                      {item.plataforma === 'PC' && '💻'}
+                      {item.plataforma === 'Nintendo Switch' && '🎮'}
+                      {item.plataforma === 'Xbox' && '🎮'}
+                      {item.plataforma === 'Sin plataforma' && '❓'}
+                    </div>
+                    <div className="plataforma-info">
+                      <div className="plataforma-nombre">{item.plataforma}</div>
+                      <div className="plataforma-stats">
+                        <span>{item.cantidad} juegos</span>
+                        <span>{item.porcentaje}%</span>
+                      </div>
+                    </div>
+                    <div className="plataforma-chart">
+                      <div 
+                        className="plataforma-bar"
+                        style={{ height: `${item.porcentaje}%` }}
+                      ></div>
                     </div>
                   </div>
-                  <div className="plataforma-chart">
-                    <div 
-                      className="plataforma-bar"
-                      style={{ height: `${item.porcentaje}%` }}
-                    ></div>
-                  </div>
+                ))
+              ) : (
+                <div className="sin-datos">
+                  <div className="sin-datos-icon">💻</div>
+                  <p>No hay plataformas registradas</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
@@ -322,75 +478,32 @@ const EstadisticasPersonales = () => {
           <div className="distribucion-card">
             <h3 className="distribucion-titulo">🙏 BENDICIÓN DIVINA</h3>
             <div className="dioses-stats">
-              {estadisticas.porDios.map(item => (
-                <div key={item.dios} className="dios-stat-item">
-                  <div className="dios-header">
-                    <div className="dios-icon">{item.icon}</div>
-                    <div className="dios-info">
-                      <div className="dios-nombre">{item.dios}</div>
-                      <div className="dios-porcentaje">{item.porcentaje}%</div>
+              {estadisticas.porDios.length > 0 ? (
+                estadisticas.porDios.map(item => (
+                  <div key={item.dios} className="dios-stat-item">
+                    <div className="dios-header">
+                      <div className="dios-icon">{item.icon}</div>
+                      <div className="dios-info">
+                        <div className="dios-nombre">{item.dios}</div>
+                        <div className="dios-porcentaje">{item.porcentaje}%</div>
+                      </div>
                     </div>
+                    <div className="dios-progress">
+                      <div 
+                        className="dios-progress-fill"
+                        style={{ width: `${item.porcentaje}%` }}
+                      ></div>
+                    </div>
+                    <div className="dios-cantidad">{item.cantidad} juegos</div>
                   </div>
-                  <div className="dios-progress">
-                    <div 
-                      className="dios-progress-fill"
-                      style={{ width: `${item.porcentaje}%` }}
-                    ></div>
-                  </div>
-                  <div className="dios-cantidad">{item.cantidad} juegos</div>
+                ))
+              ) : (
+                <div className="sin-datos">
+                  <div className="sin-datos-icon">🙏</div>
+                  <p>No hay bendiciones divinas registradas</p>
                 </div>
-              ))}
+              )}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Progresión mensual */}
-      <section className="progresion-section">
-        <h2 className="seccion-titulo">📈 CRÓNICA DEL PROGRESO</h2>
-        
-        <div className="progresion-card">
-          <div className="progresion-header">
-            <h3>Evolución Mensual de Tu Gloria</h3>
-            <div className="progresion-leyenda">
-              <div className="leyenda-item">
-                <div className="leyenda-color juegos"></div>
-                <span>Juegos</span>
-              </div>
-              <div className="leyenda-item">
-                <div className="leyenda-color horas"></div>
-                <span>Horas</span>
-              </div>
-              <div className="leyenda-item">
-                <div className="leyenda-color completados"></div>
-                <span>Completados</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="progresion-chart">
-            {estadisticas.progresionMensual.map((mes, index) => (
-              <div key={mes.mes} className="mes-column">
-                <div className="mes-label">{mes.mes}</div>
-                <div className="mes-bars">
-                  <div 
-                    className="mes-bar juegos"
-                    style={{ height: `${mes.juegos * 15}px` }}
-                    title={`${mes.juegos} juegos`}
-                  ></div>
-                  <div 
-                    className="mes-bar horas"
-                    style={{ height: `${mes.horas * 0.5}px` }}
-                    title={`${mes.horas} horas`}
-                  ></div>
-                  <div 
-                    className="mes-bar completados"
-                    style={{ height: `${mes.completados * 20}px` }}
-                    title={`${mes.completados} completados`}
-                  ></div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -442,12 +555,12 @@ const EstadisticasPersonales = () => {
               <div className="oraculo-stat">
                 <span className="stat-nombre">Dios Predilecto:</span>
                 <span className="stat-valor">
-                  {estadisticas.porDios[0].icon} {estadisticas.porDios[0].dios}
+                  {estadisticas.porDios[0]?.icon || '🙏'} {estadisticas.porDios[0]?.dios || 'Sin datos'}
                 </span>
               </div>
               <div className="oraculo-stat">
                 <span className="stat-nombre">Género Favorito:</span>
-                <span className="stat-valor">{estadisticas.porGenero[0].genero}</span>
+                <span className="stat-valor">{estadisticas.porGenero[0]?.genero || 'Sin datos'}</span>
               </div>
             </div>
             <div className="oraculo-mensaje">

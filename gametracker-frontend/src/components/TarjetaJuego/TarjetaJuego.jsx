@@ -2,12 +2,22 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import './TarjetaJuego.css';
 
-const TarjetaJuego = ({ juego, onEdit, onDelete, onViewDetails }) => {
+const TarjetaJuego = ({ 
+  juego, 
+  onEdit, 
+  onDelete, 
+  onViewDetails,
+  isEditing,
+  onStartEdit,
+  onCancelEdit,
+  onUpdateLastSession 
+}) => {
   const { isDarkMode } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Memoizar valores calculados para mejor performance
   const godData = useMemo(() => {
@@ -94,9 +104,9 @@ const TarjetaJuego = ({ juego, onEdit, onDelete, onViewDetails }) => {
     
     setTimeout(() => {
       card?.classList.remove('edit-mode');
-      onEdit?.(juego);
+      onStartEdit?.(juego);
     }, 600);
-  }, [juego, onEdit]);
+  }, [juego, onStartEdit]);
 
   const handleDelete = useCallback((e) => {
     e.stopPropagation();
@@ -121,6 +131,59 @@ const TarjetaJuego = ({ juego, onEdit, onDelete, onViewDetails }) => {
     setImageLoaded(true);
   }, []);
 
+  // Función para actualizar última sesión
+  const handleUpdateSession = useCallback(async (e) => {
+    e.stopPropagation();
+    
+    try {
+      setIsUpdating(true);
+      await onUpdateLastSession?.(juego.id);
+      
+      // Efecto visual de éxito
+      const card = e.currentTarget.closest('.tarjeta-juego');
+      card?.classList.add('session-updated');
+      
+      setTimeout(() => {
+        card?.classList.remove('session-updated');
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error al actualizar sesión:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  }, [juego.id, onUpdateLastSession]);
+
+  // Función para marcar como completado
+  const handleToggleComplete = useCallback(async (e) => {
+    e.stopPropagation();
+    
+    try {
+      setIsUpdating(true);
+      
+      const juegoActualizado = {
+        ...juego,
+        completado: !juego.completado,
+        ultimaSesion: new Date().toISOString().split('T')[0]
+      };
+      
+      await onEdit?.(juegoActualizado);
+      
+      // Efecto visual
+      const card = e.currentTarget.closest('.tarjeta-juego');
+      card?.classList.add(juegoActualizado.completado ? 'completed' : 'uncompleted');
+      
+      setTimeout(() => {
+        card?.classList.remove('completed', 'uncompleted');
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error al actualizar estado:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  }, [juego, onEdit]);
+
   // Funciones de utilidad memoizadas
   const getStatusData = useMemo(() => {
     return juego.completado 
@@ -143,6 +206,7 @@ const TarjetaJuego = ({ juego, onEdit, onDelete, onViewDetails }) => {
   }, [juego.horas]);
 
   const formatDate = useCallback((dateString) => {
+    if (!dateString) return 'No registrada';
     return new Date(dateString).toLocaleDateString('es-ES', {
       day: '2-digit',
       month: '2-digit',
@@ -181,6 +245,7 @@ const TarjetaJuego = ({ juego, onEdit, onDelete, onViewDetails }) => {
   const removeTag = useCallback((gameId, tag) => {
     if (confirm(`¿Desterrar el tag "${tag}" de esta leyenda?`)) {
       console.log(`Eliminando tag: ${tag} del juego: ${gameId}`);
+      // En una implementación real, aquí llamarías a la API
       alert(`🏷️ Tag "${tag}" desterrado con éxito`);
     }
   }, []);
@@ -189,6 +254,7 @@ const TarjetaJuego = ({ juego, onEdit, onDelete, onViewDetails }) => {
     const newTag = prompt('🏷️ Ingresa un nuevo tag épico:');
     if (newTag && newTag.trim()) {
       console.log(`Agregando tag: ${newTag} al juego: ${gameId}`);
+      // En una implementación real, aquí llamarías a la API
       alert(`✨ Nuevo tag agregado: "${newTag}"`);
     }
   }, []);
@@ -343,7 +409,7 @@ ${achievements.length >= 3 ? '✨ ¡Eres un verdadero héroe!' : '💪 Sigue for
       );
     }
     
-    const displayedTags = juego.tags.slice(0, 3); // Reducido para mobile
+    const displayedTags = juego.tags.slice(0, 3);
     const remainingTags = juego.tags.length - 3;
     
     return (
@@ -381,7 +447,6 @@ ${achievements.length >= 3 ? '✨ ¡Eres un verdadero héroe!' : '💪 Sigue for
           </span>
         )}
         
-        {/* Botón para agregar más tags */}
         <button 
           className="game-tag add-tag-btn"
           onClick={(e) => {
@@ -415,9 +480,35 @@ ${achievements.length >= 3 ? '✨ ¡Eres un verdadero héroe!' : '💪 Sigue for
     </div>
   ), []);
 
+  // Si está en modo edición, mostrar formulario de edición
+  if (isEditing) {
+    return (
+      <div className={`tarjeta-juego editing-mode ${godData.class}`}>
+        <div className="editing-overlay">
+          <h3>Editando: {juego.titulo}</h3>
+          <p>El editor épico se está preparando...</p>
+          <div className="editing-actions">
+            <button 
+              className="btn-accion btn-guardar"
+              onClick={() => onEdit?.(juego)}
+            >
+              💾 Guardar Cambios
+            </button>
+            <button 
+              className="btn-accion btn-cancelar"
+              onClick={onCancelEdit}
+            >
+              ❌ Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div 
-      className={`tarjeta-juego ${godData.class} ${isHovered ? 'hovered' : ''} ${juego.completado ? 'completado' : 'en-progreso'} ${calculateProgress.level}`}
+      className={`tarjeta-juego ${godData.class} ${isHovered ? 'hovered' : ''} ${juego.completado ? 'completado' : 'en-progreso'} ${calculateProgress.level} ${isUpdating ? 'updating' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleCardClick}
@@ -431,6 +522,14 @@ ${achievements.length >= 3 ? '✨ ¡Eres un verdadero héroe!' : '💪 Sigue for
         className="divine-glow"
         style={{ background: godData.gradient }}
       ></div>
+      
+      {/* Indicador de carga para actualizaciones */}
+      {isUpdating && (
+        <div className="updating-overlay">
+          <div className="updating-spinner"></div>
+          <span>Actualizando...</span>
+        </div>
+      )}
       
       {/* Portada épica con estados de carga */}
       <div className="portada-container">
@@ -502,11 +601,20 @@ ${achievements.length >= 3 ? '✨ ¡Eres un verdadero héroe!' : '💪 Sigue for
               ✏️
             </button>
             <button 
-              className="quick-action-btn platform-btn"
-              title={`Plataforma: ${platformData.name} - ${platformData.specs.join(', ')}`}
-              aria-label={`Plataforma: ${platformData.name}`}
+              className="quick-action-btn session-btn"
+              onClick={handleUpdateSession}
+              title="Actualizar última sesión"
+              disabled={isUpdating}
             >
-              {platformData.icon}
+              {isUpdating ? '⏳' : '🕒'}
+            </button>
+            <button 
+              className="quick-action-btn complete-btn"
+              onClick={handleToggleComplete}
+              title={juego.completado ? 'Marcar como no completado' : 'Marcar como completado'}
+              disabled={isUpdating}
+            >
+              {juego.completado ? '↶' : '✅'}
             </button>
           </div>
         )}
@@ -553,7 +661,7 @@ ${achievements.length >= 3 ? '✨ ¡Eres un verdadero héroe!' : '💪 Sigue for
           <span className="rating-text">{juego.rating}/5</span>
         </div>
 
-        {/* Barra de progreso épica corregida */}
+        {/* Barra de progreso épica */}
         <div className="progress-section">
           <div className="progress-header">
             <span className="progress-percentage">{Math.round(calculateProgress.percentage)}%</span>
@@ -638,6 +746,32 @@ ${achievements.length >= 3 ? '✨ ¡Eres un verdadero héroe!' : '💪 Sigue for
           >
             <span className="accion-icon">📤</span>
             <span className="accion-text">Compartir</span>
+          </button>
+
+          <button 
+            className="btn-accion btn-estadisticas glow-on-hover"
+            onClick={(e) => {
+              e.stopPropagation();
+              showAdvancedStats(juego);
+            }}
+            title="Ver estadísticas avanzadas"
+            aria-label="Estadísticas avanzadas"
+          >
+            <span className="accion-icon">📊</span>
+            <span className="accion-text">Estadísticas</span>
+          </button>
+
+          <button 
+            className="btn-accion btn-logros glow-on-hover"
+            onClick={(e) => {
+              e.stopPropagation();
+              viewAchievements(juego);
+            }}
+            title="Ver logros desbloqueados"
+            aria-label="Ver logros"
+          >
+            <span className="accion-icon">🏆</span>
+            <span className="accion-text">Logros</span>
           </button>
         </div>
 

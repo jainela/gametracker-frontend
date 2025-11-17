@@ -5,10 +5,12 @@ import './ListaReseñas.css';
 const ListaReseñas = () => {
   const { isDarkMode, themeName } = useTheme();
   const [reseñas, setReseñas] = useState([]);
+  const [juegos, setJuegos] = useState({}); // Para mapear juegoId a nombre
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('todas');
   const [sortBy, setSortBy] = useState('fecha');
   const [isMobile, setIsMobile] = useState(false);
+  const [error, setError] = useState(null);
 
   // Detectar si es móvil
   useEffect(() => {
@@ -22,56 +24,147 @@ const ListaReseñas = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // CORREGIDO: Cambiado de '/api/reseñas' a '/api/resenas'
+  // Cargar reseñas y juegos desde la API
   useEffect(() => {
-    const cargarReseñas = async () => {
+    const cargarDatos = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/resenas');
-        const data = await res.json();
-        setReseñas(data);
+        setLoading(true);
+        setError(null);
+        
+        // Cargar reseñas y juegos simultáneamente
+        const [reseñasRes, juegosRes] = await Promise.all([
+          fetch('http://localhost:3000/api/resenas'),
+          fetch('http://localhost:3000/api/juegos')
+        ]);
+
+        if (!reseñasRes.ok) throw new Error('Error al cargar reseñas');
+        if (!juegosRes.ok) throw new Error('Error al cargar juegos');
+
+        const reseñasData = await reseñasRes.json();
+        const juegosData = await juegosRes.json();
+
+        // Crear mapa de juegos para buscar nombres
+        const juegosMap = {};
+        juegosData.forEach(juego => {
+          juegosMap[juego._id] = juego.nombre;
+        });
+
+        // Transformar datos de reseñas
+        const reseñasTransformadas = reseñasData.map(reseña => ({
+          id: reseña._id,
+          juego: reseña.juego, // Nombre del juego (string)
+          juegoId: reseña.juegoId, // ID del juego para referencia
+          autor: reseña.autor || 'Anónimo',
+          rating: reseña.rating || 0,
+          fecha: reseña.fecha || new Date().toISOString().split('T')[0],
+          titulo: reseña.titulo || 'Sin título',
+          contenido: reseña.contenido || '',
+          horasJugadas: reseña.horasJugadas || 0,
+          completado: reseña.completado || false,
+          plataforma: reseña.plataforma || 'No especificada',
+          dios: reseña.dios || 'Apolo',
+          likes: reseña.likes || 0,
+          tags: reseña.tags || [],
+          liked: false // Estado local para like
+        }));
+
+        setReseñas(reseñasTransformadas);
+        setJuegos(juegosMap);
+
       } catch (err) {
-        console.error('Error al cargar reseñas:', err);
+        console.error('Error al cargar datos:', err);
+        setError(err.message);
+        setReseñas([]); // Resetear a array vacío en caso de error
       } finally {
         setLoading(false);
       }
     };
 
-    cargarReseñas();
+    cargarDatos();
   }, []);
 
-  const handleLike = (reseñaId) => {
-    setReseñas(prev => prev.map(reseña => 
-      reseña.id === reseñaId 
-        ? { ...reseña, likes: reseña.likes + 1, liked: true }
-        : reseña
-    ));
-    
-    // Efecto visual
-    const likeBtn = document.querySelector(`#like-${reseñaId}`);
-    likeBtn?.classList.add('liked');
-    setTimeout(() => likeBtn?.classList.remove('liked'), 600);
+  // Función para dar like a una reseña
+  const handleLike = async (reseñaId) => {
+    try {
+      const reseña = reseñas.find(r => r.id === reseñaId);
+      if (!reseña) return;
+
+      // Actualizar localmente primero para mejor UX
+      setReseñas(prev => prev.map(reseña => 
+        reseña.id === reseñaId 
+          ? { ...reseña, likes: reseña.likes + 1, liked: true }
+          : reseña
+      ));
+
+      // Efecto visual
+      const likeBtn = document.querySelector(`#like-${reseñaId}`);
+      likeBtn?.classList.add('liked');
+      setTimeout(() => likeBtn?.classList.remove('liked'), 600);
+
+      // Actualizar en el backend
+      await fetch(`http://localhost:3000/api/resenas/${reseñaId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ likes: reseña.likes + 1 })
+      });
+
+    } catch (err) {
+      console.error('Error al dar like:', err);
+      // Revertir cambios en caso de error
+      setReseñas(prev => prev.map(reseña => 
+        reseña.id === reseñaId 
+          ? { ...reseña, likes: reseña.likes - 1, liked: false }
+          : reseña
+      ));
+    }
   };
 
+  // Función para editar reseña
   const handleEditReseña = (reseña) => {
     console.log('Editando reseña:', reseña);
-    alert(`✍️ Editando las crónicas de: ${reseña.juego}`);
+    // En una implementación completa, aquí abrirías un modal o redirigirías
+    alert(`✍️ Redirigiendo para editar: "${reseña.titulo}"`);
   };
 
-  const handleDeleteReseña = (reseñaId) => {
+  // Función para eliminar reseña
+  const handleDeleteReseña = async (reseñaId) => {
     const reseña = reseñas.find(r => r.id === reseñaId);
-    if (confirm(`¿Estás seguro de que deseas borrar la reseña de "${reseña?.juego}"?`)) {
-      setReseñas(reseñas.filter(r => r.id !== reseñaId));
+    if (!reseña) return;
+
+    if (confirm(`¿Estás seguro de que deseas borrar la reseña "${reseña.titulo}"?`)) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/resenas/${reseñaId}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          // Eliminar localmente
+          setReseñas(prev => prev.filter(r => r.id !== reseñaId));
+        } else {
+          throw new Error('Error al eliminar la reseña');
+        }
+      } catch (err) {
+        console.error('Error al eliminar reseña:', err);
+        alert('❌ Error al eliminar la reseña. Por favor, intenta nuevamente.');
+      }
     }
+  };
+
+  // Función para recargar datos
+  const handleRetryLoad = () => {
+    window.location.reload(); // Recarga simple para reintentar
   };
 
   // Estadísticas épicas
   const totalReseñas = reseñas.length;
-  const promedioRating = reseñas.length > 0 
-    ? (reseñas.reduce((total, reseña) => total + reseña.rating, 0) / reseñas.length).toFixed(1)
+  const reseñasConRating = reseñas.filter(r => r.rating > 0);
+  const promedioRating = reseñasConRating.length > 0 
+    ? (reseñasConRating.reduce((total, reseña) => total + reseña.rating, 0) / reseñasConRating.length).toFixed(1)
     : '0.0';
   const totalLikes = reseñas.reduce((total, reseña) => total + reseña.likes, 0);
   const reseñasApolo = reseñas.filter(r => r.dios === 'Apolo').length;
   const reseñasHecate = reseñas.filter(r => r.dios === 'Hécate').length;
+  const reseñasAmbos = reseñas.filter(r => r.dios === 'Ambos').length;
 
   // Filtrado y ordenamiento
   const reseñasFiltradas = reseñas
@@ -109,12 +202,14 @@ const ListaReseñas = () => {
 
   // Función para truncar texto en móvil
   const truncateText = (text, maxLength) => {
+    if (!text) return '';
     if (isMobile && text.length > maxLength) {
       return text.substring(0, maxLength) + '...';
     }
     return text;
   };
 
+  // Renderizado de carga
   if (loading) {
     return (
       <div className="santuario-cargando">
@@ -132,6 +227,29 @@ const ListaReseñas = () => {
     );
   }
 
+  // Renderizado de error
+  if (error && reseñas.length === 0) {
+    return (
+      <div className="santuario-error">
+        <div className="error-oraculo">
+          <div className="error-emblema">⚡</div>
+          <h2 className="epic-text">¡Por los Dioses! Ocurrió un Error</h2>
+          <p className="error-mensaje">{error}</p>
+          <p className="error-descripcion">
+            No se pudieron cargar las reseñas desde el servidor.
+          </p>
+          <button 
+            className="btn btn-epic btn-reintentar"
+            onClick={handleRetryLoad}
+          >
+            <span className="btn-icon">🔄</span>
+            <span className="btn-text">Reintentar Conexión</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="reseñas-container">
       {/* Header épico de crónicas */}
@@ -144,6 +262,14 @@ const ListaReseñas = () => {
         </div>
         <p className="temple-greeting">{getTempleQuote()}</p>
         <p className="wisdom-quote">"{getRandomWisdom()}"</p>
+        
+        {/* Indicador de error */}
+        {error && (
+          <div className="connection-warning">
+            <span className="warning-icon">⚠️</span>
+            Error de conexión - Los datos pueden no estar actualizados
+          </div>
+        )}
       </header>
 
       {/* Estadísticas de crónicas */}
@@ -200,16 +326,18 @@ const ListaReseñas = () => {
               {isMobile ? '🔮 Filtro' : '🔮 Filtro del Oráculo'}
             </h4>
             <div className="filter-options">
-              {['todas', 'apolo', 'hecate', 'ambos'].map(option => (
+              {[
+                { key: 'todas', label: '🌟 Todas', mobileLabel: '🌟 Todas' },
+                { key: 'apolo', label: '☀️ Apolo', mobileLabel: '☀️ Apolo' },
+                { key: 'hecate', label: '🌙 Hécate', mobileLabel: '🌙 Hécate' },
+                { key: 'ambos', label: '⚡ Ambos', mobileLabel: '⚡ Ambos' }
+              ].map(option => (
                 <button
-                  key={option}
-                  className={`filter-btn ${filter === option ? 'activo' : ''}`}
-                  onClick={() => setFilter(option)}
+                  key={option.key}
+                  className={`filter-btn ${filter === option.key ? 'activo' : ''}`}
+                  onClick={() => setFilter(option.key)}
                 >
-                  {option === 'todas' && (isMobile ? '🌟 Todas' : '🌟 Todas')}
-                  {option === 'apolo' && (isMobile ? '☀️ Apolo' : '☀️ Apolo')}
-                  {option === 'hecate' && (isMobile ? '🌙 Hécate' : '🌙 Hécate')}
-                  {option === 'ambos' && (isMobile ? '⚡ Ambos' : '⚡ Ambos')}
+                  {isMobile ? option.mobileLabel : option.label}
                 </button>
               ))}
             </div>
@@ -258,14 +386,31 @@ const ListaReseñas = () => {
         {reseñasFiltradas.length === 0 ? (
           <div className="empty-chronicles">
             <div className="empty-icon float-effect">📖</div>
-            <h3>El Salón está Vacío</h3>
-            <p>No se encontraron crónicas con los filtros seleccionados</p>
-            <button 
-              className="btn btn-epic"
-              onClick={() => setFilter('todas')}
-            >
-              🌟 {isMobile ? 'Mostrar Todas' : 'Mostrar Todas las Crónicas'}
-            </button>
+            <h3>
+              {reseñas.length === 0 ? 'El Salón está Vacío' : 'No hay crónicas con este filtro'}
+            </h3>
+            <p>
+              {reseñas.length === 0 
+                ? 'Aún no hay reseñas en el sistema. ¡Sé el primero en compartir tu experiencia!'
+                : 'No se encontraron crónicas con los filtros seleccionados'
+              }
+            </p>
+            <div className="empty-actions">
+              <button 
+                className="btn btn-epic"
+                onClick={() => setFilter('todas')}
+              >
+                🌟 {isMobile ? 'Mostrar Todas' : 'Mostrar Todas las Crónicas'}
+              </button>
+              {reseñas.length === 0 && (
+                <button 
+                  className="btn btn-magic"
+                  onClick={() => window.location.hash = 'agregar-reseña'}
+                >
+                  📖 {isMobile ? 'Escribir' : 'Escribir Primera Crónica'}
+                </button>
+              )}
+            </div>
           </div>
         ) : (
           <div className="reseñas-list">
@@ -306,25 +451,27 @@ const ListaReseñas = () => {
                 {/* Contenido de la reseña */}
                 <div className="reseña-content">
                   <h4 className="reseña-titulo">
-                    {truncateText(reseña.titulo, isMobile ? 40 : 60)}
+                    {truncateText(reseña.titulo || 'Sin título', isMobile ? 40 : 60)}
                   </h4>
                   <p className="reseña-texto">
-                    {truncateText(reseña.contenido, isMobile ? 120 : 200)}
+                    {truncateText(reseña.contenido || 'Esta reseña no tiene contenido.', isMobile ? 120 : 200)}
                   </p>
                   
                   {/* Tags de la reseña */}
-                  <div className="reseña-tags">
-                    {reseña.tags.slice(0, isMobile ? 2 : 3).map(tag => (
-                      <span key={tag} className="reseña-tag">
-                        #{isMobile ? tag.split(' ')[0] : tag}
-                      </span>
-                    ))}
-                    {reseña.tags.length > (isMobile ? 2 : 3) && (
-                      <span className="reseña-tag">
-                        +{reseña.tags.length - (isMobile ? 2 : 3)}
-                      </span>
-                    )}
-                  </div>
+                  {reseña.tags && reseña.tags.length > 0 && (
+                    <div className="reseña-tags">
+                      {reseña.tags.slice(0, isMobile ? 2 : 3).map((tag, index) => (
+                        <span key={index} className="reseña-tag">
+                          #{isMobile ? tag.split(' ')[0] : tag}
+                        </span>
+                      ))}
+                      {reseña.tags.length > (isMobile ? 2 : 3) && (
+                        <span className="reseña-tag">
+                          +{reseña.tags.length - (isMobile ? 2 : 3)}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Estadísticas de la reseña */}
@@ -385,10 +532,6 @@ const ListaReseñas = () => {
                       <span className="action-icon">🗑️</span>
                       {isMobile ? '' : 'Eliminar'}
                     </button>
-                    <button className="btn-action btn-share">
-                      <span className="action-icon">📤</span>
-                      {isMobile ? '' : 'Compartir'}
-                    </button>
                   </div>
                 </div>
               </div>
@@ -425,7 +568,8 @@ const getPlatformShortName = (platform) => {
     'PlayStation': 'PS',
     'Xbox': 'XB', 
     'Nintendo Switch': 'NS',
-    'Multiplataforma': 'Multi'
+    'Multiplataforma': 'Multi',
+    'No especificada': '?'
   };
   return shortNames[platform] || platform;
 };

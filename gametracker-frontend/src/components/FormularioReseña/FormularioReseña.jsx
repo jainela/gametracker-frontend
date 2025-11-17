@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import './FormularioReseña.css';
 
@@ -17,48 +17,42 @@ const FormularioReseña = () => {
     plataforma: ''
   });
 
+  const [juegosReales, setJuegosReales] = useState([]);
+  const [cargandoJuegos, setCargandoJuegos] = useState(true);
   const [currentTag, setCurrentTag] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Datos optimizados con useMemo
-  const juegos = useMemo(() => [
-    {
-      id: 1,
-      titulo: 'The Legend of Zelda: Breath of the Wild',
-      genero: 'Aventura Épica',
-      plataforma: 'Nintendo Switch'
-    },
-    {
-      id: 2,
-      titulo: 'Hollow Knight',
-      genero: 'Metroidvania Oscuro',
-      plataforma: 'PC'
-    },
-    {
-      id: 3,
-      titulo: 'God of War',
-      genero: 'Mitología Nórdica',
-      plataforma: 'PlayStation'
-    },
-    {
-      id: 4,
-      titulo: 'Bloodborne',
-      genero: 'Horror Gótico',
-      plataforma: 'PlayStation'
-    },
-    {
-      id: 5,
-      titulo: 'Hades',
-      genero: 'Roguelike Mitológico',
-      plataforma: 'Multiplataforma'
-    },
-    {
-      id: 6,
-      titulo: 'Journey',
-      genero: 'Aventura Espiritual',
-      plataforma: 'PlayStation'
-    }
-  ], []);
+  // Cargar juegos reales de la API
+  useEffect(() => {
+    const cargarJuegosReales = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/juegos');
+        if (response.ok) {
+          const juegosData = await response.json();
+          setJuegosReales(juegosData);
+        } else {
+          throw new Error('Error al cargar juegos');
+        }
+      } catch (error) {
+        console.error('Error cargando juegos:', error);
+        alert('❌ Error al cargar la lista de juegos');
+      } finally {
+        setCargandoJuegos(false);
+      }
+    };
+
+    cargarJuegosReales();
+  }, []);
+
+  // Datos optimizados con useMemo - ahora usando juegos reales
+  const juegos = useMemo(() => {
+    return juegosReales.map(juego => ({
+      id: juego._id,
+      titulo: juego.nombre,
+      genero: juego.genero || 'Sin género',
+      plataforma: juego.plataforma
+    }));
+  }, [juegosReales]);
 
   const dioses = useMemo(() => [
     {
@@ -86,11 +80,11 @@ const FormularioReseña = () => {
 
   const plataformas = ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch', 'Multiplataforma'];
 
-  // Función auxiliar para obtener ID del juego
+  // Función auxiliar para obtener ID del juego - ahora con juegos reales
   const obtenerIdDelJuego = useCallback((tituloJuego) => {
-    const juego = juegos.find(j => j.titulo === tituloJuego);
-    return juego ? juego.id : null;
-  }, [juegos]);
+    const juego = juegosReales.find(j => j.nombre === tituloJuego);
+    return juego ? juego._id : null;
+  }, [juegosReales]);
 
   // Handlers optimizados con useCallback
   const handleInputChange = useCallback((field, value) => {
@@ -122,7 +116,7 @@ const FormularioReseña = () => {
     }
   }, [handleTagAdd]);
 
-  // CORREGIDO: Cambiado de '/api/reseñas' a '/api/resenas'
+  // Función de envío actualizada
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
 
@@ -134,10 +128,16 @@ const FormularioReseña = () => {
     setIsSubmitting(true);
 
     try {
+      const juegoId = obtenerIdDelJuego(formData.juegoSeleccionado);
+      
+      if (!juegoId) {
+        throw new Error('Juego no encontrado');
+      }
+
       const reseñaReal = {
         juego: formData.juegoSeleccionado,
-        juegoId: obtenerIdDelJuego(formData.juegoSeleccionado),
-        autor: formData.autor,
+        juegoId: juegoId,
+        autor: formData.autor || 'Anónimo',
         rating: formData.rating,
         fecha: new Date().toISOString().split('T')[0],
         titulo: formData.titulo,
@@ -150,7 +150,6 @@ const FormularioReseña = () => {
         tags: formData.tags
       };
 
-      // CORREGIDO: Ruta cambiada de '/api/reseñas' a '/api/resenas'
       const res = await fetch('http://localhost:3000/api/resenas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -159,7 +158,7 @@ const FormularioReseña = () => {
 
       if (res.ok) {
         alert(`✨ ¡Tu crónica ha sido inmortalizada bajo la bendición de ${formData.diosSeleccionado}!`);
-        // Resetear formulario al estado inicial conocido
+        // Resetear formulario
         setFormData({
           diosSeleccionado: '',
           juegoSeleccionado: '',
@@ -179,7 +178,7 @@ const FormularioReseña = () => {
       }
     } catch (err) {
       console.error('Error al enviar reseña:', err);
-      alert('❌ No se pudo conectar con el servidor');
+      alert('❌ Error: ' + err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -305,14 +304,20 @@ const FormularioReseña = () => {
                   value={formData.juegoSeleccionado}
                   onChange={(e) => handleInputChange('juegoSeleccionado', e.target.value)}
                   required
+                  disabled={cargandoJuegos}
                 >
-                  <option value="">Selecciona una epopeya...</option>
+                  <option value="">
+                    {cargandoJuegos ? 'Cargando leyendas...' : 'Selecciona una epopeya...'}
+                  </option>
                   {juegos.map(juego => (
                     <option key={juego.id} value={juego.titulo}>
                       {juego.titulo} - {juego.genero}
                     </option>
                   ))}
                 </select>
+                {cargandoJuegos && (
+                  <div className="cargando-leyendas">🔄 Cargando tus leyendas...</div>
+                )}
               </div>
 
               <div className="campo-sagrado">
@@ -534,7 +539,7 @@ const FormularioReseña = () => {
             <button 
               type="submit"
               className="btn btn-inmortalizar"
-              disabled={isSubmitting || !isFormValid}
+              disabled={isSubmitting || !isFormValid || cargandoJuegos}
             >
               {isSubmitting ? (
                 <>

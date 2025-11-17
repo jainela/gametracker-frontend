@@ -121,6 +121,12 @@ const Navbar = React.memo(({ currentView, onNavigate }) => {
       description: 'Crónicas Divinas' 
     },
     { 
+      key: 'agregar-reseña', 
+      label: 'Nueva Reseña', 
+      icon: '📖', 
+      description: 'Escribir Crónica' 
+    },
+    { 
       key: 'estadisticas', 
       label: 'Estadísticas', 
       icon: '📊', 
@@ -135,6 +141,9 @@ const Navbar = React.memo(({ currentView, onNavigate }) => {
   const handleNavigation = useCallback((view) => {
     onNavigate(view);
     setIsMobileMenuOpen(false);
+    
+    // Scroll al top cuando se cambia de vista
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [onNavigate]);
 
   const getThemeQuote = useCallback(() => {
@@ -155,13 +164,25 @@ const Navbar = React.memo(({ currentView, onNavigate }) => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [isMobileMenuOpen]);
 
+  // Cerrar menú móvil al redimensionar la ventana
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobileMenuOpen]);
+
   return (
     <>
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''} ${isMobileMenuOpen ? 'menu-open' : ''}`}>
         <div className="nav-container">
           {/* Logo y Brand Responsive */}
           <div className="nav-brand">
-            <h1 className="epic-text gold-text">GAME TRACKER</h1>
+            <h1 className="epic-text gold-text">OLYMPUS GAMES</h1>
             <span className="nav-subtitle">{getThemeQuote()}</span>
           </div>
 
@@ -176,7 +197,10 @@ const Navbar = React.memo(({ currentView, onNavigate }) => {
                 aria-current={currentView === item.key ? 'page' : undefined}
               >
                 <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label epic-text">{item.label}</span>
+                <span className="nav-label">{item.label}</span>
+                {currentView === item.key && (
+                  <div className="nav-indicator"></div>
+                )}
               </button>
             ))}
           </div>
@@ -187,12 +211,13 @@ const Navbar = React.memo(({ currentView, onNavigate }) => {
               className="theme-toggle"
               onClick={toggleTheme}
               aria-label={`Cambiar a templo de ${isDarkMode ? 'Apolo' : 'Hécate'}`}
+              title={`Cambiar a tema ${isDarkMode ? 'claro' : 'oscuro'}`}
             >
               <span className="theme-icon">
                 {isDarkMode ? '☀️' : '🌙'}
               </span>
               <span className="theme-text desktop-only">
-                {themeName}
+                {isDarkMode ? 'APOLO' : 'HÉCATE'}
               </span>
             </button>
 
@@ -203,9 +228,9 @@ const Navbar = React.memo(({ currentView, onNavigate }) => {
               aria-label="Menú principal"
               aria-expanded={isMobileMenuOpen}
             >
-              <span></span>
-              <span></span>
-              <span></span>
+              <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
+              <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
+              <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
             </button>
           </div>
         </div>
@@ -213,6 +238,16 @@ const Navbar = React.memo(({ currentView, onNavigate }) => {
         {/* Menú Mobile Desplegable */}
         <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
           <div className="mobile-menu-content">
+            <div className="mobile-menu-header">
+              <h3>Navegación</h3>
+              <button 
+                className="mobile-menu-close"
+                onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="Cerrar menú"
+              >
+                ✕
+              </button>
+            </div>
             {navItems.map(item => (
               <button
                 key={item.key}
@@ -221,8 +256,13 @@ const Navbar = React.memo(({ currentView, onNavigate }) => {
                 aria-current={currentView === item.key ? 'page' : undefined}
               >
                 <span className="mobile-nav-icon">{item.icon}</span>
-                <span className="mobile-nav-label">{item.label}</span>
-                <span className="mobile-nav-desc">{item.description}</span>
+                <div className="mobile-nav-text">
+                  <span className="mobile-nav-label">{item.label}</span>
+                  <span className="mobile-nav-desc">{item.description}</span>
+                </div>
+                {currentView === item.key && (
+                  <span className="mobile-nav-indicator">✓</span>
+                )}
               </button>
             ))}
           </div>
@@ -264,13 +304,59 @@ const AppContent = () => {
     return views[currentView] || <BibliotecaJuegos />;
   }, [currentView]);
 
+  // Efecto para manejar la navegación con teclado
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Escape cierra el menú móvil si está abierto
+      if (event.key === 'Escape') {
+        const mobileMenu = document.querySelector('.mobile-menu.open');
+        if (mobileMenu) {
+          document.querySelector('.mobile-menu-toggle')?.click();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div className={`App ${isDarkMode ? 'theme-hecate' : 'theme-apolo'}`}>
       <FloatingParticles />
       <Navbar currentView={currentView} onNavigate={setCurrentView} />
       <main className="main-content">
-        {renderView()}
+        <div className="view-container">
+          {renderView()}
+        </div>
       </main>
+      
+      {/* Footer global */}
+      <footer className="global-footer">
+        <div className="footer-content">
+          <div className="footer-section">
+            <h4>OLYMPUS GAMES</h4>
+            <p>Tu santuario personal para gestionar aventuras épicas</p>
+          </div>
+          <div className="footer-section">
+            <h5>Navegación Rápida</h5>
+            <div className="footer-links">
+              <button onClick={() => setCurrentView('biblioteca')}>📜 Biblioteca</button>
+              <button onClick={() => setCurrentView('agregar-juego')}>⚔️ Agregar Juego</button>
+              <button onClick={() => setCurrentView('agregar-reseña')}>📖 Nueva Reseña</button>
+            </div>
+          </div>
+          <div className="footer-section">
+            <h5>Estadísticas</h5>
+            <div className="footer-links">
+              <button onClick={() => setCurrentView('estadisticas')}>📊 Ver Estadísticas</button>
+              <button onClick={() => setCurrentView('reseñas')}>⭐ Ver Reseñas</button>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© 2025 Olympus Games - Forjado con ⚡ por héroes modernos</p>
+        </div>
+      </footer>
     </div>
   );
 };
