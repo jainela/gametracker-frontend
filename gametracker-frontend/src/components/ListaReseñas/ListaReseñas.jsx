@@ -26,7 +26,7 @@ const ListaReseñas = () => {
   useEffect(() => {
     const cargarReseñas = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/resenas');
+        const res = await fetch('https://gametracker-backend-1-7tfx.onrender.com/api/resenas');
         const data = await res.json();
         setReseñas(data);
       } catch (err) {

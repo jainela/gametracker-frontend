@@ -19,7 +19,7 @@ const BibliotecaJuegos = () => {
     try {
       setLoading(true);
       setError(null);
-      const respuesta = await fetch('http://localhost:3000/api/juegos');
+      const respuesta = await fetch('https://gametracker-backend-1-7tfx.onrender.com/api/juegos');
       
       if (!respuesta.ok) {
         throw new Error(`Error ${respuesta.status}: No se pudieron cargar los juegos`);

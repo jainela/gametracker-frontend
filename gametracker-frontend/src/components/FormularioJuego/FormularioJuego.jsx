@@ -126,7 +126,7 @@ const FormularioJuego = () => {
       };
 
       // Enviar a la API
-      const response = await fetch('http://localhost:3000/api/juegos', {
+      const response = await fetch('https://gametracker-backend-1-7tfx.onrender.com/api/juegos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

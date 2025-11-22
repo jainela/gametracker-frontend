@@ -17,8 +17,8 @@ const EstadisticasPersonales = () => {
         setLoading(true);
         
         const [juegosRes, reseñasRes] = await Promise.all([
-          fetch('http://localhost:3000/api/juegos'),
-          fetch('http://localhost:3000/api/resenas')
+          fetch('https://gametracker-backend-1-7tfx.onrender.com/api/juegos'),
+          fetch('https://gametracker-backend-1-7tfx.onrender.com/api/resenas')
         ]);
 
         const juegosData = juegosRes.ok ? await juegosRes.json() : [];

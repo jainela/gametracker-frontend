@@ -26,7 +26,7 @@ const FormularioReseña = () => {
   useEffect(() => {
     const cargarJuegosReales = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/juegos');
+        const response = await fetch('https://gametracker-backend-1-7tfx.onrender.com/api/juegos');
         if (response.ok) {
           const juegosData = await response.json();
           setJuegosReales(juegosData);
