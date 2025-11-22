@@ -1,0 +1,1421 @@
+/* Importación de bibliotecas de animación (CDN) */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+@import url('https://unpkg.com/aos@2.3.1/dist/aos.css');
+
+.reseñas-container {
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Fondo de crónicas divinas con animaciones */
+.theme-apolo .reseñas-container {
+  background: 
+    var(--marble),
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(252, 243, 208, 0.05) 0%, transparent 50%);
+  animation: apoloGlow 8s ease-in-out infinite;
+}
+
+.theme-hecate .reseñas-container {
+  background: 
+    var(--midnight),
+    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(76, 81, 191, 0.05) 0%, transparent 50%);
+  animation: hecatePulse 10s ease-in-out infinite;
+}
+
+@keyframes apoloGlow {
+  0%, 100% { 
+    background-position: 0% 0%, 20% 80%, 80% 20%; 
+  }
+  50% { 
+    background-position: 0% 0%, 25% 85%, 85% 25%; 
+  }
+}
+
+@keyframes hecatePulse {
+  0%, 100% { 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0.95; 
+  }
+}
+
+/* Header de crónicas épico con animaciones mejoradas */
+.reseñas-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  animation: fadeInDown 1s ease-out;
+}
+
+.chronicle-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.chronicle-banner h1 {
+  font-size: 3rem;
+  margin: 0;
+  text-shadow: 
+    2px 2px 8px var(--shadow),
+    0 0 30px var(--glow);
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover), #fef3cd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.chronicle-icon {
+  font-size: 4rem;
+  filter: drop-shadow(0 6px 20px var(--shadow));
+  animation: float-gentle 3s ease-in-out infinite, iconGlow 4s ease-in-out infinite;
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(2deg); }
+  75% { transform: translateY(-5px) rotate(-2deg); }
+}
+
+@keyframes iconGlow {
+  0%, 100% { filter: drop-shadow(0 6px 20px var(--shadow)); }
+  50% { filter: drop-shadow(0 6px 25px var(--glow)); }
+}
+
+.temple-greeting {
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  font-style: italic;
+  margin-bottom: 0.8rem;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 2px 4px var(--shadow);
+  animation: fadeIn 1.5s ease-out 0.3s both;
+}
+
+.wisdom-quote {
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 500;
+  max-width: 700px;
+  margin: 0 auto;
+  border-left: 4px solid var(--accent);
+  padding-left: 1.5rem;
+  font-style: italic;
+  text-shadow: 0 2px 4px var(--shadow);
+  animation: slideInRight 1s ease-out 0.5s both;
+}
+
+/* Estadísticas de crónicas con animaciones escalonadas */
+.chronicle-stats {
+  margin-bottom: 3rem;
+}
+
+.oracle-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.oracle-card {
+  background: var(--card-bg);
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  border: 3px solid var(--border);
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px var(--shadow);
+  animation: zoomIn 0.6s ease-out both;
+  animation-delay: calc(var(--card-index, 0) * 0.1s);
+  position: relative;
+  overflow: hidden;
+}
+
+.oracle-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.oracle-card:hover::before {
+  left: 100%;
+}
+
+.oracle-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 35px var(--shadow);
+}
+
+.oracle-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+  animation: pulse 2s infinite;
+}
+
+.oracle-card h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  font-family: 'Cinzel', serif;
+}
+
+.oracle-number {
+  color: var(--accent);
+  font-size: 2rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: countUp 1.5s ease-out;
+}
+
+@keyframes countUp {
+  from { 
+    transform: scale(0.5); 
+    opacity: 0; 
+  }
+  to { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}
+
+.oracle-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Controles de crónicas con animaciones mejoradas */
+.chronicle-controls {
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeInUp 0.8s ease-out 0.7s both;
+}
+
+.controls-container {
+  background: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 3px solid var(--border);
+  box-shadow: 0 12px 40px var(--shadow);
+  backdrop-filter: blur(10px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: start;
+  position: relative;
+  overflow: hidden;
+}
+
+.controls-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shimmer 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.control-title {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 2px 4px var(--shadow);
+}
+
+.filter-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.8rem 1.5rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Cinzel', serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-btn:hover::before {
+  left: 100%;
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow);
+  border-color: var(--accent);
+}
+
+.filter-btn.activo {
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-color: var(--accent);
+  box-shadow: 
+    0 4px 15px var(--shadow),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  animation: buttonPulse 2s infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% { box-shadow: 0 4px 15px var(--shadow), inset 0 2px 4px rgba(255, 255, 255, 0.3); }
+  50% { box-shadow: 0 4px 20px var(--glow), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
+}
+
+.sort-select {
+  padding: 0.8rem 1.2rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 200px;
+  animation: fadeInRight 0.8s ease-out 0.9s both;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+
+/* Grid de crónicas */
+.chronicles-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 1s ease-out 1s both;
+}
+
+.chronicles-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2.5rem;
+  background: var(--card-bg);
+  border-radius: 24px;
+  border: 4px solid var(--border);
+  box-shadow: 
+    0 12px 40px var(--shadow),
+    inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  animation: bounceIn 1s ease-out;
+}
+
+.chronicles-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 
+    2px 2px 8px var(--shadow),
+    0 0 20px var(--glow);
+}
+
+.chronicles-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Lista de reseñas con animaciones escalonadas */
+.reseñas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Tarjeta de reseña épica con animaciones mejoradas */
+.reseña-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  border: 3px solid var(--border);
+  box-shadow: 0 12px 40px var(--shadow);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  animation: slideInUp 0.6s ease-out both;
+  animation-delay: calc(var(--card-index, 0) * 0.1s + 1.2s);
+}
+
+.reseña-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover), var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.reseña-card:hover::before {
+  transform: scaleX(1);
+}
+
+.reseña-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 
+    0 20px 60px var(--shadow),
+    0 0 25px var(--glow);
+}
+
+/* Header de la reseña */
+.reseña-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2.5rem 2.5rem 1.5rem;
+  border-bottom: 2px solid var(--border);
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.reseña-meta {
+  flex: 1;
+}
+
+.juego-titulo {
+  color: var(--text-primary);
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 2px 4px var(--shadow);
+  position: relative;
+  display: inline-block;
+}
+
+.juego-titulo::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.reseña-card:hover .juego-titulo::after {
+  width: 100%;
+}
+
+.reseña-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-avatar {
+  font-size: 1.2rem;
+  animation: bounceIn 1s ease-out;
+}
+
+.author-name {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.review-date {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-left: auto;
+}
+
+.reseña-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: flex-end;
+}
+
+.god-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.6rem;
+  font-weight: 690;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid;
+  animation: flipInX 0.8s ease-out both;
+  animation-delay: 0.4s;
+}
+
+.god-badge.apolo {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: var(--apolo-accent);
+  color: var(--apolo-accent);
+}
+
+.god-badge.hecate {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--hecate-accent);
+  color: var(--hecate-accent);
+}
+
+.god-badge.ambos {
+  background: linear-gradient(135deg, 
+    rgba(212, 175, 55, 0.2), 
+    rgba(139, 92, 246, 0.2));
+  border-color: var(--apolo-accent);
+  color: var(--text-primary);
+}
+
+.rating-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  font-weight: 700;
+  animation: zoomIn 0.6s ease-out 0.6s both;
+}
+
+.rating-number {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+/* Contenido de la reseña */
+.reseña-content {
+  padding: 2rem 2.5rem;
+  border-bottom: 2px solid var(--border);
+  animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+.reseña-titulo {
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  font-family: 'Cinzel', serif;
+  line-height: 1.3;
+}
+
+.reseña-texto {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.reseña-texto::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(transparent, var(--card-bg));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.reseña-card:hover .reseña-texto::after {
+  opacity: 1;
+}
+
+.reseña-tags {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.reseña-tag {
+  padding: 0.4rem 0.8rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  animation: zoomIn 0.5s ease-out both;
+  animation-delay: calc(var(--tag-index, 0) * 0.1s + 0.6s);
+}
+
+.reseña-tag:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Estadísticas de la reseña */
+.reseña-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1.5rem 2.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.reseña-stats .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease-out both;
+  animation-delay: calc(var(--stat-index, 0) * 0.1s + 0.8s);
+}
+
+.reseña-stats .stat-item:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 6px 20px var(--shadow);
+  border-color: var(--accent);
+}
+
+.reseña-stats .stat-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  animation: pulse 2s infinite;
+  animation-delay: calc(var(--stat-index, 0) * 0.2s + 1s);
+}
+
+.reseña-stats .stat-value {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  font-family: 'Cinzel', serif;
+}
+
+.reseña-stats .stat-label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Acciones de la reseña */
+.reseña-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2.5rem;
+  animation: fadeIn 0.8s ease-out 1s both;
+}
+
+.btn-like {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1.5rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-like::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-like:hover::before {
+  left: 100%;
+}
+
+.btn-like:hover {
+  transform: scale(1.05);
+  border-color: #ef4444;
+}
+
+.btn-like.liked {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+  animation: heart-pulse 0.6s ease-in-out;
+}
+
+@keyframes heart-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.like-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-like:hover .like-icon {
+  transform: scale(1.2);
+}
+
+.like-count {
+  font-size: 1rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-action::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-action:hover::before {
+  left: 100%;
+}
+
+.btn-edit {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.btn-edit:hover {
+  background: #3b82f6;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.btn-delete:hover {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-share {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-share:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+  transform: translateY(-2px);
+}
+
+.action-icon {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-action:hover .action-icon {
+  transform: scale(1.2);
+}
+
+/* Crónicas vacías con animaciones */
+.empty-chronicles {
+  text-align: center;
+  padding: 5rem 3rem;
+  background: var(--card-bg);
+  border-radius: 24px;
+  border: 4px dashed var(--border);
+  max-width: 600px;
+  margin: 0 auto;
+  backdrop-filter: blur(10px);
+  animation: pulse 2s infinite, fadeIn 1s ease-out;
+}
+
+.empty-chronicles .empty-icon {
+  font-size: 5rem;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 6px 20px var(--shadow));
+  display: block;
+  animation: bounce 2s infinite, rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.empty-chronicles h3 {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-family: 'Cinzel', serif;
+  animation: fadeInDown 1s ease-out 0.5s both;
+}
+
+.empty-chronicles p {
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  animation: fadeInUp 1s ease-out 0.7s both;
+}
+
+/* Altar de la sabiduría con animaciones */
+.wisdom-altar {
+  margin-top: 5rem;
+  padding-top: 3rem;
+  border-top: 3px solid var(--border);
+  animation: fadeIn 1s ease-out 1.5s both;
+}
+
+.altar-content {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem;
+  background: var(--card-bg);
+  border-radius: 20px;
+  border: 3px solid var(--border);
+  box-shadow: 
+    0 12px 40px var(--shadow),
+    inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  position: relative;
+  animation: zoomIn 1s ease-out 1.7s both;
+}
+
+.altar-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover), var(--accent));
+  border-radius: 20px 20px 0 0;
+  animation: altarGlow 3s ease-in-out infinite;
+}
+
+@keyframes altarGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.wisdom-text {
+  color: var(--accent);
+  font-size: 1.4rem;
+  font-style: italic;
+  margin-bottom: 2rem;
+  font-family: 'Cinzel', serif;
+  line-height: 1.5;
+  text-shadow: 0 2px 8px var(--shadow);
+  animation: fadeIn 1s ease-out 1.9s both;
+}
+
+.altar-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.altar-stat {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.8s ease-out both;
+  animation-delay: calc(var(--stat-index, 0) * 0.1s + 2s);
+}
+
+.altar-stat:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px var(--shadow);
+  border-color: var(--accent);
+}
+
+/* Efectos de partículas para fondos (simulados con CSS) */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float-particle 15s infinite linear;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(100vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Scroll personalizado */
+.reseñas-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reseñas-container::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+}
+
+.reseñas-container::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+.reseñas-container::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
+}
+
+/* =============================== */
+/* RESPONSIVE DESIGN MEJORADO */
+/* =============================== */
+
+@media (max-width: 1200px) {
+  .reseñas-container {
+    padding: 1.5rem;
+  }
+  
+  .chronicle-controls {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 968px) {
+  .reseñas-container {
+    padding: 1rem;
+  }
+
+  .chronicle-banner {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .chronicle-banner h1 {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+
+  .chronicle-icon {
+    font-size: 3rem;
+  }
+
+  .temple-greeting {
+    font-size: 1.3rem;
+    padding: 0 1rem;
+  }
+
+  .wisdom-quote {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+    border-left: none;
+    border-top: 3px solid var(--accent);
+    padding-top: 1rem;
+    padding-left: 0;
+  }
+
+  .oracle-cards {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .oracle-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .oracle-icon {
+    font-size: 2.5rem;
+  }
+
+  .oracle-number {
+    font-size: 1.8rem;
+  }
+
+  .controls-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .control-group {
+    gap: 1rem;
+  }
+
+  .control-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .filter-options {
+    justify-content: center;
+  }
+
+  .sort-select {
+    min-width: 100%;
+  }
+
+  .chronicles-header {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .chronicles-header h2 {
+    font-size: 2rem;
+  }
+
+  .chronicles-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .reseña-header {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 2rem;
+  }
+
+  .reseña-badges {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .reseña-content {
+    padding: 1.5rem 2rem;
+  }
+
+  .reseña-titulo {
+    font-size: 1.3rem;
+  }
+
+  .reseña-texto {
+    font-size: 1rem;
+  }
+
+  .reseña-stats {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    padding: 1.5rem 2rem;
+  }
+
+  .reseña-actions {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+    padding: 1.5rem 2rem;
+  }
+
+  .action-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-action {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+
+  .altar-content {
+    padding: 2rem;
+    margin: 0 1rem;
+  }
+
+  .wisdom-text {
+    font-size: 1.2rem;
+  }
+
+  .altar-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .chronicle-banner h1 {
+    font-size: 1.8rem;
+  }
+
+  .chronicle-icon {
+    font-size: 2.5rem;
+  }
+
+  .temple-greeting {
+    font-size: 1.1rem;
+  }
+
+  .oracle-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .oracle-card {
+    padding: 1.2rem 0.8rem;
+  }
+
+  .oracle-icon {
+    font-size: 2rem;
+  }
+
+  .oracle-number {
+    font-size: 1.6rem;
+  }
+
+  .controls-container {
+    padding: 1.5rem;
+  }
+
+  .filter-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-btn {
+    text-align: center;
+  }
+
+  .reseña-header {
+    padding: 1.5rem;
+  }
+
+  .juego-titulo {
+    font-size: 1.5rem;
+  }
+
+  .reseña-author {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .review-date {
+    margin-left: 0;
+  }
+
+  .reseña-content {
+    padding: 1.5rem;
+  }
+
+  .reseña-badges {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+
+  .god-badge,
+  .rating-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-action {
+    width: 100%;
+  }
+
+  .empty-chronicles {
+    padding: 3rem 1.5rem;
+    margin: 0 1rem;
+  }
+
+  .empty-chronicles .empty-icon {
+    font-size: 3.5rem;
+  }
+
+  .empty-chronicles h3 {
+    font-size: 1.5rem;
+  }
+
+  .empty-chronicles p {
+    font-size: 1.1rem;
+  }
+
+  .altar-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .reseñas-container {
+    padding: 0.5rem;
+  }
+
+  .chronicle-banner h1 {
+    font-size: 1.6rem;
+  }
+
+  .chronicle-icon {
+    font-size: 2rem;
+  }
+
+  .temple-greeting {
+    font-size: 1rem;
+  }
+
+  .wisdom-quote {
+    font-size: 0.9rem;
+  }
+
+  .oracle-cards {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .controls-container {
+    padding: 1rem;
+  }
+
+  .control-title {
+    font-size: 1.1rem;
+  }
+
+  .chronicles-header {
+    padding: 1.5rem;
+  }
+
+  .chronicles-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .chronicles-subtitle {
+    font-size: 1rem;
+  }
+
+  .reseñas-list {
+    gap: 1.5rem;
+  }
+
+  .reseña-card {
+    border-radius: 16px;
+  }
+
+  .reseña-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .juego-titulo {
+    font-size: 1.3rem;
+  }
+
+  .reseña-content {
+    padding: 1rem;
+  }
+
+  .reseña-titulo {
+    font-size: 1.2rem;
+  }
+
+  .reseña-texto {
+    font-size: 0.9rem;
+  }
+
+  .reseña-tags {
+    gap: 0.5rem;
+  }
+
+  .reseña-tag {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .reseña-stats {
+    padding: 1rem;
+  }
+
+  .reseña-stats .stat-item {
+    padding: 0.8rem 0.5rem;
+  }
+
+  .reseña-stats .stat-icon {
+    font-size: 1.2rem;
+  }
+
+  .reseña-stats .stat-value {
+    font-size: 0.9rem;
+  }
+
+  .reseña-actions {
+    padding: 1rem;
+  }
+
+  .btn-like {
+    padding: 0.6rem 1rem;
+  }
+
+  .wisdom-altar {
+    margin-top: 3rem;
+  }
+
+  .altar-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .wisdom-text {
+    font-size: 1rem;
+  }
+
+  .altar-stat {
+    font-size: 0.9rem;
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .chronicle-banner h1 {
+    font-size: 1.4rem;
+  }
+
+  .oracle-card {
+    padding: 1rem 0.5rem;
+  }
+
+  .oracle-icon {
+    font-size: 1.8rem;
+  }
+
+  .oracle-number {
+    font-size: 1.4rem;
+  }
+
+  .juego-titulo {
+    font-size: 1.2rem;
+  }
+
+  .reseña-titulo {
+    font-size: 1.1rem;
+  }
+}
+
+/* Agregar estas reglas al final del archivo para inicializar AOS */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

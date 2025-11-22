@@ -1,0 +1,760 @@
+
+:root {
+  /* Templo de Apolo - Luz y Gloria Mejorada */
+  --apolo-bg-primary: #fef9e7;
+  --apolo-bg-secondary: #fcf3d0;
+  --apolo-bg-tertiary: #f8e8a8;
+  --apolo-text-primary: #2c1810;
+  --apolo-text-secondary: #7c5c3c;
+  --apolo-accent: #d4af37;
+  --apolo-accent-hover: #b8941f;
+  --apolo-card-bg: linear-gradient(135deg, #ffffff 0%, #fef9e7 100%);
+  --apolo-border: #e9d8a6;
+  --apolo-shadow: rgba(212, 175, 55, 0.35);
+  --apolo-gold-light: #fef3cd;
+  --apolo-gold-dark: #b8941f;
+  --apolo-marble: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  --apolo-success: #10b981;
+  --apolo-warning: #f59e0b;
+  --apolo-error: #dc2626;
+  --apolo-glow: rgba(212, 175, 55, 0.6);
+  
+  /* Santuario de Hécate - Misterio y Noche Mejorada */
+  --hecate-bg-primary: #0f0f1f;
+  --hecate-bg-secondary: #1a1a2e;
+  --hecate-bg-tertiary: #2d2b55;
+  --hecate-text-primary: #e2e8f0;
+  --hecate-text-secondary: #94a3b8;
+  --hecate-accent: #8b5cf6;
+  --hecate-accent-hover: #7c3aed;
+  --hecate-card-bg: linear-gradient(135deg, #252547 0%, #1a1a2e 100%);
+  --hecate-border: #4c51bf;
+  --hecate-shadow: rgba(139, 92, 246, 0.4);
+  --hecate-purple-light: #a78bfa;
+  --hecate-purple-dark: #6d28d9;
+  --hecate-midnight: linear-gradient(135deg, #0f0f1f 0%, #1a1a2e 100%);
+  --hecate-success: #10b981;
+  --hecate-warning: #f59e0b;
+  --hecate-error: #ef4444;
+  --hecate-glow: rgba(139, 92, 246, 0.6);
+
+  /* Transiciones optimizadas */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Nuevas variables para animaciones */
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out-back: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.theme-apolo {
+  --bg-primary: var(--apolo-bg-primary);
+  --bg-secondary: var(--apolo-bg-secondary);
+  --bg-tertiary: var(--apolo-bg-tertiary);
+  --text-primary: var(--apolo-text-primary);
+  --text-secondary: var(--apolo-text-secondary);
+  --accent: var(--apolo-accent);
+  --accent-hover: var(--apolo-accent-hover);
+  --card-bg: var(--apolo-card-bg);
+  --border: var(--apolo-border);
+  --shadow: var(--apolo-shadow);
+  --success: var(--apolo-success);
+  --warning: var(--apolo-warning);
+  --error: var(--apolo-error);
+  --gold-light: var(--apolo-gold-light);
+  --gold-dark: var(--apolo-gold-dark);
+  --marble: var(--apolo-marble);
+  --glow: var(--apolo-glow);
+  
+  color-scheme: light;
+}
+
+.theme-hecate {
+  --bg-primary: var(--hecate-bg-primary);
+  --bg-secondary: var(--hecate-bg-secondary);
+  --bg-tertiary: var(--hecate-bg-tertiary);
+  --text-primary: var(--hecate-text-primary);
+  --text-secondary: var(--hecate-text-secondary);
+  --accent: var(--hecate-accent);
+  --accent-hover: var(--hecate-accent-hover);
+  --card-bg: var(--hecate-card-bg);
+  --border: var(--hecate-border);
+  --shadow: var(--hecate-shadow);
+  --success: var(--hecate-success);
+  --warning: var(--hecate-warning);
+  --error: var(--hecate-error);
+  --purple-light: var(--hecate-purple-light);
+  --purple-dark: var(--hecate-purple-dark);
+  --midnight: var(--hecate-midnight);
+  --glow: var(--hecate-glow);
+  
+  color-scheme: dark;
+}
+
+/* Transiciones optimizadas - Solo propiedades esenciales */
+.theme-apolo,
+.theme-hecate {
+  transition: 
+    background-color var(--transition-normal),
+    color var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+/* Estados de cambio de tema */
+.theme-changing {
+  transition: 
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast) !important;
+}
+
+/* Base del body optimizada */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  font-family: 'Cinzel', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  transition: 
+    background-color var(--transition-normal),
+    color var(--transition-normal);
+}
+
+/* SCROLLBAR CON COLORES ESPECÍFICOS - SIN VARIABLES VERDES */
+/* Scrollbar base común */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+/* Apolo: Dorado/Oro específico */
+.theme-apolo ::-webkit-scrollbar-thumb {
+  background: #d4af37; /* Dorado específico */
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.theme-apolo ::-webkit-scrollbar-thumb:hover {
+  background: #b8941f; /* Dorado oscuro específico */
+  opacity: 0.9;
+}
+
+.theme-apolo ::-webkit-scrollbar-thumb:active {
+  background: #b8941f;
+  opacity: 1;
+}
+
+/* Hécate: Púrpura/Morado específico */
+.theme-hecate ::-webkit-scrollbar-thumb {
+  background: #8b5cf6; /* Púrpura específico */
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.theme-hecate ::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed; /* Púrpura oscuro específico */
+  opacity: 0.9;
+}
+
+.theme-hecate ::-webkit-scrollbar-thumb:active {
+  background: #7c3aed;
+  opacity: 1;
+}
+
+/* Firefox con colores específicos */
+.theme-apolo {
+  scrollbar-color: #d4af37 transparent;
+}
+
+.theme-hecate {
+  scrollbar-color: #8b5cf6 transparent;
+}
+
+* {
+  scrollbar-width: thin;
+}
+
+/* Efectos de partículas ligeros - MEJORADO */
+.theme-apolo::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(212, 175, 55, 0.01) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: subtle-shift 20s ease-in-out infinite alternate;
+}
+
+.theme-hecate::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 60% 60%, rgba(139, 92, 246, 0.01) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: subtle-shift 20s ease-in-out infinite alternate;
+}
+
+/* Efectos de texto optimizados */
+.theme-apolo {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+}
+
+.theme-hecate {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+}
+
+/* ANIMACIONES MEJORADAS Y NUEVAS */
+
+/* Animación de desplazamiento sutil para fondos */
+@keyframes subtle-shift {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 10% 10%;
+  }
+}
+
+/* Flotación mejorada */
+@keyframes float-gentle {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  33% { 
+    transform: translateY(-6px) rotate(0.5deg); 
+  }
+  66% { 
+    transform: translateY(-3px) rotate(-0.5deg); 
+  }
+}
+
+.float-effect {
+  animation: float-gentle 6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Efecto de brillo pulsante */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--glow);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--glow), 0 0 30px var(--glow);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Animación de entrada con rebote */
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(100px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.bounce-in {
+  animation: bounce-in 0.8s var(--ease-out-back) forwards;
+}
+
+/* Animación de deslizamiento desde la izquierda */
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-left {
+  animation: slide-in-left 0.6s var(--ease-out-back) forwards;
+}
+
+/* Animación de deslizamiento desde la derecha */
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  animation: slide-in-right 0.6s var(--ease-out-back) forwards;
+}
+
+/* Animación de escalado con elasticidad */
+@keyframes elastic-scale {
+  0% {
+    transform: scale(0);
+  }
+  45% {
+    transform: scale(1.05);
+  }
+  65% {
+    transform: scale(0.95);
+  }
+  85% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.elastic-scale {
+  animation: elastic-scale 0.8s var(--ease-elastic) forwards;
+}
+
+/* Animación de rotación continua */
+@keyframes rotate-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+/* Animación de parpadeo para elementos importantes */
+@keyframes attention-blink {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0.7;
+  }
+}
+
+.attention-blink {
+  animation: attention-blink 2s ease-in-out 3;
+}
+
+/* Animación de onda para botones y enlaces */
+@keyframes wave-effect {
+  0% {
+    box-shadow: 0 0 0 0 var(--glow);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.wave-effect {
+  animation: wave-effect 1.5s ease-out;
+}
+
+/* Animación de texto revelado */
+@keyframes text-reveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.text-reveal {
+  animation: text-reveal 1.2s var(--ease-out-back) forwards;
+}
+
+/* Efectos de profundidad ligeros - MEJORADOS */
+.depth-1 { 
+  box-shadow: 0 1px 3px var(--shadow);
+  transition: box-shadow var(--transition-normal);
+}
+
+.depth-1:hover {
+  box-shadow: 0 3px 8px var(--shadow);
+}
+
+.depth-2 { 
+  box-shadow: 0 2px 6px var(--shadow);
+  transition: box-shadow var(--transition-normal);
+}
+
+.depth-2:hover {
+  box-shadow: 0 5px 15px var(--shadow);
+}
+
+.depth-3 { 
+  box-shadow: 0 4px 12px var(--shadow);
+  transition: box-shadow var(--transition-normal);
+}
+
+.depth-3:hover {
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+/* Gradientes básicos - MEJORADOS */
+.epic-gradient-gold {
+  background: linear-gradient(135deg, #d4af37, #b8941f, #d4af37);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+.epic-gradient-purple {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed, #8b5cf6);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Utilidades de tema - MEJORADAS */
+.gold-text {
+  color: #d4af37;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.purple-text {
+  color: #8b5cf6;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.text-glow {
+  text-shadow: 0 0 8px var(--glow);
+  animation: text-glow-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes text-glow-pulse {
+  0% {
+    text-shadow: 0 0 5px var(--glow);
+  }
+  100% {
+    text-shadow: 0 0 15px var(--glow), 0 0 20px var(--glow);
+  }
+}
+
+/* Efectos de carta mejorados */
+.card-hover-effect {
+  transition: all var(--transition-normal) var(--ease-out-back);
+  transform: translateY(0) scale(1);
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* Botones animados */
+.btn-animated {
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.btn-animated::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left var(--transition-slow);
+}
+
+.btn-animated:hover::before {
+  left: 100%;
+}
+
+/* Efecto de partículas para elementos específicos */
+.particle-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.theme-apolo .particle {
+  background: radial-gradient(circle, #d4af37, transparent);
+}
+
+.theme-hecate .particle {
+  background: radial-gradient(circle, #8b5cf6, transparent);
+}
+
+/* Animación de carga mejorada */
+@keyframes loading-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading-pulse {
+  animation: loading-pulse 1.5s ease-in-out infinite;
+}
+
+/* Efecto de máquina de escribir */
+.typewriter {
+  overflow: hidden;
+  border-right: 2px solid var(--accent);
+  white-space: nowrap;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: var(--accent) }
+}
+
+/* Efectos de entrada para modales y overlays */
+@keyframes modal-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-enter {
+  animation: modal-enter 0.4s var(--ease-out-back) forwards;
+}
+
+/* Animación de salida */
+@keyframes modal-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+}
+
+.modal-exit {
+  animation: modal-exit 0.3s var(--ease-out-back) forwards;
+}
+
+/* Mejoras de rendimiento y accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .theme-apolo::before,
+  .theme-hecate::before {
+    background-image: none !important;
+    animation: none !important;
+  }
+  
+  .float-effect,
+  .pulse-glow,
+  .text-glow,
+  .btn-animated::before {
+    animation: none !important;
+  }
+  
+  .card-hover-effect:hover {
+    transform: none;
+  }
+}
+
+/* Optimizaciones para móviles */
+@media (max-width: 768px) {
+  .theme-apolo::before,
+  .theme-hecate::before {
+    display: none;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  /* Reducir animaciones en móviles para mejor rendimiento */
+  .float-effect {
+    animation-duration: 8s;
+  }
+  
+  .text-glow {
+    animation: none;
+    text-shadow: 0 0 5px var(--glow);
+  }
+}
+
+/* Estados de focus para accesibilidad */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+  animation: pulse-glow 1.5s ease-in-out;
+}
+
+/* Selection styles - Usando colores específicos */
+.theme-apolo ::selection {
+  background-color: #d4af37;
+  color: var(--bg-primary);
+  text-shadow: none;
+}
+
+.theme-apolo ::-moz-selection {
+  background-color: #d4af37;
+  color: var(--bg-primary);
+  text-shadow: none;
+}
+
+.theme-hecate ::selection {
+  background-color: #8b5cf6;
+  color: var(--bg-primary);
+  text-shadow: none;
+}
+
+.theme-hecate ::-moz-selection {
+  background-color: #8b5cf6;
+  color: var(--bg-primary);
+  text-shadow: none;
+}
+
+/* Soporte para modo alto contraste */
+@media (prefers-contrast: high) {
+  .theme-apolo {
+    --apolo-shadow: rgba(0, 0, 0, 0.8);
+    --apolo-border: #2c1810;
+  }
+  
+  .theme-hecate {
+    --hecate-shadow: rgba(0, 0, 0, 0.9);
+    --hecate-border: #e2e8f0;
+  }
+  
+  .text-glow,
+  .pulse-glow {
+    animation: none !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .theme-apolo::before,
+  .theme-hecate::before {
+    display: none;
+  }
+  
+  .theme-apolo,
+  .theme-hecate {
+    --bg-primary: white !important;
+    --text-primary: black !important;
+  }
+  
+  /* Ocultar elementos animados en impresión */
+  .float-effect,
+  .pulse-glow,
+  .text-glow,
+  .btn-animated::before {
+    animation: none !important;
+  }
+}
+
+/* Utilidades para animaciones escalonadas */
+.stagger-animation > * {
+  opacity: 0;
+  animation: slide-in-left 0.6s var(--ease-out-back) forwards;
+}
+
+.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
+
+/* Clases para animaciones de entrada con retraso */
+.delay-1 { animation-delay: 0.1s !important; }
+.delay-2 { animation-delay: 0.2s !important; }
+.delay-3 { animation-delay: 0.3s !important; }
+.delay-4 { animation-delay: 0.4s !important; }
+.delay-5 { animation-delay: 0.5s !important; }
+
+/* Utilidad para animaciones pausables */
+.pause-animation {
+  animation-play-state: paused !important;
+}
+
+/* Clase para reiniciar animaciones */
+.restart-animation {
+  animation: none;
+}
