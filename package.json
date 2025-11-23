@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://jainela.github.io/gametracker-frontend",
+  "homepage": "https://github.com/jainela/gametracker-frontend.git",
   "scripts": {
     "predeploy": "vite build",
     "deploy": "gh-pages -d dist",
